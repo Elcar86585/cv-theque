@@ -20,19 +20,29 @@ class Sidebar extends React.Component {
             }
         })
     }
+
     render() {
         const utilisateur = this.props.user
         const cate = this.state.categories
+        const compareLink =  window.location.pathname === `/utilisateurs`
+        let actdivLink;
+        if(window.location.pathname === window.location.href) {
+            actdivLink = "sidebar-nav-link active"
+        }else {
+            actdivLink = "sidebar-nav-link"
+        }
         let userMenu;
-        if(sessionStorage.user_token){
+        if(localStorage.user_token){
             if(utilisateur.role === 'Administrateur') {
                 userMenu = (
                     <>
                         <li className="sidebar-nav-item">
                             <li className="sidebar-nav-item">
-                                <Link to="/utilisateurs" className="sidebar-nav-link">
+                                <Link to="/utilisateurs" 
+                                    className={window.location.pathname === `/utilisateurs` ? "sidebar-nav-link active" : "sidebar-nav-link"}
+                                >
                                 <span className="sidebar-nav-abbr">
-                                    <i style={{'fontSize': '20px'}} class="bi bi-person-circle"></i>
+                                    <i style={{'fontSize': '20px'}} className="bi bi-person-circle"></i>
                                 </span>
                                 <span className="sidebar-nav-name">
                                     Utilisateurs
@@ -41,9 +51,9 @@ class Sidebar extends React.Component {
                             </li>
                         </li>
                         <li className="sidebar-nav-item">
-                            <Link to="/categories" className="sidebar-nav-link">
+                            <Link to="/categories" className={actdivLink} actived>
                             <span className="sidebar-nav-abbr">
-                                <i style={{'fontSize': '20px'}} class="bi bi-list-task"></i>
+                                <i style={{'fontSize': '20px'}} className="bi bi-list-task"></i>
                             </span>
                             <span className="sidebar-nav-name">
                                 Liste des Categories
@@ -51,24 +61,60 @@ class Sidebar extends React.Component {
                             </Link>
                         </li>
                         <li className="sidebar-nav-item">
-                            <Link to="/notifications" className="sidebar-nav-link">
-                            <span className="sidebar-nav-abbr">
-                                <i style={{'fontSize': '20px'}} class="bi bi-bell-fill"></i>
-                            </span>
-                            <span className="sidebar-nav-name">
-                                Notifications
-                            </span>
+                            <Link to="/table" className={actdivLink} actived>
+                                <span className="sidebar-nav-abbr">
+                                    <i style={{'fontSize': '20px'}} className="bi bi-file-earmark-person-fill"></i>
+                                </span>
+                                <span className="sidebar-nav-name">
+                                    Candidat
+                                </span>
                             </Link>
                         </li>
+                        <li className="sidebar-nav-item">
+                            <Link to="/notifications" className={actdivLink}>
+                                <span className="sidebar-nav-abbr">
+                                    <i style={{'fontSize': '20px'}} className="bi bi-bell-fill"></i>
+                                </span>
+                                <span className="sidebar-nav-name">
+                                    Notifications
+                                </span>
+                            </Link>
+                        </li>
+                        <li className="sidebar-nav-item">
+                            <Link to="/cv" className={actdivLink}>
+                                <span className="sidebar-nav-abbr">
+                                    <i style={{'fontSize': '20px'}} className="bi bi-file-earmark-richtext-fill"></i>
+                                </span>
+                                <span className="sidebar-nav-name">
+                                    Tous les CV
+                                </span>
+                            </Link>
+                        </li>
+                        {/* {cate && cate.map(categorie => {
+                            return (
+                                <>
+                                    <li className="sidebar-nav-item">
+                                        <Link to={`/candidats/${categorie.id}`} className={actdivLink}>
+                                            <div className="sidebar-nav-icon">
+                                                <i style={{'fontSize': '20px'}} className="bi bi-caret-right-fill"></i>
+                                            </div>
+                                            <span className="sidebar-nav-name">
+                                                {categorie.categorie}
+                                            </span>
+                                        </Link>
+                                    </li>
+                                </>
+                            )
+                        })}  */}
                     </>
                 )
             }else {
                 userMenu = (
                     <>                    
                         <li className="sidebar-nav-item">
-                            <Link to="/profile" className="sidebar-nav-link">
+                            <Link to="/profile" className={actdivLink}>
                             <span className="sidebar-nav-abbr">
-                                <i style={{'fontSize': '20px'}} class="bi bi-person-fill"></i>
+                                <i style={{'fontSize': '20px'}} className="bi bi-person-fill"></i>
                             </span>
                             <span className="sidebar-nav-name">
                                 Profile
@@ -77,30 +123,30 @@ class Sidebar extends React.Component {
                         </li>
 
                         <li className="sidebar-nav-item">
-                            <a href="#" className="sidebar-nav-link">
-                            <span className="sidebar-nav-abbr">
-                                <i style={{'fontSize': '20px'}} class="bi bi-gear-fill"></i>
-                            </span>
-                            <span className="sidebar-nav-name">
-                                Reglage
-                            </span>
-                            </a>
-                        </li> 
+                            <Link to="/notification" className={actdivLink}>
+                                <span className="sidebar-nav-abbr">
+                                    <i style={{'fontSize': '20px'}} className="bi bi-bell-fill"></i>
+                                </span>
+                                <span className="sidebar-nav-name">
+                                    Notifications
+                                </span>
+                            </Link>
+                        </li>
                         {cate && cate.map(categorie => {
-                                return (
-                                    <>
-                                        <li className="sidebar-nav-item">
-                                            <Link to={`/candidats/${categorie.id}`} className="sidebar-nav-link">
-                                                <div className="sidebar-nav-icon">
-                                                    <i style={{'fontSize': '20px'}} class="bi bi-caret-right-fill"></i>
-                                                </div>
-                                                <span className="sidebar-nav-name">
-                                                    {categorie.categorie}
-                                                </span>
-                                            </Link>
-                                        </li>
-                                    </>
-                                )
+                            return (
+                                <>
+                                    <li className="sidebar-nav-item">
+                                        <Link to={`/candidats/${categorie.id}`} className={actdivLink}>
+                                            <div className="sidebar-nav-icon">
+                                                <i style={{'fontSize': '20px'}} className="bi bi-caret-right-fill"></i>
+                                            </div>
+                                            <span className="sidebar-nav-name">
+                                                {categorie.categorie}
+                                            </span>
+                                        </Link>
+                                    </li>
+                                </>
+                            )
                         })}  
                 </>
                 )
@@ -112,7 +158,7 @@ class Sidebar extends React.Component {
                 <div className="adminx-sidebar expand-hover push">
                     <ul className="sidebar-nav">
                         <li className="sidebar-nav-item">
-                            <a href="/" className="sidebar-nav-link active">
+                            <a href="/" className={actdivLink} actived>
                             <div className="sidebar-nav-icon">
                             <i style={{'fontSize': '20px'}} className="bi bi-house"></i>
                             </div>
@@ -125,10 +171,10 @@ class Sidebar extends React.Component {
                             </a>
                         </li>
                         {userMenu}  
-                        {sessionStorage.user_token ? (
+                        {localStorage.user_token ? (
                             <>
                                 <li className="sidebar-nav-item">
-                                    <a href="#" className="sidebar-nav-link">
+                                    <a href="#" className={actdivLink}>
                                     <div className="sidebar-nav-icon">
                                     <i style={{'fontSize': '20px'}} className="bi bi-box-arrow-right"></i>
                                     </div>
@@ -144,7 +190,7 @@ class Sidebar extends React.Component {
                         ):(
                             <>
                                 <li className="sidebar-nav-item">
-                                    <a href="/formulaire" className="sidebar-nav-link">
+                                    <a href="/formulaire" className={actdivLink}>
                                     <div className="sidebar-nav-icon">
                                     <i style={{'fontSize': '20px'}} className="bi bi-box-arrow-right"></i>
                                     </div>
@@ -157,7 +203,7 @@ class Sidebar extends React.Component {
                                     </a>
                                 </li>  
                                 <li className="sidebar-nav-item">
-                                    <a href="/ajoute-candidat" className="sidebar-nav-link">
+                                    <a href="/ajoute-candidat" className={actdivLink}>
                                     <div className="sidebar-nav-icon">
                                     <i style={{'fontSize': '20px'}} className="bi bi-file-earmark-person"></i>
                                     </div>
@@ -170,7 +216,7 @@ class Sidebar extends React.Component {
                                     </a>
                                 </li>
                                 <li className="sidebar-nav-item">
-                                    <a href="/se-connecter" className="sidebar-nav-link">
+                                    <a href="/se-connecter" className={actdivLink}>
                                     <div className="sidebar-nav-icon">
                                     <i style={{'fontSize': '20px'}} className="bi bi-person-fill-check"></i>
                                     </div>

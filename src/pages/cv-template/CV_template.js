@@ -1,9 +1,9 @@
 import React from 'react';
 import './cvtemplate.css';
-import {jsPDF} from 'jspdf';
 import axios from 'axios';
 import PostCv from './PostCv';
 import {NotificationManager} from 'react-notifications';
+import moment from 'moment';
 
 class CV_template extends React.Component {
     state = {
@@ -27,6 +27,7 @@ class CV_template extends React.Component {
         formdata.append('aExperience', data.aExp);
         formdata.append('nationalite', data.nation);
         formdata.append('photo', data.photo);
+        formdata.append('contrat', data.contrat)
         
         axios.post('cvs', formdata ).then(response => {
             if(response.status === 201){
@@ -117,19 +118,7 @@ class CV_template extends React.Component {
     }
 
 
-    handletelecharge = () => {
-        const input = document.getElementById('downCV');
-        const name = this.props.data.nomPrenom;
-        const doc = new jsPDF();
-        // doc.setFont('Inter-Regular', 'normal');
-        doc.html(input, {
-            async callback(doc) {
-                doc.setFont('Lato-Regular', 'normal');
-              // save the document as a PDF with name of pdf_name
-              doc.save(name +".pdf");
-            }
-          });
-    }
+    
     render() {
         const experiences = this.props.data.experience
         const langages = this.props.data.langage
@@ -149,6 +138,13 @@ class CV_template extends React.Component {
                 <img src="https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png" alt="image" border="0" width="220" height="220"/>
             )
         }
+        
+        let date_moment = moment().format('YYYY-MM-DD')
+        const old = this.props.data.age
+        let yearNow = moment(date_moment).year();
+        let yearProfil = moment(old).year();
+        const ageProfil = yearNow-yearProfil
+
         return (
             <>
             <div id="cvtel">
@@ -165,7 +161,7 @@ class CV_template extends React.Component {
                                         <ul className="list-unstyled">
                                             <li className="mb-2"><a href={mailto}><i className="far fa-envelope fa-fw mr-2" data-fa-transform="grow-3"></i>{this.props.data.email} </a></li>
                                             <li><i className="fas fa-mobile-alt fa-fw mr-2" data-fa-transform="grow-6"></i>{this.props.data.telephone}</li>
-                                            <li><i className="fas fa-mobile-alt fa-fw mr-2" data-fa-transform="grow-6"></i>{this.props.data.age} </li>
+                                            <li><i className="fas fa-mobile-alt fa-fw mr-2" data-fa-transform="grow-6"></i>{ageProfil} ans</li>
                                         </ul>
                                     </div>
                                     <div className="secondary-info ml-md-auto mt-2">

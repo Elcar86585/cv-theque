@@ -31,7 +31,7 @@ export default function ContentTable({index, search}) {
             <img src="https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png" style={{"width": "50px", "borderRadius": "50%"}} class="img-thumbnail" alt="..."/>
         </>)
     }
-    if(search.nationalite){
+    if(search.nationalite) {
         if(search.nationalite === cv.nationalite || search.exp === cv.aExperience || search.dispo === cv.disponibility){
             return(
                 <>
@@ -77,7 +77,9 @@ export default function ContentTable({index, search}) {
                         <h6><span class="badge bg-success">{cv.disponibility}</span></h6>
                     </td>
                     <td>
-                        <Link to={`cv/${cv.id}`}><button type="button" class="btn btn-primary">Voir le CV</button></Link>
+                        <Link to={`cv/${cv.id}`}>
+                            <button type="button" class="btn btn-primary">Voir le CV</button>
+                        </Link>
                     </td>
                 </>
             ): (

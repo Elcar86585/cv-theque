@@ -35,9 +35,10 @@ class Login extends React.Component {
                                 axios.post('connection', formdata).then(response => {
                                     if(response.status === 202){
                                         localStorage.setItem('token', response.data.token)
-                                        sessionStorage.setItem('curent_user', response.data.user.id)
-                                        sessionStorage.setItem('url', response.data.user.role)
-                                        sessionStorage.setItem('user_token', response.data.user.authentication_token)
+                                        localStorage.setItem('curent_user', response.data.user.id)
+                                        localStorage.setItem('url', response.data.user.role)
+                                        localStorage.setItem('user_token', response.data.user.authentication_token)
+                                        localStorage.setItem('token', response.data.user.authentication_token)
                                         resetForm();
                                         NotificationManager.success(response.data.message, 'utilisateur', 4000);
                                         window.location.reload();

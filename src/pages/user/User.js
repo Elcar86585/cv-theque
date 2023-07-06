@@ -21,7 +21,8 @@ class User extends React.Component {
         })
     };
     render() {
-        
+        const use = this.state.users
+        console.log(use)
         return (
             <>
             <div className="adminx-content">
@@ -36,14 +37,16 @@ class User extends React.Component {
                                 </nav>
 
                                 <div className="pb-3">
-                                <h1 _msttexthash="234351" _msthash="67">Gestion d'utilisateurs</h1>
+                                    <h1 _msttexthash="234351" _msthash="67">Gestion d'utilisateurs
+                                </h1>
                                 </div>
 
                                 <div className="row">
                                 <div className="col-lg-8">
                                     <div className="card">
                                     <div className="card-header d-flex justify-content-between align-items-center">
-                                        <div className="card-header-title" _msttexthash="183612" _msthash="68">List des utilisateurs</div>
+                                        <div className="card-header-title" _msttexthash="183612" _msthash="68">List des {use.length} utilisateurs
+                                        </div>
 
                                         <nav className="card-header-actions" _msthidden="3">
                                         <a className="card-header-action" data-toggle="collapse" href="#card1" aria-expanded="false" aria-controls="card1">

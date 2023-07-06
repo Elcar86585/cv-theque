@@ -17,7 +17,7 @@ class CategorieCount extends React.Component {
     render() {
         return (
             <>
-                <span class="badge rounded-pill bg-info text-dark">+  {this.state.couter} CV</span>
+                <span class="badge rounded-pill bg-info text-dark">+  0{this.state.couter} CV</span>
             </>
         )
     }

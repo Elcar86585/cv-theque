@@ -26,7 +26,7 @@ function ContentExp({id}) {
         })
     }, [id])
     let societe;
-    if(sessionStorage.url === 'Administrateur'){
+    if(localStorage.url === 'Administrateur'){
         societe = (
             <h3 className="resume-position-title font-weight-bold mb-1">{experience.societe} </h3>
         )

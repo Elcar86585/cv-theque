@@ -4,4 +4,5 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 import 'react-toastify/dist/ReactToastify.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 

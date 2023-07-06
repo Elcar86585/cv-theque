@@ -1,5 +1,6 @@
 import React from "react";
 import ResultSeach from "./ResultSearch";
+import { Link } from "react-router-dom";
 
 
 class Search extends React.Component {
@@ -51,7 +52,9 @@ class Search extends React.Component {
                                 </h5>   
 
                                     <div className="card-title-sub">
-                                        Trouvez le profil idéal 
+                                        <Link to="/profile">
+                                            <button type="button" class="btn btn-primary mb-2">Je ne trouve pas le profil ideal</button>
+                                        </Link>
                                     </div>
                                 </div>
 
@@ -72,11 +75,10 @@ class Search extends React.Component {
                                             </div>
                                             <div className="col">
                                                 <select onChange={this.handleNation} className="custom-select mr-sm-2" id="inlineFormCustomSelect">
-                                                    <option value="">Nationalité...</option>
+                                                    <option value="">Localisation ...</option>
                                                     <option value="Malgache">Malgache</option>
                                                     <option value="Mauricen">Mauricien</option>
-                                                    <option value="Autre resident Madagascar">Autre resident Madagascar</option>
-                                                    <option value="Autre resident Maurice">Autre resident Maurice</option>
+                                                    <option value="Autre resident Madagascar">Autre resident</option>
                                                 </select>
                                             </div>
                                             <div className="col">
@@ -95,12 +97,23 @@ class Search extends React.Component {
                                                 <select onChange={this.handleDispo} className="custom-select mr-sm-2" id="inlineFormCustomSelect">
                                                     <option value="">Disponibilité...</option>
                                                     <option value="Disponible immédiat">Disponible immédiat</option>
-                                                    <option value="Temps partiel">Temps partiel</option>
-                                                    <option value="Temps plein">Temps plein</option>
-                                                    <option value="Freelance">Freelance</option>
-                                                    <option value="Ouvert à toutes proposition">Ouvert à toutes proposition</option>
+                                                    <option value="Disponible avec préavis">Disponible avec préavis</option>
                                                 </select>
-                                            </div>                                       
+                                            </div> 
+                                            <div className="col">
+                                                <select onChange={this.handleDispo} className="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                                    <option value="">Durée...</option>
+                                                    <option value="Temps plein">Temps plein</option>
+                                                    <option value="Temps partiel">Temps partiel</option>
+                                                </select>
+                                            </div> 
+                                            <div className="col">
+                                                <select className="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                                    <option value="">Contrat...</option>
+                                                    <option value="CDI">CDI</option>
+                                                    <option value="CDD">CDD</option>
+                                                </select>
+                                            </div>                                          
                                         </div>
                                     </form>
                                 </div>

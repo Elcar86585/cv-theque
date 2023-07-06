@@ -2,7 +2,8 @@ import React from 'react';
 import { Formik, Field, Form  } from 'formik';
 import axios from 'axios';
 import CV_template from '../cv-template/CV_template';
-
+import moment from 'moment';
+import {NotificationManager} from 'react-notifications'
 class Addcandidat extends React.Component {
     state={
         app: '',
@@ -35,7 +36,8 @@ class Addcandidat extends React.Component {
         facebook:'',
         linkedin:'',
         nation: '',
-        aExp: ''
+        aExp: '',
+        contrat: ''
     }
 
     
@@ -177,9 +179,18 @@ class Addcandidat extends React.Component {
 
     //telephone form
     handleAge = (e) => {
-        this.setState({
-            age: e.target.value
-        })
+        let date_moment = moment().format('YYYY-MM-DD')
+        const old = e.target.value
+        let yearNow = moment(date_moment).year();
+        let yearProfil = moment(old).year();
+        const ageProfil = yearNow-yearProfil
+        if (ageProfil < 18) {
+            NotificationManager.warning('Vous êtes mineur', 'Erreur', 4000)
+         } else {
+            this.setState({
+                age: e.target.value
+            })
+         }
     }
 
 
@@ -235,7 +246,11 @@ class Addcandidat extends React.Component {
         })
     }
 
-
+    handleContrat = (e) => {
+        this.setState({
+            contrat: e.target.default
+        })
+    }
 
     handleDate = (e) => {
         this.setState({
@@ -344,7 +359,6 @@ class Addcandidat extends React.Component {
         const consExp = this.state.experience;
         const consDiplome = this.state.diplome;
         const categoriesPost = this.state.categories;
-        console.log(this.state);
         return (
             <>
 
@@ -414,24 +428,40 @@ class Addcandidat extends React.Component {
                                         </div>
 
                                         <div className="form-group">
-                                            <label className="form-label">Age</label>
-                                            <input onChange={this.handleAge} className="form-control input-prefix mb-2" placeholder='votre âge' type="number"/>
+                                            <label className="form-label">Date de naissance</label>
+                                            <input onChange={this.handleAge} className="form-control input-prefix mb-2" placeholder='votre âge' type="date"/>
                                         </div>
 
                                         <div className="form-group">
                                             <label className="form-label">Adresse exacte</label>
                                             <input onChange={this.handleAdress} className="form-control input-prefix mb-2" type="text" placeholder='Votre adresse exacte'/>
                                         </div>
+
+                                        <div className="form-group">
+                                            <label className="form-label">Facebook</label>
+                                            <input onChange={this.handleFacebook} className="form-control input-prefix mb-2" type="text" placeholder='Lien de votre profile facebook'/>
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label className="form-label">Linkedin</label>
+                                            <input onChange={this.handleLinkedin} className="form-control input-prefix mb-2" type="text" placeholder='Lien de votre profile linkedin'/>
+                                        </div>
+
                                         <div class="form-group">
                                             <label class="form-label" for="exampleFormControlSelect1">Disponiblité</label>
                                             <select onChange={this.handleDispo} class="form-control" id="exampleFormControlSelect1">
                                             <option >----</option>
                                             <option >Disponible immédiat</option>
-                                            <option>Temps plein</option>
-                                            <option>Temps partiel</option>
-                                            <option>Freelance</option>
-                                            <option>Indisponible</option>
-                                            <option>Overt à toutes proposition</option>
+                                            <option>Disponible avec préavis</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label" for="exampleFormControlSelect1">Type de contrat</label>
+                                            <select onChange={this.handleContrat} class="form-control" id="exampleFormControlSelect1">
+                                                <option >----</option>
+                                                <option>CDI</option>
+                                                <option>CDD</option>
                                             </select>
                                         </div>
 
@@ -440,9 +470,8 @@ class Addcandidat extends React.Component {
                                             <select onChange={this.handleNation} class="form-control" id="exampleFormControlSelect1">
                                                 <option >----</option>
                                                 <option >Malgache</option>
-                                                <option>Mauricen</option>
-                                                <option>Autre resident Madagascar</option>
-                                                <option>Autre resident Maurice</option>
+                                                <option>Mauricien</option>
+                                                <option>Autre resident</option>
                                             </select>
                                         </div>
 

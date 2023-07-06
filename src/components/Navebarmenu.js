@@ -8,7 +8,7 @@ class Navebarmenu extends React.Component {
     }
 
     componentDidMount = () => {
-        if(sessionStorage.url === 'Administrateur'){
+        if(localStorage.url === 'Administrateur'){
             axios.get('notify').then(resp => {
                 this.setState({
                     notificationCounter: resp.data
@@ -19,20 +19,19 @@ class Navebarmenu extends React.Component {
 
 
     handleClick = () => {
-        sessionStorage.clear();
+        localStorage.clear();
         localStorage.clear(window.location.reload())
         window.location.replace('/')
     }
 
-    handleChange = (e) => {
-        console.log(e.target.value);
-    }
+    
 
     render() {
+        const use = this.props.user
         let button;
         let notify;
-        if(sessionStorage.user_token){
-            if(sessionStorage.url === 'Administrateur'){
+        if(localStorage.user_token){
+            if(use.role === 'Administrateur'){
                 notify=(
                     <>
                          <li>
@@ -61,6 +60,7 @@ class Navebarmenu extends React.Component {
                 </>
             )
         }
+
         return (
             <>
                 <nav className="navbar navbar-expand justify-content-between fixed-top">
@@ -72,11 +72,13 @@ class Navebarmenu extends React.Component {
                         <div  className="form-inline form-quicksearch d-none d-md-block mx-auto">
                             <div className="input-group">
                                 <div className="input-group-prepend">
-                                <div className="input-group-icon">
-                                    <span class="oi oi-magnifying-glass" style={{"paddingTop": "8px"}} ></span>
+                                    <div className="input-group-icon">
+                                        <span class="oi oi-magnifying-glass" style={{"paddingTop": "8px"}} ></span>
+                                    </div>
                                 </div>
-                                </div>
-                                <input type="number" onChange={this.handleChange} className="form-control" placeholder="Chercher par ID ..."/>
+                                <form>
+                                    <input onChange={(e) => this.props.fonction(e)} type="search" className="form-control" placeholder="Chercher par ID ..."/>
+                                </form>
                             </div>
                         </div>
 
@@ -89,11 +91,12 @@ class Navebarmenu extends React.Component {
                     <ul className="navbar-nav d-flex justify-content-end mr-2">
                         {notify}
                         <li>
-                            {sessionStorage.user_token ? (<></>):(
-                                <>
+                            {use.role === 'Administrateur' ? (<>
                                 <Link to="/ajoute-candidat">
                                     <button class="btn btn-sm btn-primary">Ajouter un CV </button>
                                 </Link>
+                            </>):(
+                                <>
                                 </>
                             )}
                         </li>

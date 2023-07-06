@@ -8,7 +8,7 @@ import {NotificationManager} from 'react-notifications';
 class Adduser extends React.Component {
     state={
         message: '', 
-        role: '',
+        role: 'Utilisateur',
         pass: false,
         type: 'password',
         word: ''
@@ -47,6 +47,8 @@ class Adduser extends React.Component {
                         initialValues={{
                             name: '',
                             email: '', 
+                            phone: '',
+                            societe: '',
                             role: '',
                             expire: '',
                             password: ''
@@ -60,6 +62,8 @@ class Adduser extends React.Component {
                             formdata.append('expire', value.expire)
                             formdata.append('password', value.password)
                             formdata.append('pass', value.password)
+                            formdata.append('phone', value.phone)
+                            formdata.append('societe', value.societe)
                             axios.post('users', formdata).then(response => {
                                 if(response.status === 201){
                                     NotificationManager.success(response.data.message, 'utilisateur', 4000);
@@ -80,6 +84,14 @@ class Adduser extends React.Component {
                                 <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">E-mail</label>
                                 <Field type="email" className="form-control" name="email" placeholder="E-mail" _msthash="79" required/>
                             </div>
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Téléphone</label>
+                                <Field type="number" className="form-control" name="phone" placeholder="Numéro téléphone" _msthash="79" required/>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Société</label>
+                                <Field type="text" className="form-control" name="societe" placeholder="Nom de la société" _msthash="79" required/>
+                            </div>
                             <div className="form-group">    
                                 <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Rôle</label>
                                 <select name="role" onChange={this.handleChange} className="form-control" id="exampleFormControlSelect1">
@@ -97,7 +109,7 @@ class Adduser extends React.Component {
 
                             <div className="form-group">
                                 <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Mot de passe</label>
-                                <Field type="password" className="form-control" name="password" placeholder="Mot de passe" required />
+                                <Field type={this.state.type} className="form-control" name="password" placeholder="Mot de passe" required />
                             </div>
                             <div className="form-check form-switch">
                                 <input onClick={this.handlePasswordShow} className="form-check-input" type="checkbox" id="flexSwitchCheckDefault"/>
