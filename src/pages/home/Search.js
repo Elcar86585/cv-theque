@@ -1,6 +1,7 @@
 import React from "react";
 import ResultSeach from "./ResultSearch";
 import { Link } from "react-router-dom";
+import ProfilIdeal from "./ProfilIdeal";
 
 
 class Search extends React.Component {
@@ -18,7 +19,6 @@ class Search extends React.Component {
     }
 
     handleNation = (e) => {
-        console.log(e.target.value)
         this.setState({nationalite: e.target.value})
     }
 
@@ -52,9 +52,7 @@ class Search extends React.Component {
                                 </h5>   
 
                                     <div className="card-title-sub">
-                                        <Link to="/profile">
-                                            <button type="button" class="btn btn-primary mb-2">Je ne trouve pas le profil ideal</button>
-                                        </Link>
+                                        <ProfilIdeal />
                                     </div>
                                 </div>
 

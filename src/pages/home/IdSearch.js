@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 export default function IdSearch({ recherche, fonc }) {
     const [search, setSearch] = useState([])
@@ -14,7 +15,7 @@ export default function IdSearch({ recherche, fonc }) {
                 } else {
                     setMess(resp.data)
                 }
-            })
+            }).catch(error => console.log(error))
         }
     }, [recherche])
     
@@ -31,7 +32,7 @@ export default function IdSearch({ recherche, fonc }) {
                                             <div className="result-header">
                                                 <div className="row">
                                                     <div className="col-lg-6">
-                                                        <div className="records">Montrant : <b>{search.length} </b> sur <b>100</b> resultats</div>
+                                                        <div className="records">Montrant : <b>{search.length}</b> resultat(s)</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -40,6 +41,7 @@ export default function IdSearch({ recherche, fonc }) {
                                                     <table className="table widget-26">
                                                         <tbody>
                                                             {search && search.map(result => {
+                                                                const date = moment(result.created_at).startOf('day').fromNow()
                                                                     return (
                                                                         <tr>
                                                                             <td>
@@ -49,7 +51,7 @@ export default function IdSearch({ recherche, fonc }) {
                                                                                     </a>
                                                                                     <p className="m-0"><a href="#" className="employer-name">
                                                                                         <b>CV id : </b> 00{result.id}
-                                                                                    </a> <span className="text-muted time">1 days ago</span></p>
+                                                                                    </a> ... <span className="text-muted time">{date} </span></p>
                                                                                 </div>
                                                                             </td>
                                                                             <td>
@@ -111,7 +113,7 @@ export default function IdSearch({ recherche, fonc }) {
                                             <div className="result-header">
                                                 <div className="row">
                                                     <div className="col-lg-6">
-                                                        <div className="records">Montrant : <b>0</b> de <b>0</b> resultat</div>
+                                                        <div className="records">Montrant : <b>0</b> resultat</div>
                                                     </div>
                                                 </div>
                                             </div>

@@ -1,9 +1,9 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import axios from 'axios';
 
-class Sidebar extends React.Component {
-    state={
+export default class Sidebar extends React.Component {
+    state = {
         categories: []
     }
 
@@ -13,7 +13,7 @@ class Sidebar extends React.Component {
 
     getCategorie = () => {
         axios.get('categorie_cvs').then(resp => {
-            if(resp.status === 200){
+            if (resp.status === 200) {
                 this.setState({
                     categories: resp.data
                 })
@@ -21,134 +21,120 @@ class Sidebar extends React.Component {
         })
     }
 
+    handleClickDecon = () => {
+        localStorage.clear();
+        localStorage.clear(window.location.reload())
+        window.location.replace('/cvtheque')
+    }
+
     render() {
         const utilisateur = this.props.user
         const cate = this.state.categories
-        const compareLink =  window.location.pathname === `/utilisateurs`
-        let actdivLink;
-        if(window.location.pathname === window.location.href) {
-            actdivLink = "sidebar-nav-link active"
-        }else {
-            actdivLink = "sidebar-nav-link"
-        }
+        const compareLink = window.location.pathname === `/utilisateurs`
+        
         let userMenu;
-        if(localStorage.user_token){
-            if(utilisateur.role === 'Administrateur') {
+        if (localStorage.user_token) {
+            if (utilisateur.role === 'Administrateur') {
                 userMenu = (
                     <>
                         <li className="sidebar-nav-item">
                             <li className="sidebar-nav-item">
-                                <Link to="/utilisateurs" 
-                                    className={window.location.pathname === `/utilisateurs` ? "sidebar-nav-link active" : "sidebar-nav-link"}
+                                <NavLink to="/utilisateurs"
+                                    className="sidebar-nav-link"
                                 >
-                                <span className="sidebar-nav-abbr">
-                                    <i style={{'fontSize': '20px'}} className="bi bi-person-circle"></i>
-                                </span>
-                                <span className="sidebar-nav-name">
-                                    Utilisateurs
-                                </span>
-                                </Link>
+                                    <span className="sidebar-nav-abbr">
+                                        <i style={{ 'fontSize': '20px' }} className="bi bi-person-circle"></i>
+                                    </span>
+                                    <span className="sidebar-nav-name">
+                                        Utilisateurs
+                                    </span>
+                                </NavLink>
                             </li>
                         </li>
                         <li className="sidebar-nav-item">
-                            <Link to="/categories" className={actdivLink} actived>
-                            <span className="sidebar-nav-abbr">
-                                <i style={{'fontSize': '20px'}} className="bi bi-list-task"></i>
-                            </span>
-                            <span className="sidebar-nav-name">
-                                Liste des Categories
-                            </span>
-                            </Link>
+                            <NavLink to="/categories" className="sidebar-nav-link" actived>
+                                <span className="sidebar-nav-abbr">
+                                    <i style={{ 'fontSize': '20px' }} className="bi bi-list-task"></i>
+                                </span>
+                                <span className="sidebar-nav-name">
+                                    Liste des Categories
+                                </span>
+                            </NavLink>
                         </li>
                         <li className="sidebar-nav-item">
-                            <Link to="/table" className={actdivLink} actived>
+                            <NavLink to="/table" className="sidebar-nav-link" actived>
                                 <span className="sidebar-nav-abbr">
-                                    <i style={{'fontSize': '20px'}} className="bi bi-file-earmark-person-fill"></i>
+                                    <i style={{ 'fontSize': '20px' }} className="bi bi-file-earmark-person-fill"></i>
                                 </span>
                                 <span className="sidebar-nav-name">
                                     Candidat
                                 </span>
-                            </Link>
+                            </NavLink>
                         </li>
                         <li className="sidebar-nav-item">
-                            <Link to="/notifications" className={actdivLink}>
+                            <NavLink to="/notifications" className="sidebar-nav-link">
                                 <span className="sidebar-nav-abbr">
-                                    <i style={{'fontSize': '20px'}} className="bi bi-bell-fill"></i>
+                                    <i style={{ 'fontSize': '20px' }} className="bi bi-bell-fill"></i>
                                 </span>
                                 <span className="sidebar-nav-name">
                                     Notifications
                                 </span>
-                            </Link>
+                            </NavLink>
                         </li>
                         <li className="sidebar-nav-item">
-                            <Link to="/cv" className={actdivLink}>
+                            <NavLink to="/cv" className="sidebar-nav-link">
                                 <span className="sidebar-nav-abbr">
-                                    <i style={{'fontSize': '20px'}} className="bi bi-file-earmark-richtext-fill"></i>
+                                    <i style={{ 'fontSize': '20px' }} className="bi bi-file-earmark-richtext-fill"></i>
                                 </span>
                                 <span className="sidebar-nav-name">
                                     Tous les CV
                                 </span>
-                            </Link>
+                            </NavLink>
                         </li>
-                        {/* {cate && cate.map(categorie => {
-                            return (
-                                <>
-                                    <li className="sidebar-nav-item">
-                                        <Link to={`/candidats/${categorie.id}`} className={actdivLink}>
-                                            <div className="sidebar-nav-icon">
-                                                <i style={{'fontSize': '20px'}} className="bi bi-caret-right-fill"></i>
-                                            </div>
-                                            <span className="sidebar-nav-name">
-                                                {categorie.categorie}
-                                            </span>
-                                        </Link>
-                                    </li>
-                                </>
-                            )
-                        })}  */}
                     </>
                 )
-            }else {
+            } else {
                 userMenu = (
-                    <>                    
+                    <>
                         <li className="sidebar-nav-item">
-                            <Link to="/profile" className={actdivLink}>
-                            <span className="sidebar-nav-abbr">
-                                <i style={{'fontSize': '20px'}} className="bi bi-person-fill"></i>
-                            </span>
-                            <span className="sidebar-nav-name">
-                                Profile
-                            </span>
-                            </Link>
+                            <NavLink to="/profile" className="sidebar-nav-link">
+                                <span className="sidebar-nav-abbr">
+                                    <i style={{ 'fontSize': '20px' }} className="bi bi-person-fill"></i>
+                                </span>
+                                <span className="sidebar-nav-name">
+                                    Profile
+                                </span>
+                            </NavLink>
                         </li>
 
                         <li className="sidebar-nav-item">
-                            <Link to="/notification" className={actdivLink}>
+                            <NavLink to="/notification" className="sidebar-nav-link">
                                 <span className="sidebar-nav-abbr">
-                                    <i style={{'fontSize': '20px'}} className="bi bi-bell-fill"></i>
+                                    <i style={{ 'fontSize': '20px' }} className="bi bi-bell-fill"></i>
                                 </span>
                                 <span className="sidebar-nav-name">
                                     Notifications
                                 </span>
-                            </Link>
+                            </NavLink>
                         </li>
                         {cate && cate.map(categorie => {
                             return (
                                 <>
                                     <li className="sidebar-nav-item">
-                                        <Link to={`/candidats/${categorie.id}`} className={actdivLink}>
+                                        <NavLink to={`/candidats/${categorie.id}`} className="sidebar-nav-link" data-toggle="collapse" href="#navTables" aria-expanded="false" aria-controls="navTables">
                                             <div className="sidebar-nav-icon">
-                                                <i style={{'fontSize': '20px'}} className="bi bi-caret-right-fill"></i>
+                                                <i style={{ 'fontSize': '20px' }} className="bi bi-folder-fill"></i>
                                             </div>
                                             <span className="sidebar-nav-name">
                                                 {categorie.categorie}
                                             </span>
-                                        </Link>
+                                        </NavLink>
+                                        <GetSousCat datar={categorie.id} />
                                     </li>
                                 </>
                             )
-                        })}  
-                </>
+                        })}
+                    </>
                 )
             }
         }
@@ -158,78 +144,78 @@ class Sidebar extends React.Component {
                 <div className="adminx-sidebar expand-hover push">
                     <ul className="sidebar-nav">
                         <li className="sidebar-nav-item">
-                            <a href="/" className={actdivLink} actived>
-                            <div className="sidebar-nav-icon">
-                            <i style={{'fontSize': '20px'}} className="bi bi-house"></i>
-                            </div>
-                            <span className="sidebar-nav-name">
-                                Tableau de bord
-                            </span>
-                            <span className="sidebar-nav-end">
+                            <NavLink to="/" className="sidebar-nav-link">
+                                <div className="sidebar-nav-icon">
+                                    <i style={{ 'fontSize': '20px' }} className="bi bi-house"></i>
+                                </div>
+                                <span className="sidebar-nav-name">
+                                    Tableau de bord
+                                </span>
+                                <span className="sidebar-nav-end">
 
-                            </span>
-                            </a>
+                                </span>
+                            </NavLink>
                         </li>
-                        {userMenu}  
+                        {userMenu}
                         {localStorage.user_token ? (
                             <>
                                 <li className="sidebar-nav-item">
-                                    <a href="#" className={actdivLink}>
-                                    <div className="sidebar-nav-icon">
-                                    <i style={{'fontSize': '20px'}} className="bi bi-box-arrow-right"></i>
-                                    </div>
-                                    <span className="sidebar-nav-name">
-                                        Deconnexion
-                                    </span>
-                                    <span className="sidebar-nav-end">
+                                    <a href="#" className="sidebar-nav-link" onClick={this.handleClickDecon}>
+                                        <div className="sidebar-nav-icon">
+                                            <i style={{ 'fontSize': '20px' }} className="bi bi-box-arrow-right"></i>
+                                        </div>
+                                        <span className="sidebar-nav-name">
+                                            Deconnexion
+                                        </span>
+                                        <span className="sidebar-nav-end">
 
-                                    </span>
+                                        </span>
                                     </a>
                                 </li>
                             </>
-                        ):(
+                        ) : (
                             <>
                                 <li className="sidebar-nav-item">
-                                    <a href="/formulaire" className={actdivLink}>
-                                    <div className="sidebar-nav-icon">
-                                    <i style={{'fontSize': '20px'}} className="bi bi-box-arrow-right"></i>
-                                    </div>
-                                    <span className="sidebar-nav-name">
-                                        Demande de login
-                                    </span>
-                                    <span className="sidebar-nav-end">
+                                    <NavLink to="/formulaire" className="sidebar-nav-link">
+                                        <div className="sidebar-nav-icon">
+                                            <i style={{ 'fontSize': '20px' }} className="bi bi-box-arrow-right"></i>
+                                        </div>
+                                        <span className="sidebar-nav-name">
+                                            Demande de login
+                                        </span>
+                                        <span className="sidebar-nav-end">
 
-                                    </span>
-                                    </a>
-                                </li>  
-                                <li className="sidebar-nav-item">
-                                    <a href="/ajoute-candidat" className={actdivLink}>
-                                    <div className="sidebar-nav-icon">
-                                    <i style={{'fontSize': '20px'}} className="bi bi-file-earmark-person"></i>
-                                    </div>
-                                    <span className="sidebar-nav-name">
-                                        Ajouter un CV
-                                    </span>
-                                    <span className="sidebar-nav-end">
-
-                                    </span>
-                                    </a>
+                                        </span>
+                                    </NavLink>
                                 </li>
                                 <li className="sidebar-nav-item">
-                                    <a href="/se-connecter" className={actdivLink}>
-                                    <div className="sidebar-nav-icon">
-                                    <i style={{'fontSize': '20px'}} className="bi bi-person-fill-check"></i>
-                                    </div>
-                                    <span className="sidebar-nav-name">
-                                        Se connecter
-                                    </span>
-                                    <span className="sidebar-nav-end">
+                                    <NavLink to="/ajoute-candidat" className="sidebar-nav-link">
+                                        <div className="sidebar-nav-icon">
+                                            <i style={{ 'fontSize': '20px' }} className="bi bi-file-earmark-person"></i>
+                                        </div>
+                                        <span className="sidebar-nav-name">
+                                            Ajouter un CV
+                                        </span>
+                                        <span className="sidebar-nav-end">
 
-                                    </span>
-                                    </a>
-                                </li>      
+                                        </span>
+                                    </NavLink>
+                                </li>
+                                <li className="sidebar-nav-item">
+                                    <NavLink to="/se-connecter" className="sidebar-nav-link">
+                                        <div className="sidebar-nav-icon">
+                                            <i style={{ 'fontSize': '20px' }} className="bi bi-person-fill-check"></i>
+                                        </div>
+                                        <span className="sidebar-nav-name">
+                                            Se connecter
+                                        </span>
+                                        <span className="sidebar-nav-end">
+
+                                        </span>
+                                    </NavLink>
+                                </li>
                             </>
-                        )}                                   
+                        )}
                     </ul>
                 </div>
             </>
@@ -238,4 +224,39 @@ class Sidebar extends React.Component {
 
 }
 
-export default Sidebar;
+
+function GetSousCat({datar}) {
+    const [sousCat, setSousCat] = useState([]);
+    useEffect(() => {
+        if(datar){
+            axios.get(`categorie_cvs/${datar}`).then(reps => {
+                setSousCat(reps.data.sousCategorie)
+            }).catch(error => console.log(error))
+        }
+    }, [datar])
+
+    if(sousCat.length > 0){
+        return (
+            <>
+                <ul class="sidebar-nav">
+                    {sousCat && sousCat.map(sc => {
+                        return(
+                            <>
+                                <li class="sidebar-nav-item">
+                                    <Link to={`/souscategorie/${sc.id}`} class="sidebar-nav-link">
+                                        <span class="sidebar-nav-abbr">
+                                            <i class="bi bi-grid-fill"></i>
+                                        </span>
+                                        <span class="sidebar-nav-name">
+                                            {sc.categorie}
+                                        </span>
+                                    </Link>
+                                </li>
+                            </>
+                        )
+                    })}
+                </ul>
+            </>
+        )
+    }
+}

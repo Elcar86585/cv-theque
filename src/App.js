@@ -1,5 +1,6 @@
-import React from 'react';
 import './App.css';
+import React from 'react';
+import 'moment/locale/fr';
 import Navebarmenu from './components/Navebarmenu.js';
 import Sidebar from './components/Sidebar.js';
 import Homepage from './pages/Homepage.js';
@@ -25,9 +26,9 @@ import IdSearch from './pages/home/IdSearch.js';
 import Favorit from './pages/notification/Favorit.js';
 import AllCv from './pages/AllCv';
 import SingleUser from './pages/user/singleUser/SingleUser';
-
-
-
+import DetailDemandeEntretien from './pages/notification/adminNotification/DetailDemandeEntretien';
+import EditCategorie from './pages/categorie/EditCategorie';
+import SousCategorie from './pages/categorie/sousCategorie/SousCategorie';
 
 class App extends React.Component {
   state = {
@@ -86,13 +87,15 @@ class App extends React.Component {
               <Route exact path='editCv/:id' element={<EditCV />} />
               <Route exact path='/table' element={<Table />} />
               <Route exact path='/user/:id' element={<SingleUser id={userLog} />} />
+              <Route exact path='/entretien/:id' element={<DetailDemandeEntretien data={userLog} />} />
+              <Route exact path='/categorie/:id' element={<EditCategorie />} />
             </>
           )
         }
         return (
           <>
             <div className="adminx-container">
-              <BrowserRouter>
+              <BrowserRouter basename='/cvtheque'>
                 <Navebarmenu fonction={this.handleSearch} user={this.state.user} />
                 <Sidebar user={this.state.user} />
                 {this.state.search ? (
@@ -104,6 +107,7 @@ class App extends React.Component {
                     {admin}
                     <Route exact path="cv/:id" element={<CV_candidat user={userLog} />} />
                     <Route exact path="candidats/:id" element={<Candidat user={userLog} />} />
+                    <Route exact path="souscategorie/:id" element={<SousCategorie user={userLog} />} />
                     <Route exact path="profile" element={<Profile user={userLog} />} />
                     <Route exact path="utilisateurs" element={<User />} />
                     <Route exact path="ajoute-candidat" element={<Addcandidat />} />
@@ -123,14 +127,14 @@ class App extends React.Component {
       return (
         <>
           <div className="adminx-container">
-            <BrowserRouter>
+            <BrowserRouter basename='/cvtheque'>
               <Navebarmenu fonction={this.handleSearch} user={this.state.user} />
               <Sidebar user={this.state.user} />
               <Routes>
                 <Route exact path='se-connecter' element={<Login />} />
                 <Route exact path="ajoute-candidat" element={<Addcandidat />} />
                 <Route exact path="*" element={<Page404 />} />
-                <Route exact path='/formulaire' element={<DemandeLogin />} />
+                <Route exact path='formulaire' element={<DemandeLogin />} />
                 <Route exact path="/" element={<Accueil />} />
               </Routes>
               <NotificationContainer />

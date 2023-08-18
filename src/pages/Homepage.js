@@ -5,16 +5,18 @@ import CategorieCount from "./componentsHomepage/CategorieCount";
 import Cards from "./home/Cards";
 import Search from "./home/Search";
 import CardsAdmin from "./home/CardsAdmin";
-import IdSearch from "./home/IdSearch";
 import CandidatRecent from "./home/CandidatRecent";
+import SousCategorieCounter from "./componentsHomepage/SousCategorieCounter";
 
 class Homepage extends React.Component {
     state = {
-        categories: []
+        categories: [],
+        sousCategories: []
     }
 
     componentDidMount = () => {
         this.getCategorie();
+        this.getSousCategorie();
     }
 
     getCategorie = () => {
@@ -24,22 +26,22 @@ class Homepage extends React.Component {
                     categories: resp.data
                 })
             }
+        }).catch(error => console.log(error))
+    }
+
+    getSousCategorie = () => {
+        axios.get('sous_categories').then(resp => {
+            if(resp.status === 200){
+                this.setState({
+                    sousCategories: resp.data
+                })
+            }
         })
     }
     render() {
+        const sousCat = this.state.sousCategories
         const user = this.props.user
         const categories = this.state.categories;
-        let actionButton;
-        if (localStorage.user_token) {
-            if (user.role === 'Administrateur') {
-                actionButton = (
-                    <>
-                        <button className="btn btn-sm btn-secondary">Editer</button>&nbsp;
-                        <button className="btn btn-sm btn-danger">Delete</button>
-                    </>
-                )
-            }
-        }
         let cards;
         if (user.role === 'Administrateur') {
             cards = (
@@ -88,6 +90,16 @@ class Homepage extends React.Component {
                                                 </thead>
                                                 <tbody>
                                                     {categories && categories.map(categorie => {
+                                                        let actionButton;
+                                                        if (localStorage.user_token) {
+                                                            if (user.role === 'Administrateur') {
+                                                                actionButton = (
+                                                                    <>
+                                                                        <Link to={`/categorie/${categorie.id}`}><button className="btn btn-sm btn-secondary">Détail</button></Link>
+                                                                    </>
+                                                                )
+                                                            }
+                                                        }
                                                         return (
                                                             <>
                                                                 <tr>
@@ -95,14 +107,38 @@ class Homepage extends React.Component {
                                                                     <td>
                                                                         <h5><CategorieCount data={categorie.id} /></h5>
                                                                     </td>
-
                                                                     <td>
                                                                         <Link to={`/candidats/${categorie.id}`} ><button className="btn btn-sm btn-primary" >Voir tous les CV</button></Link>&nbsp;
                                                                         {actionButton}
                                                                     </td>
-
                                                                 </tr>
                                                             </>
+                                                        )
+                                                    })}
+                                                    {sousCat && sousCat.map(sc => {
+                                                        let button;
+                                                        if (localStorage.user_token) {
+                                                            if (user.role === 'Administrateur') {
+                                                                button = (
+                                                                    <>
+                                                                        <Link to={`/categorie/${sc.categorie_cv_id}`}><button className="btn btn-sm btn-secondary">Détail</button></Link>
+                                                                    </>
+                                                                )
+                                                            }
+                                                        }
+                                                        return(
+                                                            <tr>
+                                                                <td><strong>{sc.categorie}</strong> </td>
+                                                                <td>
+                                                                    <h5>
+                                                                        <SousCategorieCounter data={sc.id}/>
+                                                                    </h5>
+                                                                </td>
+                                                                <td>
+                                                                    <Link to={`/souscategorie/${sc.id}`} ><button className="btn btn-sm btn-primary" >Voir tous les CV</button></Link>&nbsp;
+                                                                    {button}
+                                                                </td>
+                                                            </tr>
                                                         )
                                                     })}
                                                 </tbody>

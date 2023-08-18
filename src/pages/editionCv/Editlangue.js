@@ -12,7 +12,7 @@ export default function EditLangue({id}) {
             if(resp.status === 200) {
                 setLangue(resp.data)
             }
-        })
+        }).catch(error => console.log(error))
     }, [id])
 
     const editInfo = () => {
@@ -24,7 +24,7 @@ export default function EditLangue({id}) {
                 if(resp.status === 200) {
                     NotificationManager.success('Modifier avec succée', 'Modification valdataer', 4000)
                 }
-            })
+            }).catch(error => console.log(error))
         }else {
             NotificationManager.warning('Aucune modification enregistrer', 'Modification non valider', 4000)
         }
@@ -35,7 +35,7 @@ export default function EditLangue({id}) {
             if(resp.status === 204) {
                 NotificationManager.success('Vous avec supprimer une langue', 'Suprimer avec succèes', 4000)
             }
-        })
+        }).catch(error => console.log(error))
     }
 
     return (

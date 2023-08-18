@@ -108,13 +108,13 @@ function Notification({idCv}) {
         if(idCv){
             axios.get(`cvs/${idCv}`).then(resp => {
                 setProfile(resp.data.cv)
-            })
+            }).catch(error => console.log(error))
         }
         if(profil) {
             const id = profil.categorie_cv_id
             axios.get(`categorie_cvs/${id}`).then(resp => {
                 setCat(resp.data.cat)
-            })
+            }).catch(error => console.log(error))
         }
     }, [idCv])
     if(profil){

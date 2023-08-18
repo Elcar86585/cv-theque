@@ -26,13 +26,14 @@ export default function EditCV() {
     const [facebook, setFacebook] = useState('');
     const [linkedin, setlinkedin] = useState('');
     const [adresse, setAdresse] = useState('');
-    const [nationalite, setNationalité] = useState('')
+    const [nationalite, setNationalité] = useState('');
     const [dispo, setDispo] = useState('');
     const [post, setPost] = useState('');
     const [age, setAge] = useState('');
     const [status, setStatus] = useState('');
     const [aExp, setAexp] = useState('');
     const [contrat, setContrat] = useState('');
+    const [sousCat, setSousCat] = useState([])
     useEffect(() => {
         axios.get(`cvs/${id}`).then(resp => {
             if(id){
@@ -43,12 +44,17 @@ export default function EditCV() {
                 setLangue(resp.data.langage)
                 setLoisir(resp.data.loisir)
             }
-        });
+        }).catch(error => console.log(error));
         axios.get('categorie_cvs').then(resp => {
             if(resp.status === 200) {
                 setCategorie(resp.data)
             }
         });
+        axios.get('sous_categories').then(resp => {
+            if(resp.status === 200){
+                setSousCat(resp.data)
+            }
+        })
     }, [id])
     const profile = cvall
     const handleSubmit = () => {
@@ -78,9 +84,8 @@ export default function EditCV() {
                     setLoisir(resp.data.loisir)
                 });
             }
-        })  
+        }).catch(error => console.log(error))  
     }
-    console.log(cvall);
     return (
         <>
             <div className="adminx-content">
@@ -91,10 +96,24 @@ export default function EditCV() {
                             <div className="card">
                                 <div className="card-body">
                                     <div className="d-flex flex-column align-items-center text-center">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin" className="rounded-circle p-1 bg-primary" width="110"/>
+                                        {profile.photo && profile.photo.url ? (
+                                            <>
+                                                <img src={`http://localhost:3001/${profile.photo.url}`} alt="Admin" className="rounded-circle p-1 bg-primary" width="110" height={110}/>
+                                            </>
+                                        ):(<>
+                                            <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin" className="rounded-circle p-1 bg-primary" width="110"/>                                       
+                                        </>)}
                                         <div className="mt-3">
                                             <h4>{profile.nomPrenom} </h4>
-                                            <GetCategorie id={profile.categorie_cv_id} />
+                                            {profile.sous_category_id ? (
+                                                <>
+                                                    <GetSousCategorie id={profile.sous_category_id} />
+                                                </>
+                                            ):(
+                                                <>
+                                                    <GetCategorie id={profile.categorie_cv_id} />
+                                                </>
+                                            )}
                                             <p className="text-muted font-size-sm">{profile.adresse} </p>
                                             <strong>ID : {profile.id}</strong><br/>
                                             {profile.status === true ? (
@@ -248,25 +267,51 @@ export default function EditCV() {
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div className="row mb-3">
-                                                    <div className="col-sm-3">
-                                                        <h6 className="mb-0">Post</h6>
-                                                    </div>
-                                                    <div className="col-sm-9 text-secondary">
-                                                        <select type="text" className="form-control" 
-                                                            onChange={(e) => setPost(e.target.value)}
-                                                        >
-                                                            <option selected ><GetCategorie id={profile.categorie_cv_id} /></option>
-                                                            {categorie && categorie.map(cat => {
-                                                                return (
-                                                                    <>
-                                                                        <option value={cat.id} >{cat.categorie} </option>
-                                                                    </>
-                                                                )
-                                                            })}
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                                {profile.sous_category_id ? (
+                                                    <>
+                                                        <div className="row mb-3">
+                                                            <div className="col-sm-3">
+                                                                <h6 className="mb-0">Post</h6>
+                                                            </div>
+                                                            <div className="col-sm-9 text-secondary">
+                                                                <select type="text" className="form-control" 
+                                                                    onChange={(e) => setPost(e.target.value)}
+                                                                >
+                                                                    <option selected ><GetSousCategorie id={profile.sous_category_id } /></option>
+                                                                    {sousCat && sousCat.map(cat => {
+                                                                        return (
+                                                                            <>
+                                                                                <option value={cat.id} >{cat.categorie} </option>
+                                                                            </>
+                                                                        )
+                                                                    })}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                ):(
+                                                    <>
+                                                         <div className="row mb-3">
+                                                            <div className="col-sm-3">
+                                                                <h6 className="mb-0">Post</h6>
+                                                            </div>
+                                                            <div className="col-sm-9 text-secondary">
+                                                                <select type="text" className="form-control" 
+                                                                    onChange={(e) => setPost(e.target.value)}
+                                                                >
+                                                                    <option selected ><GetCategorie id={profile.categorie_cv_id} /></option>
+                                                                    {categorie && categorie.map(cat => {
+                                                                        return (
+                                                                            <>
+                                                                                <option value={cat.id} >{cat.categorie} </option>
+                                                                            </>
+                                                                        )
+                                                                    })}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                )}
                                                 <div className="row mb-3">
                                                     <div className="col-sm-3">
                                                         <h6 className="mb-0">Age</h6>
@@ -409,12 +454,30 @@ function GetCategorie({id}) {
                 if(resp.status === 200){
                     setCat(resp.data.cat)
                 }
-            })
+            }).catch(error => console.log(error))
         }
     },[id])
     return (
         <>
             <strong className="text-secondary mb-1">{cat.categorie}  </strong>
+        </>
+    )
+}
+
+function GetSousCategorie({id}) {
+    const [sousCat, setSousCat] = useState('')
+    useEffect(() => {
+        if(id){
+            axios.get(`sous_categories/${id}`).then(resp => {
+                if(resp.status === 200){
+                    setSousCat(resp.data)
+                }
+            }).catch(error => console.log(error))
+        }
+    },[id])
+    return (
+        <>
+            <strong className="text-secondary mb-1">{sousCat.categorie}  </strong>
         </>
     )
 }

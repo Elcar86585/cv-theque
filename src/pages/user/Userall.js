@@ -27,9 +27,7 @@ class Userall extends React.Component {
     }
 
     handleDelete = (id, name) => {
-        alert(`Vous voulez vraiment supprimer ${name}`);
         axios.delete(`users/${id}`).then(response => {
-            console.log(response.data)
             if (response.status === 204) {
                 NotificationManager.success('Supprimer avec succèes', 'Supprimer', 4000);
                 this.props.get()
@@ -41,6 +39,7 @@ class Userall extends React.Component {
 
     handleSearch = (e) => {
         axios.get(`/usersearch?name=${e.target.value}`).then(resp => {
+            console.log(resp.data.search)
             if (resp.status === 200) {
                 this.setState({ tady: resp.data.search })
             } else {
@@ -62,7 +61,8 @@ class Userall extends React.Component {
                     <div id="DataTables_Table_0_wrapper" className="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
                         <div className="row">
                             <div className="col-sm-12 col-md-6"><div className="dataTables_length" id="DataTables_Table_0_length">
-                                <label><font _mstmutation="1" _msttexthash="97825" _msthash="69">Montrer </font>
+                                <label>
+                                    <font _mstmutation="1" _msttexthash="97825" _msthash="69">-- </font>
                                     <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0"
                                         className="form-control form-control-sm">
                                         <option value="10" _msttexthash="9451" _msthash="70">
@@ -79,7 +79,7 @@ class Userall extends React.Component {
                                         </option>
                                     </select>
                                     <font _mstmutation="1" _msttexthash="114621" _msthash="74">
-                                        Entrées
+                                        ---
                                     </font>
                                 </label>
                             </div>
@@ -102,13 +102,13 @@ class Userall extends React.Component {
                             <div className="row">
                                 {recherche.length > 0 ? (
                                     <>
-                                        {/* <SearchUser table={recherche} message={this.state.message} /> */}
+                                        <SearchUser table={recherche} message={this.state.message} />
                                     </>
                                 ) : (
                                     <>
                                         {users && users.map(user => {
                                             var date = moment(user.created_at); // crée un objet Moment pour la date actuelle
-                                            var formattedDate = date.fromNow(); // format "il y a quelques minutes"
+                                            var formattedDate = date.fromNow(); // format " quelques minutes"
                                             return (
                                                 <div className="col-xl-4 col-sm-6">
                                                     <div className="card">
@@ -119,12 +119,12 @@ class Userall extends React.Component {
                                                                     {user.role === 'Administrateur' ? (
                                                                         <>
                                                                             <span className="badge rounded-pill bg-primary" style={{ "color": "#ffffff" }}>Administrateur</span>
-                                                                            <span className="badge rounded-pill bg-light text-dark">il y a{formattedDate} </span>
+                                                                            <span className="badge rounded-pill bg-light text-dark">{formattedDate} </span>
                                                                         </>
                                                                     ) : (
                                                                         <>
                                                                             <span className="badge rounded-pill bg-success" style={{ "color": "#ffffff" }}>Utilisateur</span>
-                                                                            <span className="badge rounded-pill bg-light text-dark">il y a {formattedDate} </span>
+                                                                            <span className="badge rounded-pill bg-light text-dark"> {formattedDate} </span>
                                                                         </>
                                                                     )}
                                                                 </div>
@@ -132,7 +132,6 @@ class Userall extends React.Component {
                                                             <GetUse id={user.id} user={user} />
                                                             <div className="d-flex gap-2 pt-4">
                                                                 <Link to={`/user/${user.id}`}><button type="button" className="btn btn-soft-primary"><i className="bx bx-user me-1"></i> Profile</button></Link>&nbsp;
-                                                                <button type="button" className="btn btn-primary btn-sm w-50"><i className="bx bx-message-square-dots me-1"></i> Contact</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -172,6 +171,15 @@ function GetUse({ id, user }) {
             <p className="text-muted mb-0"><i class="bi bi-buildings"></i>&nbsp;{user.societe} </p>
             <p className="text-muted mb-0 mt-2"><i className="bi bi-people"></i>&nbsp;Demande d'entretien ({entretien.length}) </p>
             <p className="text-muted mb-0 mt-2"><i className="bi bi-star"></i>&nbsp;List des favoris ({favori.length}) </p>
+            {user.account === true ? (
+            <p className="text-muted mb-0 mt-2">
+                <span class="badge badge-warning"><i className="bi bi-person-fill-slash"></i>&nbsp;Compte Désactiver </span>
+            </p>
+            ):(
+            <p className="text-muted mb-0 mt-2">
+                <span class="badge badge-info"><i className="bi bi-person-fill-check"></i>&nbsp;Comtpe Activer </span>
+            </p>
+            )}
         </div>
     )
 }

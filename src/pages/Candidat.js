@@ -14,8 +14,9 @@ function Candidat({user}) {
     axios.get(`categorie_cvs/${id}`).then(resp => {
       setCv(resp.data.cvArr);
       setCategorie(resp.data.cat);
-    });
+    }).catch(error => console.log(error));
   }, [id]);
+  
   return (
     <>
       <div className="adminx-content">

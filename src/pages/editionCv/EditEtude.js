@@ -13,7 +13,7 @@ export default function EditEtude({id}) {
             if(resp.status === 200) {
                 setEtude(resp.data)
             }
-        })
+        }).catch(error => console.log(error))
     }, [id])
 
     const editEtude = () => {
@@ -37,7 +37,7 @@ export default function EditEtude({id}) {
             if(resp.status === 204) {
                 NotificationManager.success('Vous avec supprimer une etude ou formation', 'Suprimer avec succèes', 4000)
             }
-        })
+        }).catch(error => console.log(error))
     }
     return (
         <form>

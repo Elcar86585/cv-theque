@@ -17,7 +17,7 @@ class CandidatRecent extends React.Component {
             this.setState({
                 profil: reponse.data
             })
-        })
+        }).catch(error => console.log(error))
     }
     render() {
         const candidat = this.state.profil 
@@ -32,7 +32,7 @@ class CandidatRecent extends React.Component {
                                     <div class="row">
                                         {candidat && candidat.map(cv => {
                                             var date = moment(cv.created_at); // crée un objet Moment pour la date actuelle
-                                            var formattedDate = date.fromNow(); // format "il y a quelques minutes"
+                                            var formattedDate = date.fromNow(); // format " quelques minutes"
                                             if(cv.status !== true){
                                                 return (
                                                     <div class="col-lg-12 col-md-12 col-sm-12">
@@ -49,10 +49,18 @@ class CandidatRecent extends React.Component {
                                                                     <div class="story-author">
                                                                         <p class="name">
                                                                             {cv.nomPrenom} / <a href="" class="badge badge-info">Broullion</a>
-                                                                            &nbsp;<a href="" class="badge badge-info">il y a {formattedDate}</a>
+                                                                            &nbsp;<a href="" class="badge badge-info"> {formattedDate}</a>
                                                                         </p>
                                                                         <p class="time">
-                                                                            <Categorie id={cv.categorie_cv_id} /> / {cv.aExperience} d'experience(s)
+                                                                            {cv.sous_category_id ? (
+                                                                                <>
+                                                                                    <SousCategorie sid={cv.sous_category_id} /> / {cv.aExperience} d'experience(s)
+                                                                                </>
+                                                                            ):(
+                                                                                <>
+                                                                                    <Categorie id={cv.categorie_cv_id} /> / {cv.aExperience} d'experience(s)
+                                                                                </>
+                                                                            )}
                                                                         </p>
                                                                         <p class="time">
                                                                             <Link to={`editCv/${cv.id}`} class="badge badge-warning">Modifier le CV</Link>
@@ -79,10 +87,18 @@ class CandidatRecent extends React.Component {
                                                                     <div class="story-author">
                                                                         <p class="name">
                                                                             {cv.nomPrenom} / <a href="" class="badge badge-success">Publier</a>
-                                                                            &nbsp;<a href="" class="badge badge-success">il y a {formattedDate}</a>
+                                                                            &nbsp;<a href="" class="badge badge-success"> {formattedDate}</a>
                                                                         </p>
                                                                         <p class="time">
-                                                                            <Categorie id={cv.categorie_cv_id} /> / {cv.aExperience} d'experience(s)
+                                                                            {cv.sous_category_id ? (
+                                                                                <>
+                                                                                    <SousCategorie sid={cv.sous_category_id} /> / {cv.aExperience} d'experience(s)
+                                                                                </>
+                                                                            ):(
+                                                                                <>
+                                                                                    <Categorie id={cv.categorie_cv_id} /> / {cv.aExperience} d'experience(s)
+                                                                                </>
+                                                                            )}
                                                                         </p>
                                                                         <p class="time">
                                                                             <Link to={`editCv/${cv.id}`} class="badge badge-warning">Modifier le CV</Link>
@@ -130,7 +146,15 @@ class CandidatRecent extends React.Component {
                                                                     <div class="story-author">
                                                                         <p class="name"><strong>ID : {cv.id}</strong> </p>
                                                                         <p class="time">
-                                                                            <Categorie id={cv.categorie_cv_id} /> / {cv.aExperience} d'experience(s)
+                                                                            {cv.sous_category_id ? (
+                                                                                <>
+                                                                                    <SousCategorie sid={cv.sous_category_id} /> / {cv.aExperience} d'experience(s)
+                                                                                </>
+                                                                            ):(
+                                                                                <>
+                                                                                    <Categorie id={cv.categorie_cv_id} /> / {cv.aExperience} d'experience(s)
+                                                                                </>
+                                                                            )}
                                                                         </p>
                                                                         <Link to={`/cv/${cv.id}`} ><p class="time">Voir le CV</p></Link>
                                                                     </div>
@@ -161,13 +185,32 @@ export default CandidatRecent;
 function Categorie({id}) {
     const [cat, setCat] = useState('')
     useEffect(() => {
-        axios.get(`/categorie_cvs/${id}`).then(resp => {
-            setCat(resp.data.cat)
-        })
+        if(id){
+            axios.get(`/categorie_cvs/${id}`).then(resp => {
+                setCat(resp.data.cat)
+            }).catch(error => console.log(error))
+        }
     }, [id])
+    
     return(
         <>
             {cat.categorie}
         </>
+    )
+}
+
+function SousCategorie({sid}) {
+    const [sousCat, setSousCat] = useState('')
+    useEffect(() => {
+        if(sid){
+            axios.get(`/sous_categories/${sid}`).then(resp => {
+                setSousCat(resp.data.sc)
+            }).catch(error => console.log(error))
+        }
+    }, [sid])
+    return(
+        <>
+        {sousCat.categorie}
+    </>
     )
 }

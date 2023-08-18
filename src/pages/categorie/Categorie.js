@@ -67,7 +67,7 @@ class Categorie extends React.Component {
                                         </nav>
                                     </div>
                                     <div className="card-body collapse show" id="card1">
-                                        <CategorieAll cate={cat} func={this.getCategories} />
+                                        <CategorieAll cate={cat} func={this.componentDidMount} />
                                     </div>
                                     </div>
                                 </div>

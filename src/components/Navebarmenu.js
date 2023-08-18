@@ -4,7 +4,8 @@ import axios from 'axios';
 class Navebarmenu extends React.Component {
     state={
         notificationCounter: '',
-        search: ''
+        search: '',
+        entretienCount: ''
     }
 
     componentDidMount = () => {
@@ -13,7 +14,12 @@ class Navebarmenu extends React.Component {
                 this.setState({
                     notificationCounter: resp.data
                 })
-            })
+            }).catch(error => console.log(error))
+            axios.get('entretienCounter').then(resp => {
+                this.setState({
+                    entretienCount: resp.data
+                })
+            }).catch(error => console.log(error))
         }
     }
 
@@ -21,13 +27,14 @@ class Navebarmenu extends React.Component {
     handleClick = () => {
         localStorage.clear();
         localStorage.clear(window.location.reload())
-        window.location.replace('/')
+        window.location.replace('/cvtheque')
     }
 
     
 
     render() {
         const use = this.props.user
+        const not = this.state.notificationCounter + this.state.entretienCount
         let button;
         let notify;
         if(localStorage.user_token){
@@ -38,7 +45,7 @@ class Navebarmenu extends React.Component {
                             <Link class="position-relative" to="/notifications">
                                 <i class="bi bi-bell-fill" style={{"fontSize": "25px"}} ></i>
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {this.state.notificationCounter}
+                                    {not}
                                 </span>
                             </Link>
                         </li>
@@ -64,9 +71,9 @@ class Navebarmenu extends React.Component {
         return (
             <>
                 <nav className="navbar navbar-expand justify-content-between fixed-top">
-                        <a className="navbar-brand mb-0 h1 d-none d-md-block" href="/">
+                        <a className="navbar-brand mb-0 h1 d-none d-md-block" href="/cvtheque">
                         <img src="https://www.activsolution.fr/superawesome/2022/11/logo-activ-solution-250.png" className="navbar-brand-image d-inline-block align-top mr-2" alt=""/>
-                            CV theque Activ Solution Océan Indien
+                            CV thèque Activ Solution Océan Indien
                         </a>
 
                         <div  className="form-inline form-quicksearch d-none d-md-block mx-auto">

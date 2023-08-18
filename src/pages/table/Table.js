@@ -31,7 +31,7 @@ class Table extends React.Component {
                     categorie: resp.data
                 })
             }
-        })
+        }).catch(error => console.log(error))
     }
 
     getCv = () => {
@@ -39,7 +39,7 @@ class Table extends React.Component {
             this.setState({
                 cvall: resp.data
             })
-        })
+        }).catch(error => console.log(error))
     }
 
     handleOnglet = (e) => {
@@ -87,7 +87,6 @@ class Table extends React.Component {
     handleEmail = (e) => {
         const mail = e.target.value
         const email = this.state.email.filter(item => item.email !== mail)
-        console.log(email)
         
         // if(mail) {
         //     this.setState(prevState => ({

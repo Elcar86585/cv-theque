@@ -13,7 +13,7 @@ export default function ContentTable({index, search}) {
                     setCv(resp.data.cv);
                     setLoad(true);
                 }
-            })
+            }).catch(error => console.log(error))
         }
     }, [index])
     const seaN = search.nationalite
@@ -22,13 +22,13 @@ export default function ContentTable({index, search}) {
         const url = cv.photo.url;
         image = (
             <>
-                <img src={`http://localhost:3001/${url}`} style={{"width": "50px", "borderRadius": "50%"}} class="img-thumbnail" alt="image CV thèque Activ solution"/>
+                <img src={`http://localhost:3001/${url}`} style={{"width": "50px", "borderRadius": "50%", "height": "50px",}} class="img-thumbnail" alt="image CV thèque Activ solution"/>
             </>
         )
     }else{
         image = (
         <>
-            <img src="https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png" style={{"width": "50px", "borderRadius": "50%"}} class="img-thumbnail" alt="..."/>
+            <img src="https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png" style={{"width": "50px", "height": "50px", "borderRadius": "50%"}} class="img-thumbnail" alt="..."/>
         </>)
     }
     if(search.nationalite) {

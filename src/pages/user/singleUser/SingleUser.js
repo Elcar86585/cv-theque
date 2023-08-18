@@ -13,11 +13,11 @@ export default function SingleUser() {
     const [user, setUser] = useState('')
     const [favo, setFavo] = useState('')
     const [demande, setDemande] = useState('')
-    const {id} = useParams()
+    const { id } = useParams()
     useEffect(() => {
-        if(id) {
+        if (id) {
             axios.get(`users/${id}`).then(resp => {
-                if(resp.status === 200) {
+                if (resp.status === 200) {
                     setUser(resp.data.user)
                     setDemande(resp.data.entretien)
                     setFavo(resp.data.favo)
@@ -25,12 +25,21 @@ export default function SingleUser() {
             })
         }
     }, [id])
-    
+
     const handleDelete = (id) => {
-        axios.delete(`users/${id}`).then(resp => {
-            if(resp.status === 204) {
-                NotificationManager.success('Utilisateur supprimer avec succée', 'Supprimer', 4000);
-                window.location.replace('/utilisateurs')
+        axios.put(`users/${id}`, { account: true }).then(resp => {
+            if (resp.status === 200) {
+                NotificationManager.success('Utilisateur à été désactiver avec succée', 'Désactiver', 4000);
+                window.history.back();
+            }
+        })
+    }
+
+    const handleActived = (id) => {
+        axios.put(`users/${id}`, { account: false }).then(resp => {
+            if (resp.status === 200) {
+                NotificationManager.success('Utilisateur à été activer avec succée', 'Activation', 4000);
+                window.history.back();
             }
         })
     }
@@ -71,6 +80,15 @@ export default function SingleUser() {
                                             </li>
                                             <li className="list-group-item">
                                                 <div className="list-icon">
+                                                    <i className="bi bi-geo-alt-fill"></i>
+                                                </div>
+                                                <div className="list-details">
+                                                    <span>{user.pays} </span>
+                                                    <small>{user.adresse} </small>
+                                                </div>
+                                            </li>
+                                            <li className="list-group-item">
+                                                <div className="list-icon">
                                                     <i className="bi bi-person-circle"></i>
                                                 </div>
                                                 <div className="list-details">
@@ -88,7 +106,7 @@ export default function SingleUser() {
                                                         <small>Role de l'utilisateur</small>
                                                     </div>
                                                 </li>
-                                            ):(
+                                            ) : (
                                                 <li className="list-group-item">
                                                     <div className="list-icon">
                                                         <i className="bi bi-person-vcard-fill"></i>
@@ -99,16 +117,35 @@ export default function SingleUser() {
                                                     </div>
                                                 </li>
                                             )}
-                                            <li className="list-group-item">
-                                                <div className="list-icon">
-                                                    <i className="bi bi-trash3"></i>
-                                                </div>
-                                                <div className="list-details">
-                                                    <button onClick={() => handleDelete(user.id)} type="button" class="btn btn-danger">
-                                                        Supprimer l' <span class="badge badge-light">utilisateur</span>
-                                                    </button>
-                                                </div>
-                                            </li>
+
+                                            {user.account === true ? (
+                                                <>
+                                                    <li className="list-group-item">
+                                                        <div className="list-icon">
+                                                          <i className="bi bi-person-fill-check"></i>
+                                                        </div>
+                                                        <div className="list-details">
+                                                            <button onClick={() => handleActived(user.id)} type="button" class="btn btn-primary">
+                                                                Activer l' <span class="badge badge-light">utilisateur</span>
+                                                            </button>
+                                                        </div>
+                                                    </li>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <li className="list-group-item">
+                                                        <div className="list-icon">
+                                                            <i className="bi bi-person-fill-x"></i>
+                                                        </div>
+                                                        <div className="list-details">
+                                                            <button onClick={() => handleDelete(user.id)} type="button" class="btn btn-danger">
+                                                                Désactiver l' <span class="badge badge-light">utilisateur</span>
+                                                            </button>
+                                                        </div>
+                                                    </li>
+                                                </>
+                                            )}
+
                                         </ul>
                                         <div className="row text-center mt-4">
                                             <div className="col p-2">
@@ -131,17 +168,17 @@ export default function SingleUser() {
                         <div className="col-lg-8">
                             <div className="card z-depth-3">
                                 <div className="card-body">
-                                <Tabs activeKey={tabKey} onSelect={(e) => initTabKey(e)}>
-                                    <Tab eventKey="one" title="Demande d'entretien">
-                                        <DemandeEntretien ids={demande}  />
-                                    </Tab>
-                                    <Tab eventKey="two" title="List des favoris">
-                                        <FavorisList ids={favo}  />                               
-                                    </Tab>
-                                    <Tab eventKey="three" title="Modifier l'utilisateur">
-                                        <EditUser user={user} />
-                                    </Tab>
-                                </Tabs>
+                                    <Tabs activeKey={tabKey} onSelect={(e) => initTabKey(e)}>
+                                        <Tab eventKey="one" title="Demande d'entretien">
+                                            <DemandeEntretien ids={demande} />
+                                        </Tab>
+                                        <Tab eventKey="two" title="List des favoris">
+                                            <FavorisList ids={favo} />
+                                        </Tab>
+                                        <Tab eventKey="three" title="Modifier l'utilisateur">
+                                            <EditUser user={user} />
+                                        </Tab>
+                                    </Tabs>
                                 </div>
                             </div>
                         </div>

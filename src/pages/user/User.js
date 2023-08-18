@@ -22,7 +22,6 @@ class User extends React.Component {
     };
     render() {
         const use = this.state.users
-        console.log(use)
         return (
             <>
             <div className="adminx-content">

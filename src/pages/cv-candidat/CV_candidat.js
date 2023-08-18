@@ -13,9 +13,12 @@ import { NotificationManager } from 'react-notifications';
 import CommentList from './CommentList';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { Button, Modal } from 'react-bootstrap';
-
-
+import { Button, Col, Modal, Row } from 'react-bootstrap';
+import { Calendar, DateObject } from "react-multi-date-picker";
+import Footer from "react-multi-date-picker/plugins/range_picker_footer";
+import DatePicker from "react-multi-date-picker";
+import TimePicker from "react-multi-date-picker/plugins/analog_time_picker";
+import moment from 'moment';
 
 export default function CV_candidat({ user, fun }) {
     const { id } = useParams();
@@ -26,27 +29,37 @@ export default function CV_candidat({ user, fun }) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const [value, setValue] = useState(new Date());
+    const [dateValue, setDateValue] = useState([
+        new DateObject().setDay(15),
+        new DateObject().add(1, "month").setDay(15)
+    ]);
+    const [heurre, setHeurre] = useState('');
 
     useEffect(() => {
         if (id) {
             axios.get(`cvs/${id}`).then(resp => {
-                setCv(resp.data.cv);
-                setArray(resp.data);
-                setCom(resp.data.comment)
-            });
+                if(resp.status === 200) {
+                    setCv(resp.data.cv);
+                    setArray(resp.data);
+                    setCom(resp.data.comment)
+                }
+            }).catch(error => {console.log(error)})
         }
     }, [id]);
 
     const getComment = () => {
         axios.get(`cvs/${id}`).then(resp => {
             setCom(resp.data.comment)
-        });
+        }).catch(error => console.log(error));
     }
 
     const handleClick = () => {
-        setComment(true)
+        setComment(true);
     }
+
+    const date = dateValue.map(d => `${d.day}/${d.month}/${d.year}`)
+    const hours = `${heurre.hour}:${heurre.second}`
+
     const admin = user.role === 'Administrateur';
     let contact;
     let commentaire;
@@ -137,20 +150,23 @@ export default function CV_candidat({ user, fun }) {
             } else {
                 NotificationManager.info('Le CV est déja dans votre favoris', 'Info', 4000)
             }
-        })
+        }).catch(error => console.log(error))
     }
 
     const handleDemandeEntretien = () => {
         const formdata = new FormData;
         formdata.append('cv_id', cv.id);
         formdata.append('user_id', user.id)
+        formdata.append('drdv', date)
+        formdata.append('hrdv', hours)
         axios.post('entretiens', formdata).then(resp => {
             if (resp.status === 201) {
                 NotificationManager.success('Votre demande d\'entretien est valider', 'Valider', 4000)
+                handleClose();
             } else {
                 NotificationManager.warning('Une erreur est survenue lors de l\'envoie de votre demande', 'Erreur', 4000)
             }
-        })
+        }).catch(error => console.log(error))
     }
 
     const handletelecharge = () => {
@@ -166,7 +182,6 @@ export default function CV_candidat({ user, fun }) {
             }
         });
     }
-
     return (
         <div className="adminx-content">
             <div className="adminx-main-content">
@@ -208,14 +223,12 @@ export default function CV_candidat({ user, fun }) {
                                             <div className="resume-skill-item">
                                                 <CandidatLangage lang={array.langage} />
                                             </div>
-
                                             <div className="resume-skill-item">
                                                 <h4 className="resume-skills-cat font-weight-bold">Loisirs</h4>
                                                 <CandidatLoisir loi={array.loisir} />
                                             </div>
                                         </div>
                                     </section>
-
                                     <section className="resume-section interests-section mb-5">
                                         <h2 className="resume-section-title text-uppercase font-weight-bold pb-3 mb-3">Informatique</h2>
                                         <div className="resume-section-content">
@@ -228,7 +241,6 @@ export default function CV_candidat({ user, fun }) {
                         </div>
                     </div>
                 </article>
-
                 <center>
                     <div className="">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -257,19 +269,55 @@ export default function CV_candidat({ user, fun }) {
                     </div>
                 </center>
             </div>
-            <Modal show={show} onHide={handleClose}>
+            <Modal  aria-labelledby="contained-modal-title-vcenter" size="lg"
+                centered show={show} onHide={handleClose}>
                 <Modal.Header>
                     <Modal.Title>Fixer vos date de disponibilité</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    <h1>Cops</h1>
+                <Modal.Body className='row'>
+                    <Row className='container'>
+                        <Col xs={12} md={8} >
+                            <Calendar
+                                range
+                                onChange={setDateValue}
+                                numberOfMonths={2}
+                                plugins={[
+                                    <Footer
+                                        position="bottom"
+                                        format="DD MMM YYYY"
+                                        names={{
+                                            selectedDates: "Date de rendez-vous d'entretien",
+                                            from: "Je suis libre le",
+                                            to: "Jusqu'au ",
+                                            selectDate: "selection",
+                                            close: "Close",
+                                            separator: ",",
+                                        }}
+                                    />,
+                                ]}
+                            />
+                        </Col>
+                        <Col xs={6} md={4}>
+                            <p>Selectionnez l'heure de rendez-vous : </p>
+                            <DatePicker 
+                                disableDayPicker
+                                format="HH:mm"
+                                onChange={setHeurre}
+                                plugins={[
+                                    <TimePicker
+                                    />
+                                ]} 
+                                />
+                            
+                        </Col>
+                    </Row>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
-                        Close
+                        Fermer
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
+                    <Button variant="primary" onClick={handleDemandeEntretien}>
+                        Valider le rendez-vous
                     </Button>
                 </Modal.Footer>
             </Modal>

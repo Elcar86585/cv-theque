@@ -8,6 +8,7 @@ export default function EditUser({user}) {
     const [phone, setPhone] = useState('');
     const [societe, setSociete] = useState('');
     const [mdp, setMdp] = useState('');
+    const [expire, setExpire] = useState('')
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
@@ -17,6 +18,7 @@ export default function EditUser({user}) {
         if(phone){fromdata.append('phone', phone);}
         if(societe){fromdata.append('societe', societe);}
         if(mdp){fromdata.append('pass', mdp)}
+        if(expire){fromdata.append('expire', expire)}
         
 
         axios.put(`users/${user.id}`, fromdata).then(resp => {
@@ -54,7 +56,7 @@ export default function EditUser({user}) {
                         <label className="col-lg-3 col-form-label form-control-label">Numero telephone </label>
                         <div className="col-lg-9">
                             <input 
-                                className="form-control" type="number" 
+                                className="form-control" type="text" 
                                 defaultValue={user.phone} 
                                 onChange={(e) => setPhone(e.target.value)}
                             />
@@ -81,8 +83,18 @@ export default function EditUser({user}) {
                         </div>
                     </div>
                     <div className="form-group row">
+                        <label className="col-lg-3 col-form-label form-control-label">Date d'expiration</label>
+                        <div className="col-lg-9">
+                            <input 
+                                className="form-control" type="date" 
+                                defaultValue={user.expire} 
+                                onChange={(e) => setExpire(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className="form-group row">
                         <label className="col-lg-3 col-form-label form-control-label"></label>
-                        <button class="btn btn-primary" onClick={handleSubmit}>
+                        <button className="btn btn-primary" onClick={handleSubmit}>
                             Valider les modifications
                         </button>
                     </div>

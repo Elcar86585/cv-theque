@@ -64,13 +64,15 @@ class Adduser extends React.Component {
                             formdata.append('pass', value.password)
                             formdata.append('phone', value.phone)
                             formdata.append('societe', value.societe)
+                            formdata.append('adresse', value.adresse)
+                            formdata.append('pays', value.pays)
                             axios.post('users', formdata).then(response => {
                                 if(response.status === 201){
                                     NotificationManager.success(response.data.message, 'utilisateur', 4000);
                                     resetForm();
                                     this.props.get();
                                 }else {
-                                    NotificationManager.waring(response.data.message, 'Erreur', 4000);
+                                    NotificationManager.warning(response.data.message, 'Erreur', 4000);
                                 }
                             })
                         }}
@@ -86,11 +88,19 @@ class Adduser extends React.Component {
                             </div>
                             <div className="form-group">
                                 <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Téléphone</label>
-                                <Field type="number" className="form-control" name="phone" placeholder="Numéro téléphone" _msthash="79" required/>
+                                <Field type="text" className="form-control" name="phone" placeholder="Numéro téléphone" _msthash="79" required/>
                             </div>
                             <div className="form-group">
                                 <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Société</label>
                                 <Field type="text" className="form-control" name="societe" placeholder="Nom de la société" _msthash="79" required/>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Pays</label>
+                                <Field type="text" className="form-control" name="pays" placeholder="Pays" _msthash="79" required/>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Adresse</label>
+                                <Field type="text" className="form-control" name="adresse" placeholder="Adresse postal" _msthash="79" required/>
                             </div>
                             <div className="form-group">    
                                 <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Rôle</label>
@@ -119,7 +129,6 @@ class Adduser extends React.Component {
                             <div className="form-group">
                                 <button type="submit" className="btn btn-primary" _msttexthash="2631473" _msthash="97">Valider l'utilisateur</button>
                             </div>
-                            
                         </Form>
                     </Formik>
                 </div>

@@ -11,16 +11,17 @@ class Profile extends React.Component {
         type: 'password',
         pass: this.props.user.pass,
         mdp: '',
+        usage: {}
     }
 
-    // componentDidMount = () => {
-    //     this.getUser();
-    // }
+    componentDidMount = () => {
+        this.getUser();
+    }
 
     getUser = () => {
         if (localStorage.token) {
             axios.get(`users/${localStorage.curent_user}`).then(resp => {
-                console.log(resp.data)
+                this.setState({usage: resp.data})
             })
         }
     }
@@ -61,7 +62,9 @@ class Profile extends React.Component {
     render() {
         const show = this.state.password;
         const user = this.props.user;
-        const date = moment(user.created_at).format('DD-MM-YYYY');
+        const date = moment(user.created_at).format('LL');
+        const expireDate = moment(user.expire).format('LL');
+        const deta = this.state.usage
         return (
             <>
                 <div className="adminx-content">
@@ -83,14 +86,58 @@ class Profile extends React.Component {
                                 <div className="col-lg-6">
                                     <div className="card">
                                         <div className="card-header d-flex justify-content-between align-items-center">
-                                            <div className="card-header-title" _msttexthash="183612" _msthash="68">Description</div>
+                                            <div className="card-header-title" _msttexthash="183612" _msthash="68">A propos de vous</div>
                                         </div>
                                         <div className="card-body collapse show" id="card1">
-                                            <p>Nom et prenom : {user.name} </p>
-                                            <p>E-mail : {user.email} </p>
+                                            <p>Nom et prenom : <strong>{user.name}</strong> </p>
+                                            <p>E-mail : <strong>{user.email}</strong> </p>
+                                            <p>Pays : <strong>{user.pays}</strong> </p>
+                                            <p>Société : <strong>{user.societe}</strong> </p>
+                                            <p>Téléphone : <strong>{user.phone}</strong> </p>
+                                            <p>Date d'expiration de compte : <strong>{expireDate}</strong> </p>
                                             <p>Membre depuis : <strong>{date}</strong> </p>
-                                            <p>Date d'expiration de compte: <strong>{user.expire}</strong> </p>
-                                            <br />
+                                            <div class="alert alert-danger" role="alert"><br />
+                                                <p>Date d'expiration du compte : <strong>{expireDate}</strong> </p>
+                                            </div>
+                                            {/* <hr /> */}
+                                            {/* <div class="row space-between">
+                                                <div class="col-4">
+                                                    <div class="card service-card card-inverse">
+                                                        <center>
+                                                            <div class="card-block">
+                                                                <i class="bi bi-star-fill" style={{ 'fontSize': '30px' }}></i>
+                                                                <h4 class="card-title">
+                                                                    {deta.favo}
+                                                                </h4>
+                                                            </div>
+                                                        </center>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="card service-card card-inverse">
+                                                        <center>
+                                                            <div class="card-block">
+                                                                <i class="bi bi-person-square" style={{ 'fontSize': '30px' }}></i>
+                                                                <h4 class="card-title">
+                                                                    5
+                                                                </h4>
+                                                            </div>
+                                                        </center>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="card service-card card-inverse">
+                                                        <center>
+                                                            <div class="card-block">
+                                                                <i class="bi bi-cloud-download-fill" style={{ 'fontSize': '30px' }}></i>
+                                                                <h4 class="card-title">
+                                                                    2
+                                                                </h4>
+                                                            </div>
+                                                        </center>
+                                                    </div>
+                                                </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                     <br />

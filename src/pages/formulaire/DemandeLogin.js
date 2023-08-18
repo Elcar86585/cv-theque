@@ -10,7 +10,15 @@ class DemandeLogin extends React.Component {
         objet: '',
         description: '',
         type: 'submit',
-        phone: ''
+        phone: '',
+        ip: {}, 
+        adresse: ''
+    }
+
+    componentDidMount = () => {
+        axios.get('https://ipapi.co/json').then(resp => {
+            this.setState({ip: resp.data})
+        }).catch(error => console.log(error))
     }
 
     handleName = (e) => {
@@ -43,6 +51,7 @@ class DemandeLogin extends React.Component {
         })
     }
     render() {
+        const trace = this.state.ip
         return (
             <>
                 <div className="adminx-content">
@@ -102,11 +111,17 @@ class DemandeLogin extends React.Component {
                                             Inscrivez-vous dès maintenant pour accéder à notre base de données de CV et découvrir
                                             les talents qui peuvent faire la différence pour votre entreprise !
                                             <hr />
-                                            Nom : {this.state.name}
+                                            Nom et prénom : {this.state.name}
                                             <br /><hr />
                                             Adresse E-mail : {this.state.email}
                                             <br /><hr />
-                                            Objet : {this.state.objet}
+                                            Numéro téléphone : {this.state.phone}
+                                            <br /><hr />
+                                            Pays : {`${trace.country_name} / ${trace.country_capital} / ${trace.city}`}
+                                            <br /><hr />
+                                            Adresse exacte : {this.state.adresse}
+                                            <br /><hr />
+                                            Entreprise : {this.state.objet}
                                             <br /><hr />
                                             Description :<br />
                                             {this.state.description}
@@ -135,9 +150,10 @@ class DemandeLogin extends React.Component {
                                                     formData.append('email', this.state.email);
                                                     formData.append('object', this.state.objet);
                                                     formData.append('numero', this.state.phone);
+                                                    formData.append('pays', `${trace.country_name} / ${trace.country_capital} / ${trace.city}`);
+                                                    formData.append('adresse', this.state.adresse);
                                                     formData.append('description', this.state.description);
                                                     axios.post('demand_logins', formData).then(resp => {
-                                                        console.log(resp.data.name)
                                                         if (resp.status === 201) {
                                                             NotificationManager.success('Votre demande est bien envoyer', 'Envoyer', 4000);
                                                             this.setState({ type: 'reset' })
@@ -145,7 +161,7 @@ class DemandeLogin extends React.Component {
                                                         } else {
                                                             NotificationManager.danger('Une erreur est survenue lors de l\'envoye de votre demande', 'Erreur', 4000);
                                                         }
-                                                    })
+                                                    }).catch(error => console.log(error))
                                                 }}
                                             >
                                                 <Form>
@@ -160,8 +176,16 @@ class DemandeLogin extends React.Component {
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="exampleInputEmail1" class="form-label">Numéro téléphone</label>
-                                                        <input name="phone" onChange={this.handlePhone} placeholder="Votre numéro téléphone" type="number" class="form-control" required aria-describedby="emailHelp" />
+                                                        <input name="phone" onChange={this.handlePhone} defaultValue={trace.country_calling_code} type="text" class="form-control" required aria-describedby="emailHelp" />
                                                         <div class="form-text">Votre numéro téléphone ne sera pas publier.</div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="exampleInputEmail1" class="form-label">Pays </label>
+                                                        <input name="pays" value={`${trace.country_name} / ${trace.country_capital} / ${trace.city}`} type="text" class="form-control" required aria-describedby="emailHelp" />
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="exampleInputEmail1" class="form-label">Adresse exacte </label>
+                                                        <input name="text" onChange={(e) => this.setState({adresse: e.target.value})} type="text" class="form-control" placeholder="Votre adresse exacte" required aria-describedby="emailHelp" />
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="exampleInputPassword1" class="form-label">Nom de l'entreprise</label>

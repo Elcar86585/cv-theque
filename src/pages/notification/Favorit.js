@@ -20,7 +20,6 @@ export default function Favorit({ id, fav }) {
                         <div >
                             <div className="row gy-4 justify-content-center">
                                 {fav && fav.map(f => {
-                                    console.log(f)
                                     return (
                                         <div className="col-sm-6 col-md-6 col-lg-4">
                                             <Favori idCv={f.cv_id}  />
@@ -44,12 +43,12 @@ function Favori({idCv}) {
         if(idCv) {
             axios.get(`cvs/${idCv}`).then(resp => {
                 setCv(resp.data.cv)
-            })
+            }).catch(error => console.log(error))
         }
         if(cv) {
             axios.get(`categorie_cvs/${cv.categorie_cv_id}`).then(resp => {
                 setCat(resp.data.cat)
-            })
+            }).catch(error => console.log(error))
         }
     }, [idCv])
     return (

@@ -11,7 +11,7 @@ export default function ResultSeach({catego, sea}) {
         if(catego){
             axios.get(`categorie_cvs/${catego}`).then(resp => {
                 setCv(resp.data.cvArr)
-            })
+            }).catch(error => console.log(error))
         }
     }, [catego])
     return(
@@ -35,7 +35,7 @@ export default function ResultSeach({catego, sea}) {
                             <>
                                 <tr>
                                     <ContentTable index={cvall} search={sea} />
-                                </tr> 
+                                </tr>
                             </>
                         )
                     })}

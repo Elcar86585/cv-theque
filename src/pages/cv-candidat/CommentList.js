@@ -36,7 +36,6 @@ function CommentContent({id, fonct}) {
     const d = comment.created_at
     const date = moment(d).format('MMMM d YYYY, HH:mm' )
     const handleDelete = (iD) => {
-        console.log(iD)
         axios.delete(`comments/${iD}`).then(resp => {
             if(resp.status === 204) {
                 NotificationManager.success('Commentaire supprimer avec succée', 'Suppression', 4000);

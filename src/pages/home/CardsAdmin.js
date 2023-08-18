@@ -13,22 +13,22 @@ export default function CardsAdmin() {
             if(resp.status === 200) {
                 setUserData(resp.data)
             }
-        })
+        }).catch(error => console.log(error))
         axios.get('cvs').then(resp => {
             if(resp.status === 200) {
                 setCvs(resp.data)
             }
-        })
+        }).catch(error => console.log(error))
         axios.get('demand_logins').then(resp => {
             if(resp.status === 200) {
                 setDemande(resp.data)
             }
-        })
+        }).catch(error => console.log(error))
         axios.get('entretiens').then(resp => {
             if(resp.status === 200) {
                 setEntretien(resp.data)
             }
-        })
+        }).catch(error => console.log(error))
     }, [1])
 
     // Demande d'entretien
@@ -109,7 +109,7 @@ export default function CardsAdmin() {
                                 {entretien.length}
                             </span></h2>
                             <p className="m-b-0">Valider<span className="f-right fw-bold">{entretientrueCounter} </span></p>
-                            <p className="m-b-0">En ocurs de validation<span className="f-right fw-bold">{entretienFalseCounter} </span></p>
+                            <p className="m-b-0">En cours de validation<span className="f-right fw-bold">{entretienFalseCounter} </span></p>
                         </div>
                     </div>
                 </div>

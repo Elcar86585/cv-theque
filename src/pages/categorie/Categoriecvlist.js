@@ -4,7 +4,7 @@ import axios from "axios";
 
 export default function Categoriecvlist({ cv, userLog }) {
     
-    if (cv) {
+    if (cv.length > 0) {
         return (
             <div className="row">
                 {cv && cv.map(c => {
@@ -20,16 +20,15 @@ export default function Categoriecvlist({ cv, userLog }) {
     } else {
         return (
             <div className="row">
-                <h1>
-                    Pas encore de CV
-                </h1>
+                <h2>
+                    Ooops, Pas encore de CV
+                </h2>
             </div>
         )
     }
 }
 
 function CvCard({id, user}) {
-    console.log(user)
     const [cv, setCv] = useState('')
     useEffect(() => {
         if(id) {
@@ -50,7 +49,17 @@ function CvCard({id, user}) {
             </span>
         )
     }
-    if(cv.status === true){
+
+    const handleView = (e) => {
+        const formData = new FormData;
+        formData.append('cv_id', e);
+        formData.append('user_id', user.id)
+        axios.post('views', {formData}).then(resp => {
+            console.log('viewws');
+        }).catch(error => console.log(error))
+    }
+    
+    if(cv.status === true || cv.status === null){
         if(user.role === 'Administrateur') {
             return (
                 <div className="col-md-6 col-xl-4">
@@ -101,7 +110,7 @@ function CvCard({id, user}) {
                                 </div>
                             </div>
                         </div>
-                        <Link to={`/cv/${cv.id}`} className="tile-link"></Link>
+                        <Link onClick={() => handleView(cv.id)} to={`/cv/${cv.id}`} className="tile-link"></Link>
                     </div>
                 </div>
             )

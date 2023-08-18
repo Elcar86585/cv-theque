@@ -18,7 +18,7 @@ class Cards extends React.Component {
             this.setState({
                 cvall: resp.data
             })
-        })
+        }).catch(error => console.log(error))
     }
 
     getCat = () => {
@@ -26,7 +26,7 @@ class Cards extends React.Component {
             this.setState({
                 catAll: resp.data
             })
-        })
+        }).catch(error => console.log(error))
     }
     render() {
         const user = this.props.usr
@@ -43,6 +43,24 @@ class Cards extends React.Component {
         return (
             <>
                 <div className="row">
+                    <div className="col-md-6 col-lg-3 d-flex">
+                        <div className="card border-0 bg-success text-white text-center mb-grid w-100">
+                            <div className="d-flex flex-row align-items-center h-100">
+                                <div className="card-icon d-flex align-items-center h-100 justify-content-center">
+                                    <i style={{ "fontSize": "50px" }} className="bi bi-door-open-fill"></i>
+                                </div>
+                                <div className="card-body">
+                                    <div className="card-info-title">Bonjour !</div>
+                                    <div className=''>
+                                        <h3 className="card-title mb-0" style={{ "fontSize": "17px" }} >
+                                            {salutation}
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div className="col-md-6 col-lg-3 d-flex">
                         <div className="card border-0 bg-info text-white text-center mb-grid w-100">
                             <div className="d-flex flex-row align-items-center h-100">
@@ -89,24 +107,6 @@ class Cards extends React.Component {
                                     <h3 className="card-title mb-0">
                                         <Link style={{ "color": "#fff" }} to="/favoris" > List des favorite </Link>
                                     </h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="col-md-6 col-lg-3 d-flex">
-                        <div className="card border-0 bg-success text-white text-center mb-grid w-100">
-                            <div className="d-flex flex-row align-items-center h-100">
-                                <div className="card-icon d-flex align-items-center h-100 justify-content-center">
-                                    <i style={{ "fontSize": "50px" }} className="bi bi-door-open-fill"></i>
-                                </div>
-                                <div className="card-body">
-                                    <div className="card-info-title">Bonjour !</div>
-                                    <div className=''>
-                                        <h3 className="card-title mb-0" style={{ "fontSize": "17px" }} >
-                                            {salutation}
-                                        </h3>
-                                    </div>
                                 </div>
                             </div>
                         </div>
