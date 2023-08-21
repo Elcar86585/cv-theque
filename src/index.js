@@ -4,7 +4,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:3001';
+axios.defaults.baseURL = 'https://8fa5-154-126-85-47.ngrok-free.app';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

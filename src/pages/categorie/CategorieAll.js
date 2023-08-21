@@ -58,6 +58,7 @@ export default class CategorieAll extends React.Component {
                                                         <small>{daty} </small>
                                                     </div>
                                                     <p class="mb-1">{cat.description}</p>
+                                                    <Link class="badge badge-info" to={`/candidats/${cat.id}`}>Voir tous les CV</Link>
                                                     <hr />
                                                     <p>Sous catégorie :</p>
                                                     <ul>
@@ -99,7 +100,8 @@ function GetSousCategorie({ data }) {
                 return (
                     <>
                         <li>
-                            <b>{sc.categorie} :</b> {sc.description}
+                            <b>{sc.categorie} :</b> {sc.description}<br/>
+                            <Link class="badge badge-primary" to={`/souscategorie/${sc.id}`}>Voir tous les CV</Link>
                         </li>
                     </>
                 )

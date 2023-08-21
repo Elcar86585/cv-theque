@@ -11,7 +11,7 @@ export default function CvBrouillon({candy, utilisateur}) {
                 let image;
                 if (profil.photo && profil.photo.url) {
                     image = (
-                        <span style={{ "background-image": `url(http://localhost:3001/${profil.photo.url})` }} className="avatar avatar-xl mr-3">
+                        <span style={{ "background-image": `url(https://8fa5-154-126-85-47.ngrok-free.app/${profil.photo.url})` }} className="avatar avatar-xl mr-3">
                         </span>
                     )
                 } else {

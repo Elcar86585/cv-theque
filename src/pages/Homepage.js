@@ -7,6 +7,7 @@ import Search from "./home/Search";
 import CardsAdmin from "./home/CardsAdmin";
 import CandidatRecent from "./home/CandidatRecent";
 import SousCategorieCounter from "./componentsHomepage/SousCategorieCounter";
+import RecentIdealProfil from "./home/RecentIdealProfil";
 
 class Homepage extends React.Component {
     state = {
@@ -43,9 +44,18 @@ class Homepage extends React.Component {
         const user = this.props.user
         const categories = this.state.categories;
         let cards;
+        let idealProf;
         if (user.role === 'Administrateur') {
             cards = (
                 <CardsAdmin />       
+            )
+            idealProf = (
+                <div className="card">
+                    <div className="card-header">
+                        Je ne trouve pas mon profil ideal
+                    </div>
+                    <RecentIdealProfil use={user} />
+                </div>
             )
         } else {
             cards = (
@@ -69,7 +79,7 @@ class Homepage extends React.Component {
                             <div className="pb-3">
                                 <h1>Tableau de bord</h1>
                             </div>
-                            <Search ctg={categories} />
+                            <Search ctg={categories} user={user} />
                             {cards}
                             <div className="row">
                                 <div className="col-lg-8">
@@ -154,6 +164,7 @@ class Homepage extends React.Component {
                                         </div>
                                         <CandidatRecent use={user} />
                                     </div>
+                                    {idealProf}
                                 </div>
                             </div>
                         </div>

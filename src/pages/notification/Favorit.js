@@ -57,7 +57,7 @@ function Favori({idCv}) {
                 <div className="card-body d-flex">
                     <div className="icon-lg rounded-3 text-white">
                         {cv.photo && cv.photo.url ? (<>
-                            <img src={`http://localhost:3001/${cv.photo.url}`} width={70} />
+                            <img src={`https://8fa5-154-126-85-47.ngrok-free.app/${cv.photo.url}`} width={70} />
                         </>) : (
                             <>
                                 <img src="https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png" width={70} />

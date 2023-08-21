@@ -11,7 +11,7 @@ export default function ProfileDetail({profil}) {
                             <div className="d-flex flex-column align-items-center text-center">
                                 {profil.photo && profil.photo.url ? (
                                     <>
-                                        <img src={`http://localhost:3001/${profil.photo.url}`} alt="Admin" className="rounded-circle" width="150" height={150} />
+                                        <img src={`https://8fa5-154-126-85-47.ngrok-free.app/${profil.photo.url}`} alt="Admin" className="rounded-circle" width="150" height={150} />
                                     </>
                                 ): (
                                     <>

@@ -1,6 +1,5 @@
 import React from "react";
 import ResultSeach from "./ResultSearch";
-import { Link } from "react-router-dom";
 import ProfilIdeal from "./ProfilIdeal";
 
 
@@ -30,6 +29,11 @@ class Search extends React.Component {
         this.setState({dispo: e.target.value})
     }
 
+    handleSubmit = (e) => {
+        e.preventdefault();
+        console.log('submited')
+    }
+
     render() {
         const categorie = this.props.ctg;
         let resultat;
@@ -52,7 +56,7 @@ class Search extends React.Component {
                                 </h5>   
 
                                     <div className="card-title-sub">
-                                        <ProfilIdeal />
+                                        <ProfilIdeal user={this.props.user} />
                                     </div>
                                 </div>
 
@@ -74,8 +78,8 @@ class Search extends React.Component {
                                             <div className="col">
                                                 <select onChange={this.handleNation} className="custom-select mr-sm-2" id="inlineFormCustomSelect">
                                                     <option value="">Localisation ...</option>
-                                                    <option value="Malgache">Malgache</option>
-                                                    <option value="Mauricen">Mauricien</option>
+                                                    <option value="Malgache">Madagascar</option>
+                                                    <option value="Mauricen">Maurice</option>
                                                     <option value="Autre resident Madagascar">Autre resident</option>
                                                 </select>
                                             </div>
@@ -111,7 +115,10 @@ class Search extends React.Component {
                                                     <option value="CDI">CDI</option>
                                                     <option value="CDD">CDD</option>
                                                 </select>
-                                            </div>                                          
+                                            </div>  
+                                            {/* <div className="col">
+                                                <button onClick={(e) => this.handleSubmit(e)} class="btn btn-secondary">Recherche</button>
+                                            </div>                                         */}
                                         </div>
                                     </form>
                                 </div>

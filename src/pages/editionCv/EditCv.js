@@ -98,7 +98,7 @@ export default function EditCV() {
                                     <div className="d-flex flex-column align-items-center text-center">
                                         {profile.photo && profile.photo.url ? (
                                             <>
-                                                <img src={`http://localhost:3001/${profile.photo.url}`} alt="Admin" className="rounded-circle p-1 bg-primary" width="110" height={110}/>
+                                                <img src={`https://8fa5-154-126-85-47.ngrok-free.app/${profile.photo.url}`} alt="Admin" className="rounded-circle p-1 bg-primary" width="110" height={110}/>
                                             </>
                                         ):(<>
                                             <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin" className="rounded-circle p-1 bg-primary" width="110"/>                                       

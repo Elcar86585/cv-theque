@@ -64,7 +64,7 @@ class Profile extends React.Component {
         const user = this.props.user;
         const date = moment(user.created_at).format('LL');
         const expireDate = moment(user.expire).format('LL');
-        const deta = this.state.usage
+        const deta = this.state.usage;
         return (
             <>
                 <div className="adminx-content">

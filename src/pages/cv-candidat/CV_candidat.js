@@ -120,7 +120,7 @@ export default function CV_candidat({ user, fun }) {
     if (cv && cv.photo.url) {
         photo = (
             <>
-                <img src={`http://localhost:3001/${cv.photo.url}`} alt="image" border="0" width="220" height="220" />
+                <img src={`https://8fa5-154-126-85-47.ngrok-free.app/${cv.photo.url}`} alt="image" border="0" width="220" height="220" />
             </>
         )
     } else {

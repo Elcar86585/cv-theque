@@ -13,14 +13,14 @@ class CandidatRecent extends React.Component {
     }
 
     getprofile = () => {
-        axios.get('cvs?limit=25', {params: {per_page: 10}}).then(reponse => {
+        axios.get('/cvs').then(reponse => {
             this.setState({
-                profil: reponse.data
+                profil: reponse.data.slice(0, 6)
             })
         }).catch(error => console.log(error))
     }
     render() {
-        const candidat = this.state.profil 
+        const candidat = this.state.profil
         const user = this.props.use
         if(user.role === "Administrateur") {
             return (
@@ -43,7 +43,7 @@ class CandidatRecent extends React.Component {
                                                                         {cv.photo && cv.photo.url === null ? (
                                                                             <img src="https://bootdey.com/img/Content/avatar/avatar6.png"/>
                                                                             ):(
-                                                                            <img src={`http://localhost:3001/${cv.photo.url}`}/>
+                                                                            <img src={`https://8fa5-154-126-85-47.ngrok-free.app/${cv.photo.url}`}/>
                                                                         )}                                                                    
                                                                     </div>
                                                                     <div class="story-author">
@@ -81,7 +81,7 @@ class CandidatRecent extends React.Component {
                                                                         {cv.photo && cv.photo.url === null ? (
                                                                             <img src="https://bootdey.com/img/Content/avatar/avatar6.png"/>
                                                                             ):(
-                                                                            <img src={`http://localhost:3001/${cv.photo.url}`}/>
+                                                                            <img src={`https://8fa5-154-126-85-47.ngrok-free.app/${cv.photo.url}`}/>
                                                                         )}                                                                    
                                                                     </div>
                                                                     <div class="story-author">
@@ -140,7 +140,7 @@ class CandidatRecent extends React.Component {
                                                                         {cv.photo && cv.photo.url === null ? (
                                                                             <img src="https://bootdey.com/img/Content/avatar/avatar6.png"/>
                                                                             ):(
-                                                                            <img src={`http://localhost:3001/${cv.photo.url}`}/>
+                                                                            <img src={`https://8fa5-154-126-85-47.ngrok-free.app/${cv.photo.url}`}/>
                                                                         )}
                                                                     </div>
                                                                     <div class="story-author">
