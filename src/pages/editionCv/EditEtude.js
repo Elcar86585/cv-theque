@@ -6,6 +6,7 @@ export default function EditEtude({id}) {
     const [etude, setEtude] = useState('');
     const [ecole, setEcole] = useState('');
     const [dateEtude, setDateEtude] = useState('');
+    const [dateFinEcole, setDateFinEcole] = useState('');
     const [descEtude, setDescetude] = useState('');
 
     useEffect(() => {
@@ -21,7 +22,8 @@ export default function EditEtude({id}) {
         if(ecole){data.append('ecole', ecole)}
         if(dateEtude){data.append('datecole', dateEtude)}
         if(descEtude){data.append('descriptionecole', descEtude)}
-        if(ecole || dateEtude || descEtude) {
+        if(dateFinEcole){data.append('datefinecole', dateFinEcole)}
+        if(ecole || dateEtude || descEtude || dateFinEcole) {
             axios.put(`diplomes/${id}`, data).then(resp => {
                 if(resp.status === 200) {
                     NotificationManager.success('Modifier avec succée', 'Modification valider', 4000)
@@ -39,6 +41,7 @@ export default function EditEtude({id}) {
             }
         }).catch(error => console.log(error))
     }
+    
     return (
         <form>
             <div className="row mb-3">
@@ -56,10 +59,16 @@ export default function EditEtude({id}) {
                 <div className="col-sm-3">
                     <h6 className="mb-0">Date d'etude</h6>
                 </div>
-                <div className="col-sm-9 text-secondary">
-                    <input type="text" 
+                <div className="col-sm-5 text-secondary">
+                    <input type="date" 
                         className="form-control" defaultValue={etude.datecole}
                         onChange={(e) => setDateEtude(e.target.value)}
+                    />
+                </div>
+                <div className="col-sm-4 text-secondary">
+                    <input type="date" 
+                        className="form-control" defaultValue={etude.datefinecole}
+                        onChange={(e) => setDateFinEcole(e.target.value)}
                     />
                 </div>
             </div>

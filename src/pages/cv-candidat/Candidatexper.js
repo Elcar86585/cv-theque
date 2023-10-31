@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from "moment";
 import React, {useEffect, useState} from "react";
 
 
@@ -35,16 +36,19 @@ function ContentExp({id}) {
             <h3 className="resume-position-title font-weight-bold mb-1">XXXXXXX </h3>
         )
     }
+    const dexp = moment(experience.datexp).format("Do MMM YYYY");
+    const fexp = moment(experience.datefin).format("Do MMM YYYY");
+    const exper = moment(experience.datefin).format('YYYY') - moment(experience.datexp).format('YYYY')
     return(
         <>
             <div className="resume-timeline-item-header mb-2">
                 <div className="d-flex flex-column flex-md-row">
                     {societe}
-                    <div className="resume-company-name ml-auto">
-                        {experience.id}
+                    <div className="resume-company-name ml-auto"> 
+                        {exper} an(s)
                     </div>
                 </div>
-                <div className="resume-position-time">{experience.datexp} </div>
+                <div className="resume-position-time">{dexp} - {fexp} </div>
             </div>
             <div className="resume-timeline-item-desc">
                 <p>

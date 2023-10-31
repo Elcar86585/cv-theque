@@ -35,7 +35,7 @@ class AddCategorie extends React.Component {
                                     this.props.fonc();
                                     NotificationManager.success('Créer avec succées', 'Valider', 4000)
                                 }else {
-                                    NotificationManager.danger('Une erreur est survenu lors de la validation', 'Erreur', 4000)
+                                    NotificationManager.warning('Une erreur est survenu lors de la validation', 'Erreur', 4000)
                                 }
                             })
                         }}

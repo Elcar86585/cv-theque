@@ -40,7 +40,7 @@ function CvCard({id, user}) {
     let image;
     if(cv.photo && cv.photo.url){
         image = (
-            <span style={{ "background-image": `url(https://8fa5-154-126-85-47.ngrok-free.app/${cv.photo.url})` }} className="avatar avatar-xl mr-3">
+            <span style={{ "background-image": `url(http://cvtheque.activsolution.fr:33066/${cv.photo.url})` }} className="avatar avatar-xl mr-3">
             </span>
         )
     }else {
@@ -60,6 +60,7 @@ function CvCard({id, user}) {
     }
     
     if(cv.status === true || cv.status === null){
+        console.log(cv)
         if(user.role === 'Administrateur') {
             return (
                 <div className="col-md-6 col-xl-4">

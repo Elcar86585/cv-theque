@@ -32,7 +32,7 @@ class Userall extends React.Component {
                 NotificationManager.success('Supprimer avec succèes', 'Supprimer', 4000);
                 this.props.get()
             } else {
-                NotificationManager.danger('Une erreur est survenu lors de la suppression', 'Erreur', 4000);
+                NotificationManager.warning('Une erreur est survenu lors de la suppression', 'Erreur', 4000);
             }
         })
     }
@@ -115,7 +115,7 @@ class Userall extends React.Component {
                                                         <div className="card-body">
                                                             <div className="d-flex align-items-center">
                                                                 <div className="flex-1 ms-3">
-                                                                    <h6 className="font-size-16 mb-1"><strong>{user.name}</strong> </h6>
+                                                                    <h6 className="font-size-16 mb-1"><strong>{user.name}</strong> {user.prenom} </h6>
                                                                     {user.role === 'Administrateur' ? (
                                                                         <>
                                                                             <span className="badge rounded-pill bg-primary" style={{ "color": "#ffffff" }}>Administrateur</span>

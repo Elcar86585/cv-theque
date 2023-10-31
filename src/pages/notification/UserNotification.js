@@ -3,7 +3,7 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-export default function UserNotification({user, id}) {
+export default function UserNotification({ user, id }) {
     const notif = user
     const [cv, setCv] = useState('');
     return (
@@ -29,9 +29,9 @@ export default function UserNotification({user, id}) {
                                         </a>
                                         <a href="#" className="card-header-action">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-x-circle"><circle cx="12" cy="12" r="10">
-                                                </circle><line x1="15" y1="9" x2="9" y2="15">
+                                            </circle><line x1="15" y1="9" x2="9" y2="15">
                                                 </line>
-                                                    <line x1="9" y1="9" x2="15" y2="15">
+                                                <line x1="9" y1="9" x2="15" y2="15">
                                                 </line>
                                             </svg>
                                         </a>
@@ -44,37 +44,37 @@ export default function UserNotification({user, id}) {
                                     {notif && notif.map(n => {
                                         var date = moment(n.created_at); // crée un objet Moment pour la date actuelle
                                         var formattedDate = date.fromNow(); // format "il y a quelques minutes"
-                                        if(n.lu === false) {
+                                        if (n.lu === false) {
                                             return (
                                                 <div className="alert alert-primary" role="alert">
-                                                    <strong>{id.name} </strong>, vous avez fait une demande d'entretien avec le profil 
+                                                    <strong>{id.name} </strong>, vous avez fait une demande d'entretien avec le profil
                                                     <strong>&nbsp;
                                                         <Link onClick={() => setCv(n.cv_id)} >
                                                             ID : {n.cv_id}
                                                         </Link>
-                                                    </strong> <br/>
+                                                    </strong> <br />
                                                     <Link onClick={() => setCv(n.cv_id)}>
                                                         <h5><span className="badge bg-info text-dark">Détail de la demande</span></h5>
                                                     </Link>
-                                                    <hr/>
+                                                    <hr />
                                                     Il y a {formattedDate} / &nbsp;
                                                     <i className="bi bi-arrow-repeat"></i>&nbsp;
-                                                     en cours de validation ...
+                                                    en cours de validation ...
                                                 </div>
                                             )
-                                        }else{
+                                        } else {
                                             return (
                                                 <div className="alert alert-info" role="alert">
-                                                    <strong>{id.name} </strong>, vous avez fait une demande d'entretien avec le profil 
+                                                    <strong>{id.name} </strong>, vous avez fait une demande d'entretien avec le profil
                                                     <strong>&nbsp;
                                                         <Link onClick={() => setCv(n.cv_id)} >
                                                             ID : {n.cv_id}
                                                         </Link>
-                                                    </strong> <br/>
+                                                    </strong> <br />
                                                     <Link onClick={() => setCv(n.cv_id)}>
                                                         <h5><span className="badge bg-info text-dark">Détail de la demande</span></h5>
                                                     </Link>
-                                                    <hr/>
+                                                    <hr />
                                                     Il y a {formattedDate} / &nbsp;
                                                     <i className="bi bi-check2-all"></i>&nbsp;
                                                     Valider
@@ -93,6 +93,47 @@ export default function UserNotification({user, id}) {
                                 </div>
                                 <Notification idCv={cv} />
                             </div>
+                            <div className="card">
+                                <div className="card-header d-flex justify-content-between align-items-center">
+                                    <div className="card-header-title" _msttexthash="183612" _msthash="68">
+                                        Réglage des notifications par e-mail
+                                    </div>
+                                </div>
+                                <div className="card-body collapse show" id="card1">
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <td>Notification nouveau CV</td>
+                                                <td>
+                                                    <select class="custom-select">
+                                                        <option value="2">Activer</option>
+                                                        <option value="3">Desactiver</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Notification de mise à jour</td>
+                                                <td>
+                                                    <select class="custom-select">
+                                                        <option value="2">Activer</option>
+                                                        <option value="3">Desactiver</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Notification de validation </td>
+                                                <td>
+                                                    <select class="custom-select">
+                                                        <option value="2">Activer</option>
+                                                        <option value="3">Desactiver</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button type="submit" class="btn btn-primary mb-2">Valider</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -101,52 +142,52 @@ export default function UserNotification({user, id}) {
     )
 }
 
-function Notification({idCv}) {
+function Notification({ idCv }) {
     const [profil, setProfile] = useState('')
     const [cat, setCat] = useState('')
     useEffect(() => {
-        if(idCv){
+        if (idCv) {
             axios.get(`cvs/${idCv}`).then(resp => {
                 setProfile(resp.data.cv)
             }).catch(error => console.log(error))
         }
-        if(profil) {
+        if (profil) {
             const id = profil.categorie_cv_id
             axios.get(`categorie_cvs/${id}`).then(resp => {
                 setCat(resp.data.cat)
             }).catch(error => console.log(error))
         }
     }, [idCv])
-    if(profil){
+    if (profil) {
         return (
             <>
                 <div className="card-body">
                     <h5 className="card-title"><strong>ID : {profil.id}</strong> </h5>
                     <strong>{cat.categorie}</strong>
-                    <hr/>
+                    <hr />
                     Annés d'experience {profil.aExperience}
-                    <hr/>
+                    <hr />
                     Localisation : {profil.nationalite}
-                    <hr/>
+                    <hr />
                     <p className="card-text">
                         {profil.disponibility}
                     </p>
-                    <hr/>
+                    <hr />
                     <p className="card-text">
                         Contrat : {profil.contrat}
                     </p>
-                    <hr/>
+                    <hr />
 
                     <Link to={`/cv/${profil.id}`} className="btn btn-primary">Voir le detail du CV</Link>
                 </div>
             </>
         )
-    }else{
+    } else {
         return (
             <>
                 <div className="card-body">
                     <h5 className="card-title"><strong>Detail de notification</strong> </h5>
-                    
+
                 </div>
             </>
         )

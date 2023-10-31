@@ -40,6 +40,7 @@ class Adduser extends React.Component {
     render () {
         var now = moment().hours();
         var month = moment().month();
+        
         return (
             <>
                 <div className="card-body">
@@ -51,7 +52,10 @@ class Adduser extends React.Component {
                             societe: '',
                             role: '',
                             expire: '',
-                            password: ''
+                            password: '',
+                            post: '',
+                            site: '',
+                            prenom: ''
                         }}
 
                         onSubmit={(value, {resetForm}) => {
@@ -66,10 +70,14 @@ class Adduser extends React.Component {
                             formdata.append('societe', value.societe)
                             formdata.append('adresse', value.adresse)
                             formdata.append('pays', value.pays)
+                            formdata.append('post', value.post)
+                            formdata.append('site', value.site)
+                            formdata.append('prenom', value.prenom)
                             axios.post('users', formdata).then(response => {
                                 if(response.status === 201){
                                     NotificationManager.success(response.data.message, 'utilisateur', 4000);
                                     resetForm();
+                                    console.log(response.data)
                                     this.props.get();
                                 }else {
                                     NotificationManager.warning(response.data.message, 'Erreur', 4000);
@@ -79,8 +87,12 @@ class Adduser extends React.Component {
                     >
                         <Form >
                             <div className="form-group">
-                                <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Nom etprénom</label>
-                                <Field type="text" className="form-control" name="name" placeholder="Nom et prénom" _msthash="79" required />
+                                <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Nom</label>
+                                <Field type="text" className="form-control" name="name" placeholder="Nom" _msthash="79" required />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Prénom</label>
+                                <Field type="text" className="form-control" name="prenom" placeholder="Prénom" _msthash="79" required />
                             </div>
                             <div className="form-group">
                                 <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">E-mail</label>
@@ -93,6 +105,14 @@ class Adduser extends React.Component {
                             <div className="form-group">
                                 <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Société</label>
                                 <Field type="text" className="form-control" name="societe" placeholder="Nom de la société" _msthash="79" required/>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Site internet</label>
+                                <Field type="text" className="form-control" name="site" placeholder="www.exemple.com" _msthash="79" required/>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Post</label>
+                                <Field type="text" className="form-control" name="post" placeholder="Votre poste" _msthash="79" required/>
                             </div>
                             <div className="form-group">
                                 <label className="form-label" htmlFor="demoText" _msttexthash="1074619" _msthash="78">Pays</label>

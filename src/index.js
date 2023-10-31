@@ -4,7 +4,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://8fa5-154-126-85-47.ngrok-free.app';
+
+axios.defaults.baseURL = 'http://cvtheque.activsolution.fr:33066';
+axios.defaults.https = false;
+// axios.defaults.trustAsAny = true;
+// axios.defaults.withCredentials = true;
+// axios.defaults.ignoreHTTPSErrors = true;
+// axios.defaults.ignoreSSL = true;
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

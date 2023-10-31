@@ -33,7 +33,11 @@ export default function EditCV() {
     const [status, setStatus] = useState('');
     const [aExp, setAexp] = useState('');
     const [contrat, setContrat] = useState('');
-    const [sousCat, setSousCat] = useState([])
+    const [sousCat, setSousCat] = useState([]);
+    const [image, setImage] = useState(null);
+    const [prenom, setPrenom] = useState('');
+    const [pretention, setPretention] = useState('');
+
     useEffect(() => {
         axios.get(`cvs/${id}`).then(resp => {
             if(id){
@@ -72,20 +76,50 @@ export default function EditCV() {
         if(aExp){formdata.append('aExperience', aExp)}
         if(status){formdata.append('status', status)}
         if(contrat){formdata.append('contrat', contrat)}
+        if(image){formdata.append('photo', image)}
+        if(prenom){formdata.append('prenom', prenom)}
+        if(pretention){formdata.append('pretention', pretention)}
         axios.put(`cvs/${id}`, formdata).then(resp => {
             if(resp.status === 200){
                 NotificationManager.success(`CV de ${profile.nomPrenom} modifier`, `Modification valider`, 4000)
                 axios.get(`cvs/${id}`).then(resp => {
                     setCvall(resp.data.cv);       
-                    setExperience(resp.data.exp)
-                    setEtude(resp.data.diplo)
-                    setInfo(resp.data.info)
-                    setLangue(resp.data.langage)
-                    setLoisir(resp.data.loisir)
+                    setExperience(resp.data.exp);
+                    setEtude(resp.data.diplo);
+                    setInfo(resp.data.info);
+                    setLangue(resp.data.langage);
+                    setLoisir(resp.data.loisir);
                 });
             }
         }).catch(error => console.log(error))  
     }
+
+    const handleDeleteCv = () => {
+        const confirme = window.confirm('Vous voulez vraiment le supprimer')
+        if(confirme === true){
+            axios.delete(`cvs/${id}`).then(response =>  {
+                if(response.status === 204){
+                    NotificationManager.success('Cv supprimer avec succès', 'Supprimer', 4000)
+                    window.history.back();
+                }
+                console.log(response)
+            })
+        }
+    }
+
+    function handleClick() {
+        // Ouvre un input image
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.click();
+    
+        // Attend que l'utilisateur sélectionne une image
+        input.addEventListener('change', (event) => {
+          const file = event.target.files[0];
+          setImage(file);
+        });
+    }
+
     return (
         <>
             <div className="adminx-content">
@@ -98,11 +132,14 @@ export default function EditCV() {
                                     <div className="d-flex flex-column align-items-center text-center">
                                         {profile.photo && profile.photo.url ? (
                                             <>
-                                                <img src={`https://8fa5-154-126-85-47.ngrok-free.app/${profile.photo.url}`} alt="Admin" className="rounded-circle p-1 bg-primary" width="110" height={110}/>
+                                                <img src={`http://cvtheque.activsolution.fr:33066/${profile.photo.url}`} alt="Admin" 
+                                                className="rounded-circle p-1 bg-primary" width="110" height={110} onClick={handleClick}/>
                                             </>
                                         ):(<>
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin" className="rounded-circle p-1 bg-primary" width="110"/>                                       
+                                            <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin" 
+                                            className="rounded-circle p-1 bg-primary" width="110" onClick={handleClick}/>  
                                         </>)}
+                                            <i className="bi bi-camera-fill" style={{fontSize: "30px", position: "relative"}} onClick={handleClick} ></i>                                     
                                         <div className="mt-3">
                                             <h4>{profile.nomPrenom} </h4>
                                             {profile.sous_category_id ? (
@@ -129,13 +166,25 @@ export default function EditCV() {
                                             <from>
                                                 <div className="row mb-3">
                                                     <div className="col-sm-3">
-                                                        <h6 className="mb-0">Nom complet</h6>
+                                                        <h6 className="mb-0">Nom</h6>
                                                     </div>
                                                     <div className="col-sm-9 text-secondary">
                                                         <input 
                                                             defaultValue={profile.nomPrenom} type="text" 
                                                             className="form-control"  name="nomPrenom"
                                                             onChange={(e) => setName(e.target.value)}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <div className="col-sm-3">
+                                                        <h6 className="mb-0">Prénom</h6>
+                                                    </div>
+                                                    <div className="col-sm-9 text-secondary">
+                                                        <input 
+                                                            defaultValue={profile.prenom} type="text" 
+                                                            className="form-control"  name="nomPrenom"
+                                                            onChange={(e) => setPrenom(e.target.value)}
                                                         />
                                                     </div>
                                                 </div>
@@ -217,6 +266,18 @@ export default function EditCV() {
                                                             type="text" className="form-control" 
                                                             defaultValue={profile.adresse}
                                                             onChange={(e) => setAdresse(e.target.value)}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <div className="col-sm-3">
+                                                        <h6 className="mb-0">Prétention</h6>
+                                                    </div>
+                                                    <div className="col-sm-9 text-secondary">
+                                                        <input 
+                                                            type="text" className="form-control" 
+                                                            defaultValue={profile.pretention}
+                                                            onChange={(e) => setPretention(e.target.value)}
                                                         />
                                                     </div>
                                                 </div>
@@ -332,22 +393,30 @@ export default function EditCV() {
                                                         <select type="text" className="form-control"
                                                             onChange={(e) => setStatus(e.target.value)}
                                                         >
-                                                            <option  selected >{profile.status === true ? (
-                                                                <option value="true">Publier</option>
+                                                            {profile.status === true ? (
+                                                                <>
+                                                                    <option value="true" selected >Publier</option>
+                                                                    <option value="false">Brouillon</option>
+                                                                </>
                                                             ):(
-                                                                <option value="false">Brouillon</option>
-                                                            )} </option>
-                                                            <option value="true">Publier</option>
-                                                            <option value="false">Brouillon</option>
+                                                                <>
+                                                                    <option value="false" selected>Brouillon</option>
+                                                                    <option value="true">Publier</option>
+                                                                </>
+                                                            )}
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-sm-3"></div>
                                                     <div className="col-sm-9 text-secondary">
-                                                        <button onClick={handleSubmit} type="submit" className="btn btn-primary px-4" title="Enregistrer les modifications">
+                                                        <button onClick={handleSubmit} type="submit" className="btn btn-primary btn-sm" title="Enregistrer les modifications">
                                                             <i class="bi bi-bookmark-fill"></i>&nbsp;
                                                             Enregistrer
+                                                        </button>&nbsp;
+                                                        <button onClick={handleDeleteCv} type="button" className="btn btn-danger btn-sm" title="Enregistrer les modifications">
+                                                            <i class="bi bi-trash-fill"></i>&nbsp;
+                                                            Supprimer le CV
                                                         </button>
                                                     </div>
                                                 </div>

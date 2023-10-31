@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './cvCandidat.css';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import CandidatExper from './Candidatexper';
 import CandidatEtude from './CandidatEtude';
@@ -19,6 +19,7 @@ import Footer from "react-multi-date-picker/plugins/range_picker_footer";
 import DatePicker from "react-multi-date-picker";
 import TimePicker from "react-multi-date-picker/plugins/analog_time_picker";
 import moment from 'moment';
+import generatePDF, { Resolution, Margin } from 'react-to-pdf';
 
 export default function CV_candidat({ user, fun }) {
     const { id } = useParams();
@@ -38,12 +39,12 @@ export default function CV_candidat({ user, fun }) {
     useEffect(() => {
         if (id) {
             axios.get(`cvs/${id}`).then(resp => {
-                if(resp.status === 200) {
+                if (resp.status === 200) {
                     setCv(resp.data.cv);
                     setArray(resp.data);
                     setCom(resp.data.comment)
                 }
-            }).catch(error => {console.log(error)})
+            }).catch(error => { console.log(error) })
         }
     }, [id]);
 
@@ -54,7 +55,11 @@ export default function CV_candidat({ user, fun }) {
     }
 
     const handleClick = () => {
-        setComment(true);
+        if(comment === true){
+            setComment(false)
+        }else{
+            setComment(true);
+        }
     }
 
     const date = dateValue.map(d => `${d.day}/${d.month}/${d.year}`)
@@ -63,12 +68,17 @@ export default function CV_candidat({ user, fun }) {
     const admin = user.role === 'Administrateur';
     let contact;
     let commentaire;
+    let date_moment = moment().format('YYYY-MM-DD')
+    let yearNow = moment(date_moment).year();
+    let yearProfil = moment(cv.age).year();
+    const ageCandidat = yearNow - yearProfil
+    console.log(cv)
     if (admin === true) {
         commentaire = (
             <>
                 {comment ? (
                     <>
-                        <Commentaire userId={user.id} cvId={cv.id} fon={getComment} />
+                        <Commentaire userId={user.id} hid={handleClick} cvId={cv.id} fon={getComment} />
                         <br />
                         <CommentList comment={com} />
                     </>
@@ -84,12 +94,15 @@ export default function CV_candidat({ user, fun }) {
         contact = (
             <>
                 <div className="primary-info">
-                    <h1 className="name mt-0 mb-1 text-white text-uppercase text-uppercase">{cv.nomPrenom} </h1>
-                    <div className="title mb-3">{ }</div>
+                    <h1 className="name mt-0 mb-1 text-white text-uppercase text-uppercase">{cv.nomPrenom} {cv.prenom} </h1>
+                    <div className="title mb-3">
+                        <CandidatCategorie id={cv.categorie_cv_id} />
+                    </div>
                     <ul className="list-unstyled">
                         <li className="mb-2"><a href={`mailto:${cv.email}`} target='_blanc'><i className="far fa-envelope fa-fw mr-2" data-fa-transform="grow-3"></i>{cv.email} </a></li>
                         <li><a href={`tel:${cv.telephone}`} target='_blanc'><i className="fas fa-mobile-alt fa-fw mr-2" data-fa-transform="grow-6"></i>{cv.telephone} </a></li>
-                        <li><i className="fas fa-mobile-alt fa-fw mr-2" data-fa-transform="grow-6"></i>{cv.age} ans / {cv.aExperience} d'experience(s)</li>
+                        <li><i className="fas fa-mobile-alt fa-fw mr-2" data-fa-transform="grow-6"></i>{ageCandidat} ans / {cv.aExperience} d'experience(s)</li>
+                        <li><i className="fas fa-mobile-alt fa-fw mr-2" data-fa-transform="grow-6"></i>{cv.national} à {cv.nationalite} </li>
                     </ul>
                 </div>
                 <div className="secondary-info ml-md-auto mt-2">
@@ -110,6 +123,7 @@ export default function CV_candidat({ user, fun }) {
                     <ul className="list-unstyled">
                         <li className="mb-2"><i className="far fa-envelope fa-fw mr-2" data-fa-transform="grow-3"></i>{cv.disponibility} </li>
                         <li><i className="fas fa-mobile-alt fa-fw mr-2" data-fa-transform="grow-6"></i>{cv.aExperience} d'experience(s) </li>
+                        <li><i className="fas fa-mobile-alt fa-fw mr-2" data-fa-transform="grow-6"></i>{cv.national} </li>
                     </ul>
                 </div>
             </>
@@ -120,7 +134,7 @@ export default function CV_candidat({ user, fun }) {
     if (cv && cv.photo.url) {
         photo = (
             <>
-                <img src={`https://8fa5-154-126-85-47.ngrok-free.app/${cv.photo.url}`} alt="image" border="0" width="220" height="220" />
+                <img src={`http://cvtheque.activsolution.fr:33066/${cv.photo.url}`} alt="image" border="0" width="220" height="220" />
             </>
         )
     } else {
@@ -156,9 +170,9 @@ export default function CV_candidat({ user, fun }) {
     const handleDemandeEntretien = () => {
         const formdata = new FormData;
         formdata.append('cv_id', cv.id);
-        formdata.append('user_id', user.id)
-        formdata.append('drdv', date)
-        formdata.append('hrdv', hours)
+        formdata.append('user_id', user.id);
+        formdata.append('drdv', date);
+        formdata.append('hrdv', hours);
         axios.post('entretiens', formdata).then(resp => {
             if (resp.status === 201) {
                 NotificationManager.success('Votre demande d\'entretien est valider', 'Valider', 4000)
@@ -166,27 +180,15 @@ export default function CV_candidat({ user, fun }) {
             } else {
                 NotificationManager.warning('Une erreur est survenue lors de l\'envoie de votre demande', 'Erreur', 4000)
             }
-        }).catch(error => console.log(error))
+        }).catch(error => console.log(error));
     }
-
-    const handletelecharge = () => {
-        const input = document.getElementById('downCV');
-        const name = `cv_id_${cv.id}`;
-        const doc = new jsPDF();
-        // doc.setFont('Inter-Regular', 'normal');
-        doc.html(input, {
-            async callback(doc) {
-                doc.setFont('Lato-Regular', 'normal');
-                // save the document as a PDF with name of pdf_name
-                doc.save(name + ".pdf");
-            }
-        });
-    }
+    
+    const targetRef = useRef();
     return (
         <div className="adminx-content">
             <div className="adminx-main-content">
-                <article className="resume-wrapper text-div position-relative" id="ifmcontentstoprint">
-                    <div className="resume-wrapper-inner mx-auto text-left bg-white shadow-lg">
+                <article className="resume-wrapper text-div position-relative">
+                    <div className="resume-wrapper-inner mx-auto text-left bg-white shadow-lg" id="ifmcontentstoprint" ref={targetRef}>
                         <header className="resume-header pt-4 pt-md-0">
                             <div className="media flex-column flex-md-row">
                                 {photo}
@@ -198,7 +200,10 @@ export default function CV_candidat({ user, fun }) {
                         </header>
                         <div className="resume-body p-5">
                             <section className="resume-section summary-section mb-5">
-                                <h2 className="resume-section-title text-uppercase font-weight-bold pb-3 mb-3">profile</h2>
+                                <h2 className="resume-section-title text-uppercase font-weight-bold pb-3 mb-3">profile / &nbsp;
+                                    <span class="badge bg-secondary" style={{color: "white"}}>{cv.disponibility} </span>&nbsp;
+                                    <span class="badge bg-dark" style={{color: "white"}}>{cv.contrat} </span>
+                                </h2>
                                 <div className="resume-section-content">
                                     <p className="mb-0">{cv.descriptionProfile} </p>
                                 </div>
@@ -223,10 +228,25 @@ export default function CV_candidat({ user, fun }) {
                                             <div className="resume-skill-item">
                                                 <CandidatLangage lang={array.langage} />
                                             </div>
+                                            <hr/>
                                             <div className="resume-skill-item">
                                                 <h4 className="resume-skills-cat font-weight-bold">Loisirs</h4>
                                                 <CandidatLoisir loi={array.loisir} />
                                             </div>
+                                            {admin === true ? (
+                                                <><hr/>
+                                                    <div className="resume-skill-item">
+                                                        <h4 className="resume-skills-cat font-weight-bold">Pretention salarial</h4>
+                                                            <b>{cv.pretention}</b>
+                                                    </div>
+                                                    <hr/>
+                                                    <div className="resume-skill-item">
+                                                        <h4 className="resume-skills-cat font-weight-bold">Adresse</h4>
+                                                            {cv.adresse}
+                                                    </div>
+                                                    <hr/>
+                                                </>
+                                            ):(<></>)}
                                         </div>
                                     </section>
                                     <section className="resume-section interests-section mb-5">
@@ -244,24 +264,68 @@ export default function CV_candidat({ user, fun }) {
                 <center>
                     <div className="">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button className="btn btn-primary btn-lg"
-                            onClick={handleShow}
-                        >
-                            <i className="bi bi-person-workspace"></i>&nbsp;
-                            Demande d'entretien avec l'ID : {cv.id}
-                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        {admin === true ? (
+                            <>
+                                {cv.resume && cv.resume.url ? (
+                                    <>
+                                        <Link to={`http://cvtheque.activsolution.fr:33066/${cv.resume && cv.resume.url}`}
+                                            className="btn btn-success btn-lg"
+                                            target='_blanc'
+                                        >
+                                            <i className="bi bi-eye"></i>&nbsp;
+                                            Voir le CV de l'ID : {cv.id}
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Link to="#"
+                                            className="btn btn-success btn-lg"
+                                            target='_blanc' hidden
+                                        >
+                                            <i className="bi bi-eye"></i>&nbsp;
+                                            Pas de CV pour l'ID : {cv.id}
+                                        </Link>
+                                    </>
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                <button className="btn btn-primary btn-lg"
+                                    onClick={handleShow}
+                                >
+                                    <i className="bi bi-person-workspace"></i>&nbsp;
+                                    Demande d'entretien avec l'ID : {cv.id}
+                                </button>
+                            </>
+                        )}
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <button className="btn btn-secondary btn-lg me-md-2" onClick={printCv} >
                             <i className="bi bi-printer-fill"></i>&nbsp;
                             Imprimer le cv
                         </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button className="btn btn-warning btn-lg"
-                            onClick={() => handleFavorite()}
-                        >
-                            <i className="bi bi-star"></i>&nbsp;
-                            Mettre en favori
-                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button onClick={() => handletelecharge()} className="btn btn-info btn-lg"
+                        {admin === true ? (<>
+                            <Link to={`/editCv/${cv.id}`} className="btn btn-warning btn-lg"
 
+                            >
+                                <i className="bi bi-pencil-square"></i>&nbsp;
+                                Modifier le CV
+                            </Link>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </>) : (
+                            <>
+                                <button className="btn btn-warning btn-lg"
+                                    onClick={() => handleFavorite()}
+                                >
+                                    <i className="bi bi-star"></i>&nbsp;
+                                    Mettre en favori
+                                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </>
+                        )}
+                        <button 
+                        onClick={() => generatePDF(targetRef, {filename: `activsolution_cvtheque_${cv.id}.pdf`, page: {format: 'letter',
+                            margin: Margin.SMALL, orientation: 'landscape'}
+                        })} 
+                            className="btn btn-info btn-lg"
                         >
                             <i className="bi bi-cloud-arrow-down-fill"></i>&nbsp;
                             Télécharger
@@ -269,7 +333,7 @@ export default function CV_candidat({ user, fun }) {
                     </div>
                 </center>
             </div>
-            <Modal  aria-labelledby="contained-modal-title-vcenter" size="lg"
+            <Modal aria-labelledby="contained-modal-title-vcenter" size="lg"
                 centered show={show} onHide={handleClose}>
                 <Modal.Header>
                     <Modal.Title>Fixer vos date de disponibilité</Modal.Title>
@@ -299,16 +363,15 @@ export default function CV_candidat({ user, fun }) {
                         </Col>
                         <Col xs={6} md={4}>
                             <p>Selectionnez l'heure de rendez-vous : </p>
-                            <DatePicker 
+                            <DatePicker
                                 disableDayPicker
                                 format="HH:mm"
                                 onChange={setHeurre}
                                 plugins={[
                                     <TimePicker
                                     />
-                                ]} 
-                                />
-                            
+                                ]}
+                            />
                         </Col>
                     </Row>
                 </Modal.Body>
@@ -322,7 +385,6 @@ export default function CV_candidat({ user, fun }) {
                 </Modal.Footer>
             </Modal>
         </div>
-
     )
 }
 

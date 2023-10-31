@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import {NotificationManager} from 'react-notifications'
 
-export default function Commentaire({userId, cvId, fon}) {
+export default function Commentaire({userId, cvId, fon, hid}) {
     const [comment, setComment] = useState('');
     const handleComment = () => {
         if(comment) {
@@ -14,6 +14,7 @@ export default function Commentaire({userId, cvId, fon}) {
                 if(resp.status === 201) {
                     NotificationManager.success('Commentaire ajouter avec succée', 'Commentaire ajouter', 4000);
                     fon();
+                    hid();
                 }
             })
         }else {

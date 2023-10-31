@@ -175,45 +175,6 @@ export default class Sidebar extends React.Component {
                             </>
                         ) : (
                             <>
-                                <li className="sidebar-nav-item">
-                                    <NavLink to="/formulaire" className="sidebar-nav-link">
-                                        <div className="sidebar-nav-icon">
-                                            <i style={{ 'fontSize': '20px' }} className="bi bi-box-arrow-right"></i>
-                                        </div>
-                                        <span className="sidebar-nav-name">
-                                            Demande de login
-                                        </span>
-                                        <span className="sidebar-nav-end">
-
-                                        </span>
-                                    </NavLink>
-                                </li>
-                                <li className="sidebar-nav-item">
-                                    <NavLink to="/ajoute-candidat" className="sidebar-nav-link">
-                                        <div className="sidebar-nav-icon">
-                                            <i style={{ 'fontSize': '20px' }} className="bi bi-file-earmark-person"></i>
-                                        </div>
-                                        <span className="sidebar-nav-name">
-                                            Ajouter un CV
-                                        </span>
-                                        <span className="sidebar-nav-end">
-
-                                        </span>
-                                    </NavLink>
-                                </li>
-                                <li className="sidebar-nav-item">
-                                    <NavLink to="/se-connecter" className="sidebar-nav-link">
-                                        <div className="sidebar-nav-icon">
-                                            <i style={{ 'fontSize': '20px' }} className="bi bi-person-fill-check"></i>
-                                        </div>
-                                        <span className="sidebar-nav-name">
-                                            Se connecter
-                                        </span>
-                                        <span className="sidebar-nav-end">
-
-                                        </span>
-                                    </NavLink>
-                                </li>
                             </>
                         )}
                     </ul>

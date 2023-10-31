@@ -14,7 +14,7 @@ import Addcandidat from './pages/candidat/Addcandidat.js';
 import Categorie from './pages/categorie/Categorie.js';
 import CV_candidat from './pages/cv-candidat/CV_candidat.js';
 import Login from './pages/login/Login.js';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Page404 from './pages/page404/Page404.js';
 import DemandeLogin from './pages/formulaire/DemandeLogin.js';
 import Notification from './pages/notification/adminNotification/Notifications.js';
@@ -29,6 +29,7 @@ import SingleUser from './pages/user/singleUser/SingleUser';
 import DetailDemandeEntretien from './pages/notification/adminNotification/DetailDemandeEntretien';
 import EditCategorie from './pages/categorie/EditCategorie';
 import SousCategorie from './pages/categorie/sousCategorie/SousCategorie';
+import ThinksPage from './pages/thinkspage/ThinksPage';
 
 class App extends React.Component {
   state = {
@@ -59,7 +60,7 @@ class App extends React.Component {
           userFavoris: resp.data.favo
         })
       } else {
-        NotificationManager.danger('Une erreur est survenue lors de la traitement de votre requêtte', 'ERREUR', 10000)
+        NotificationManager.warning('Une erreur est survenue lors de la traitement de votre requêtte', 'ERREUR', 10000)
       }
     }).catch(error => {console.log(error)})
   }
@@ -122,6 +123,14 @@ class App extends React.Component {
             </div>
           </>
         )
+      }else{
+        return (
+          <div className="adminx-content">
+            <br/>
+            <p>Redirection en cours ...</p>
+            <a href='#' onClick={() => localStorage.clear(window.location.reload())}>Click ici</a>
+          </div>
+        )
       }
     } else {
       return (
@@ -133,6 +142,7 @@ class App extends React.Component {
               <Routes>
                 <Route exact path='se-connecter' element={<Login />} />
                 <Route exact path="ajoute-candidat" element={<Addcandidat />} />
+                <Route exact path='/merci' element={<ThinksPage />} />
                 <Route exact path="*" element={<Page404 />} />
                 <Route exact path='formulaire' element={<DemandeLogin />} />
                 <Route exact path="/" element={<Accueil />} />

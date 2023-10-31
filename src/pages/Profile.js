@@ -2,6 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import moment from 'moment/moment';
 import { NotificationManager } from 'react-notifications'
+import UserProfil from './profil/UserProfil';
 
 
 class Profile extends React.Component {
@@ -100,107 +101,13 @@ class Profile extends React.Component {
                                                 <p>Date d'expiration du compte : <strong>{expireDate}</strong> </p>
                                             </div>
                                             {/* <hr /> */}
-                                            {/* <div class="row space-between">
-                                                <div class="col-4">
-                                                    <div class="card service-card card-inverse">
-                                                        <center>
-                                                            <div class="card-block">
-                                                                <i class="bi bi-star-fill" style={{ 'fontSize': '30px' }}></i>
-                                                                <h4 class="card-title">
-                                                                    {deta.favo}
-                                                                </h4>
-                                                            </div>
-                                                        </center>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="card service-card card-inverse">
-                                                        <center>
-                                                            <div class="card-block">
-                                                                <i class="bi bi-person-square" style={{ 'fontSize': '30px' }}></i>
-                                                                <h4 class="card-title">
-                                                                    5
-                                                                </h4>
-                                                            </div>
-                                                        </center>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="card service-card card-inverse">
-                                                        <center>
-                                                            <div class="card-block">
-                                                                <i class="bi bi-cloud-download-fill" style={{ 'fontSize': '30px' }}></i>
-                                                                <h4 class="card-title">
-                                                                    2
-                                                                </h4>
-                                                            </div>
-                                                        </center>
-                                                    </div>
-                                                </div>
-                                            </div> */}
+                                            <UserProfil dataUser={user} />
                                         </div>
                                     </div>
                                     <br />
-                                    <div className="card">
-                                        <div className="card-header d-flex justify-content-between align-items-center">
-                                            <div className="card-header-title" _msttexthash="183612" _msthash="68">
-                                                Réglage des notifications par e-mail
-                                            </div>
-                                        </div>
-                                        <div className="card-body collapse show" id="card1">
-                                            <table class="table table-striped">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Notification nouveau CV</td>
-                                                        <td>
-                                                            <select class="custom-select">
-                                                                <option value="2">Activer</option>
-                                                                <option value="3">Desactiver</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Notification de mise à jour</td>
-                                                        <td>
-                                                            <select class="custom-select">
-                                                                <option value="2">Activer</option>
-                                                                <option value="3">Desactiver</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Notification de validation </td>
-                                                        <td>
-                                                            <select class="custom-select">
-                                                                <option value="2">Activer</option>
-                                                                <option value="3">Desactiver</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <button type="submit" class="btn btn-primary mb-2">Valider</button>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div className="col-lg-6">
-                                    <div className="card">
-                                        <div className="card-header d-flex justify-content-between align-items-center">
-                                            <div className="card-header-title" _msttexthash="183612" _msthash="68">
-                                                Je ne trouve pas le profil ideal
-                                            </div>
-                                        </div>
-                                        <div className="card-body collapse show" id="card1">
-                                            <form>
-                                                <div class="form-group">
-                                                    <label for="exampleFormControlTextarea1">Description de votre profil</label>
-                                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary mb-2">Envoyer</button>
-                                            </form>
-                                        </div>
-                                    </div>
                                     <div className="card">
                                         <div className="card-header">
                                             <div className="card-header-title" _msttexthash="58201" _msthash="77">Change mot de passe</div>

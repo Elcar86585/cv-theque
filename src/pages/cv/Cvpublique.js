@@ -12,7 +12,7 @@ export default function Cvpublique({ candy, utilisateur }) {
                 let image;
                 if (profil.photo && profil.photo.url) {
                     image = (
-                        <span style={{ "background-image": `url(https://8fa5-154-126-85-47.ngrok-free.app/${profil.photo.url})` }} className="avatar avatar-xl mr-3">
+                        <span style={{ "background-image": `url(http://cvtheque.activsolution.fr:33066/${profil.photo.url})` }} className="avatar avatar-xl mr-3">
                         </span>
                     )
                 } else {
@@ -51,14 +51,11 @@ export default function Cvpublique({ candy, utilisateur }) {
                                                     </p>
                                                 </p>
                                                 <Link to={`/editCv/${profil.id}`}><button type="button" className="btn btn-secondary btn-sm" title="Modifier">
-                                                    <i className="bi bi-pencil-square"></i>
+                                                    <i className="bi bi-pencil-square"></i> Modifier
                                                 </button></Link>&nbsp;&nbsp;
                                                 <Link to={`/cv/${profil.id}`} ><button type="button" className="btn btn-primary btn-sm" title="Voir le CV">
-                                                    <i className="bi bi-eye-fill"></i>
+                                                    <i className="bi bi-eye-fill"></i> Voir le CV
                                                 </button></Link>&nbsp;&nbsp;
-                                                <Link><button type="button" className="btn btn-danger btn-sm" title="Voir le CV">
-                                                    <i className="bi bi-trash"></i>
-                                                </button></Link>
                                             </div>
                                         </div>
                                     </div>

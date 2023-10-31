@@ -118,7 +118,7 @@ class Table extends React.Component {
                             </nav>
 
                             <div className="pb-3">
-                                <h1 _msttexthash="234351" _msthash="67">List des profiles</h1>
+                                <h1 _msttexthash="234351" _msthash="67">Liste des profils</h1>
                             </div>
 
                             <div className="row">
@@ -158,7 +158,7 @@ class Table extends React.Component {
                                                     <div class="col-sm-12">
                                                         <br />
                                                         <Tabs class="nav nav-tabs" activeKey={this.state.ongle} onSelect={(e) => this.handleOnglet(e)}>
-                                                            <Tab eventKey="one" title="Notitifier par e-mail">
+                                                            <Tab eventKey="one" title="Notifier par e-mail">
                                                                 <Mailing data={this.state.cvall} fun={this.handleSelectAllMail} check={this.state.selectAllMail} 
                                                                     changeMail={this.handleEmail}
                                                                 />

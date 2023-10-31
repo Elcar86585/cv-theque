@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 
 
@@ -33,11 +34,13 @@ function EtudeContent({id}) {
                 setEtude(resp.data);
         })
     }, [id])
+    const detude = moment(etude.datecole).format("Do MMM YYYY");
+    const fetude = moment(etude.datefinecole).format("Do MMM YYYY");
     return(
         <>
         <li className="mb-2">
             <div className="resume-degree font-weight-bold">{etude.ecole}</div>
-            <div className="resume-degree-time">{etude.datecole} </div>
+            <div className="resume-degree-time">{detude} - {fetude} </div>
             <div className="resume-degree-org">
                 {etude.descriptionecole}
             </div>

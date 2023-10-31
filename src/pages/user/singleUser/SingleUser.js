@@ -45,6 +45,7 @@ export default function SingleUser() {
     }
     var date = moment(user.created_at); // crée un objet Moment pour la date actuelle
     var formattedDate = date.fromNow(); // format "il y a quelques minutes"
+   
     return (
         <>
             <div className="adminx-content">
@@ -54,7 +55,7 @@ export default function SingleUser() {
                             <div className="profile-card-4 z-depth-3">
                                 <div className="card">
                                     <div className="card-body text-center bg-primary rounded-top">
-                                        <h5 className="mb-1 text-white">{user.name} </h5>
+                                        <h5 className="mb-1 text-white">{user.name} {user.prenom} </h5>
                                         <h6 className="text-light">Société : {user.societe}  </h6>
                                         <h6 className="text-light">ID : 00{user.id} </h6>
                                     </div>
@@ -74,8 +75,26 @@ export default function SingleUser() {
                                                     <i className="bi bi-envelope-at-fill"></i>
                                                 </div>
                                                 <div className="list-details">
-                                                    <span>{user.email} </span>
+                                                    <span><a href={`mailto:${user.email}`}>{user.email}</a> </span>
                                                     <small>Adresse e-mail</small>
+                                                </div>
+                                            </li>
+                                            <li className="list-group-item">
+                                                <div className="list-icon">
+                                                    <i className="bi bi-browser-chrome"></i>
+                                                </div>
+                                                <div className="list-details">
+                                                    <span><Link to={`https://${user.site}`} target="_blanc"> {user.site} </Link></span>
+                                                    <small>Site Web</small>
+                                                </div>
+                                            </li>
+                                            <li className="list-group-item">
+                                                <div className="list-icon">
+                                                    <i className="bi bi-person-fill-gear"></i>
+                                                </div>
+                                                <div className="list-details">
+                                                    <span>{user.post} </span>
+                                                    <small>Post</small>
                                                 </div>
                                             </li>
                                             <li className="list-group-item">

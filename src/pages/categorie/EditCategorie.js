@@ -37,7 +37,7 @@ export default function EditCategorie() {
             axios.delete(`categorie_cvs/${id}`).then(resp => {
                 if(resp.status === 204){
                     NotificationManager.success('Supprimer avec succées', 'Catégorie supprimer avec succées', 4000)
-                    window.location.replace('/categories');
+                    window.location.replace('/cvtheque/categories');
                 }
             }).catch(error => console.log(error))
         }

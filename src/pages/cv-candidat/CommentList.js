@@ -72,8 +72,8 @@ function GetUser({id}) {
     }, [id])
     return (
         <span class="be-comment-name">
-                <strong>{user.name}</strong>
-            </span>
+            <strong>{user.name}</strong>
+        </span>
     )
 }
 

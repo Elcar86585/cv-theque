@@ -1,47 +1,68 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ContentTable from "./ContentTable";
+import { Link } from "react-router-dom";
 
 
 
-export default function ResultSeach({catego, sea}) {
-    const [cv, setCv] = useState('');
+export default function ResultSeach({ sea }) {
     
-    useEffect(() => {
-        if(catego){
-            axios.get(`categorie_cvs/${catego}`).then(resp => {
-                setCv(resp.data.cvArr)
-            }).catch(error => console.log(error))
-        }
-    }, [catego])
-    return(
+    return (
         <>
-             <table class="table table-actions table-striped table-hover mb-0">
+            <table class="table table-actions table-striped table-hover mb-0">
                 <thead>
                     <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Photo</th>
-                    <th scope="col">Natinnalité</th>
-                    <th scope="col">Expérience</th>
-                    <th scope="col">Disponibilité</th>
-                    <th scope="col">Action</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Photo</th>
+                        <th scope="col">Natinnalité</th>
+                        <th scope="col">Expérience</th>
+                        <th scope="col">Disponibilité</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {sea && sea.map(cv => {
+                        let image;
+                        if (cv.photo && cv.photo.url !== null) {
+                            const url = cv.photo.url;
+                            image = (
+                                <>
+                                    <img src={`http://cvtheque.activsolution.fr:33066/${url}`} style={{ "width": "50px", "borderRadius": "50%", "height": "50px", }} class="img-thumbnail" alt="image CV thèque Activ solution" />
+                                </>
+                            )
+                        } else {
+                            image = (
+                                <>
+                                    <img src="https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png" style={{ "width": "50px", "height": "50px", "borderRadius": "50%" }} class="img-thumbnail" alt="..." />
+                                </>)
+                        }
 
-                </tbody>
-                    {cv && cv.map(cvall => {
-                        return(
-                            <>
+                        if (cv.status === true) {
+                            return (
                                 <tr>
-                                    <ContentTable index={cvall} search={sea} />
+                                    <th scope="row">
+                                        <strong>{cv.id}</strong>
+                                    </th>
+                                    <th>
+                                        {image}
+                                    </th>
+                                    <td>{cv.nationalite} </td>
+                                    <td>{cv.aExperience} </td>
+                                    <td>
+                                        <h6><span class="badge bg-success">{cv.disponibility}</span></h6>
+                                    </td>
+                                    <td>
+                                        <Link to={`cv/${cv.id}`}><button type="button" class="btn btn-primary">Voir le CV</button></Link>
+                                    </td>
                                 </tr>
-                            </>
-                        )
+                            )
+                        }
                     })}
+                </tbody>
+
             </table>
-            <br/>
-            <br/>
+            <br />
+            <br />
         </>
     )
 }

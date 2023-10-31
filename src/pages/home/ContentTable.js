@@ -22,7 +22,7 @@ export default function ContentTable({index, search}) {
         const url = cv.photo.url;
         image = (
             <>
-                <img src={`https://8fa5-154-126-85-47.ngrok-free.app/${url}`} style={{"width": "50px", "borderRadius": "50%", "height": "50px",}} class="img-thumbnail" alt="image CV thèque Activ solution"/>
+                <img src={`http://cvtheque.activsolution.fr:33066/${url}`} style={{"width": "50px", "borderRadius": "50%", "height": "50px",}} class="img-thumbnail" alt="image CV thèque Activ solution"/>
             </>
         )
     }else{

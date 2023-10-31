@@ -43,7 +43,7 @@ class CandidatRecent extends React.Component {
                                                                         {cv.photo && cv.photo.url === null ? (
                                                                             <img src="https://bootdey.com/img/Content/avatar/avatar6.png"/>
                                                                             ):(
-                                                                            <img src={`https://8fa5-154-126-85-47.ngrok-free.app/${cv.photo.url}`}/>
+                                                                            <img src={`http://cvtheque.activsolution.fr:33066/${cv.photo.url}`}/>
                                                                         )}                                                                    
                                                                     </div>
                                                                     <div class="story-author">
@@ -81,7 +81,7 @@ class CandidatRecent extends React.Component {
                                                                         {cv.photo && cv.photo.url === null ? (
                                                                             <img src="https://bootdey.com/img/Content/avatar/avatar6.png"/>
                                                                             ):(
-                                                                            <img src={`https://8fa5-154-126-85-47.ngrok-free.app/${cv.photo.url}`}/>
+                                                                            <img src={`http://cvtheque.activsolution.fr:33066/${cv.photo.url}`}/>
                                                                         )}                                                                    
                                                                     </div>
                                                                     <div class="story-author">
@@ -140,7 +140,7 @@ class CandidatRecent extends React.Component {
                                                                         {cv.photo && cv.photo.url === null ? (
                                                                             <img src="https://bootdey.com/img/Content/avatar/avatar6.png"/>
                                                                             ):(
-                                                                            <img src={`https://8fa5-154-126-85-47.ngrok-free.app/${cv.photo.url}`}/>
+                                                                            <img src={`http://cvtheque.activsolution.fr:33066/${cv.photo.url}`}/>
                                                                         )}
                                                                     </div>
                                                                     <div class="story-author">

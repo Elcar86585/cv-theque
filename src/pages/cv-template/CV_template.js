@@ -5,10 +5,12 @@ import PostCv from './PostCv';
 import { NotificationManager } from 'react-notifications';
 import moment from 'moment';
 import GetSousCat from './GetSousCat';
+import { Link } from 'react-router-dom';
 
 class CV_template extends React.Component {
     state = {
-        cvId: null
+        cvId: null,
+        newCvid: null
     }
 
 
@@ -20,10 +22,8 @@ class CV_template extends React.Component {
         formdata.append('telephone', data.telephone)
         formdata.append('age', data.age);
         formdata.append('adresse', data.adresse);
-        if (data.sousCat) {
-            formdata.append('sous_category_id', data.sousCat)
-        } else {
-            formdata.append('categorie_cv_id', data.categorieId);
+        if (data.sousCat) {formdata.append('sous_category_id', data.sousCat)}else{
+            formdata.append('categorie_cv_id', data.category);
         }
         formdata.append('descriptionProfile', data.profileDescription);
         formdata.append('disponibility', data.dispo);
@@ -32,10 +32,15 @@ class CV_template extends React.Component {
         formdata.append('aExperience', data.aExp);
         formdata.append('nationalite', data.nation);
         formdata.append('photo', data.photo);
-        formdata.append('contrat', data.contrat)
+        formdata.append('resume', data.resume);
+        formdata.append('contrat', data.contrat);
+        formdata.append('national', data.nationnalite);
+        formdata.append('prenom', data.prenom);
+        formdata.append('pretention', data.pretention);
 
         axios.post('cvs', formdata).then(response => {
             if (response.status === 201) {
+                this.setState({newCvid: response.data.id})
                 const exp = this.props.data.experience;
                 const diplo = this.props.data.diplome;
                 const lang = this.props.data.langage;
@@ -46,6 +51,7 @@ class CV_template extends React.Component {
                     const formExp = new FormData;
                     formExp.append('societe', expe.societeState);
                     formExp.append('datexp', expe.dateState);
+                    formExp.append('datefin', expe.dateFinExp);
                     formExp.append('descriptionexp', expe.descriptionState);
                     formExp.append('cv_id', response.data.id);
 
@@ -107,10 +113,15 @@ class CV_template extends React.Component {
                     formDiplom.append('ecole', diplome.ecoleState);
                     formDiplom.append('datecole', diplome.dateDipState);
                     formDiplom.append('descriptionecole', diplome.descriptionDipState);
+                    formDiplom.append('datefinecole', diplome.dateFinDilpoState);
                     formDiplom.append('cv_id', response.data.id);
 
                     axios.post('diplomes', formDiplom).then(resp => {
+
                         if (resp.status === 201) {
+                            if(localStorage.url !== 'Administrateur'){
+                                window.location.replace('/cvtheque/merci');
+                            }
                             NotificationManager.success('Diplomes et formations valider', 'Diplomes et formations', 2000)
                         } else {
                             NotificationManager.warning('Une erreur est survenue losr de la validation de vos Diplomes et formations', 'Erreur', 2000)
@@ -147,10 +158,12 @@ class CV_template extends React.Component {
         }
 
         let date_moment = moment().format('YYYY-MM-DD')
-        const old = this.props.data.age
+        const old = this.props.data.age;
         let yearNow = moment(date_moment).year();
         let yearProfil = moment(old).year();
-        const ageProfil = yearNow - yearProfil
+        const ageProfil = yearNow - yearProfil;
+        const sudo = localStorage.url
+        console.log(this.props.data.pretention)
         return (
             <>
                 <div id="cvtel">
@@ -162,7 +175,7 @@ class CV_template extends React.Component {
                                     <img className="mr-3 img-fluid picture mx-auto" src="assets/images/фотощька.jpg" alt="" />
                                     <div className="media-body p-4 d-flex flex-column flex-md-row mx-auto mx-lg-0">
                                         <div className="primary-info">
-                                            <h1 className="name mt-0 mb-1 text-white text-uppercase text-uppercase">{this.props.data.nomPrenom} </h1>
+                                            <h1 className="name mt-0 mb-1 text-white text-uppercase text-uppercase">{this.props.data.nomPrenom} {this.props.data.prenom} </h1>
                                             {this.props.data.sousCat ? (
                                                 <>
                                                     <div className="title mb-3"><GetSousCat scId={this.props.data.sousCat} /> </div>
@@ -181,7 +194,7 @@ class CV_template extends React.Component {
                                         <div className="secondary-info ml-md-auto mt-2">
                                             <ul className="resume-social list-unstyled">
                                                 {/* <li className="mb-3"><strong>Age:</strong><i className="fab fa-telegram-plane fa-fw"></i>&nbsp; {age} ans </li> */}
-                                                <li className="mb-3"><a href="#"><span className="fa-container text-center mr-2"><i class="bi bi-geo-alt"></i></span></a></li>
+                                                <li className="mb-3"><a href="#"><span className="fa-container text-center mr-2"><i className="bi bi-geo-alt"></i></span></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -189,11 +202,11 @@ class CV_template extends React.Component {
                             </header>
                             <div className="resume-body p-5">
                                 <section className="resume-section summary-section mb-5">
-                                    <h2 className="resume-section-title text-uppercase font-weight-bold pb-3 mb-3">profile / <span class="badge badge-pill badge-primary"> {this.props.data.dispo} </span></h2>
+                                    <h2 className="resume-section-title text-uppercase font-weight-bold pb-3 mb-3">profile / <span className="badge badge-pill badge-primary"> {this.props.data.dispo} </span></h2>
 
                                     <div className="resume-section-content">
                                         <p className="mb-0">
-                                            <span class="oi oi-map-marker">Adresse :</span>&nbsp;{this.props.data.adresse}<br /><hr />
+                                            <span className="oi oi-map-marker">Adresse :</span>&nbsp;{this.props.data.adresse}<br /><hr />
                                             {this.props.data.profileDescription}
                                         </p>
                                     </div>
@@ -325,10 +338,16 @@ class CV_template extends React.Component {
 
                         </div>
                         <br />
-                        <div class="d-grid gap-2 d-md-flex justify-content">
+                        <div className="d-grid gap-2 d-md-flex justify-content">
                             &nbsp;
-                            {/* <button onClick={this.handletelecharge} class="btn btn-secondary btn-lg me-md-2" type="button">Télécharger le CV</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
-                            <button onClick={this.handleSubmit} class="btn btn-primary btn-lg" type="button">Publier le cv dans la CVthèque</button>
+                            <button onClick={this.handleSubmit} className="btn btn-primary btn-lg" type="button">Publier le cv dans la CVthèque</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            {this.state.newCvid ? (
+                                <>
+                                    {sudo === 'Administrateur' ? (
+                                        <Link to={`/editCv/${this.state.newCvid}`} className="btn btn-secondary btn-lg me-md-2" type="button">Modifier</Link>
+                                    ):(<></>)}
+                                </>
+                            ):(<></>)}
                         </div>
                     </article>
 

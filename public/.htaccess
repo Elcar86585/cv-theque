@@ -7,4 +7,9 @@
     RewriteCond %{REQUEST_FILENAME} !-d 
     RewriteCond %{REQUEST_FILENAME} !-f 
     RewriteRule ^ index.html [L] 
+    
+    Allow from cvtheque.activsolution.fr
+
+    RewriteCond %{HTTP:X-Forwarded-Proto} =https
+    RewriteRule ^(.*)$ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>

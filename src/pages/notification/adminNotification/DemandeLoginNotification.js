@@ -34,16 +34,20 @@ export default function DemandeLoginNotification({ login, fun }) {
                 <div className="row gutters-sm">
                     <div class="col-md-8 mb-3">
                         {login && login.map(demande => {
+                            console.log(demande)
                             var date = moment(demande.created_at); // crée un objet Moment pour la date actuelle
                             var formattedDate = date.fromNow(); // format "il y a quelques minutes"
                             if(demande.lu === true){
+                                
                                 return (
                                     <>
                                         <div className="card">
                                             <div class=" card-body">
                                                 <div class="media forum-item">
                                                     <div class="media-body">
-                                                        Nom et prenom : <h6><strong data-toggle="collapse" data-target=".forum-content" class="text-body">{demande.name} </strong></h6>
+                                                        Nom :<h6><strong data-toggle="collapse" data-target=".forum-content" class="text-body">{demande.name} </strong></h6>
+                                                        <hr />
+                                                        Prénom :<h6><i data-toggle="collapse" data-target=".forum-content" class="text-body">{demande.prenom} </i></h6>
                                                         <hr />
                                                         <p class="text-secondary">
                                                             E-mail: {demande.email}
@@ -51,6 +55,12 @@ export default function DemandeLoginNotification({ login, fun }) {
                                                             Téléphone : {demande.numero}
                                                             <hr />
                                                             Société : {demande.object}
+                                                            <hr />
+                                                            Post : {demande.post}
+                                                            <hr />
+                                                            Site internet : {demande.site}
+                                                            <hr />
+                                                            Priorisation : {demande.priorisation}
                                                             <hr />
                                                             Description :<br /> {demande.description}
     
@@ -80,7 +90,9 @@ export default function DemandeLoginNotification({ login, fun }) {
                                             <div class=" card-body" style={{"backgroundColor": "#e9ecef "}}>
                                                 <div class="media forum-item">
                                                     <div class="media-body">
-                                                        Nom et prenom : <h6><strong data-toggle="collapse" data-target=".forum-content" class="text-body">{demande.name} </strong></h6>
+                                                        Nom :<h6><strong data-toggle="collapse" data-target=".forum-content" class="text-body">{demande.name} </strong></h6>
+                                                        <hr />
+                                                        Prénom :<h6><p data-toggle="collapse" data-target=".forum-content" class="text-body">{demande.prenom} </p></h6>
                                                         <hr />
                                                         <p class="text-secondary">
                                                             E-mail: {demande.email}
@@ -89,11 +101,14 @@ export default function DemandeLoginNotification({ login, fun }) {
                                                             <hr />
                                                             Société : {demande.object}
                                                             <hr />
-                                                            Pays :<br /> {demande.pays}
+                                                            Post : {demande.post}
                                                             <hr />
-                                                            Adresse :<br /> {demande.adresse}
+                                                            Site internet : {demande.site}
+                                                            <hr />
+                                                            Priorisation : {demande.priorisation}
                                                             <hr />
                                                             Description :<br /> {demande.description}
+    
                                                         </p>
                                                         <p class="text-muted">
                                                             Il y a <span class="text-secondary font-weight-bold">{formattedDate} </span><br />
