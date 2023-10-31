@@ -37,6 +37,7 @@ export default function EditCV() {
     const [image, setImage] = useState(null);
     const [prenom, setPrenom] = useState('');
     const [pretention, setPretention] = useState('');
+    const [descriptionProfil, setDescriptionProfil] = useState('');
 
     useEffect(() => {
         axios.get(`cvs/${id}`).then(resp => {
@@ -79,6 +80,7 @@ export default function EditCV() {
         if(image){formdata.append('photo', image)}
         if(prenom){formdata.append('prenom', prenom)}
         if(pretention){formdata.append('pretention', pretention)}
+        if(descriptionProfil){formdata.append('descriptionProfile', descriptionProfil)}
         axios.put(`cvs/${id}`, formdata).then(resp => {
             if(resp.status === 200){
                 NotificationManager.success(`CV de ${profile.nomPrenom} modifier`, `Modification valider`, 4000)
@@ -119,7 +121,7 @@ export default function EditCV() {
           setImage(file);
         });
     }
-
+    console.log(profile.descriptionProfile)
     return (
         <>
             <div className="adminx-content">
@@ -383,6 +385,18 @@ export default function EditCV() {
                                                             defaultValue={profile.age} 
                                                             onChange={(e) => setAge(e.target.value)}
                                                         />
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <div className="col-sm-3">
+                                                        <h6 className="mb-0">Description</h6>
+                                                    </div>
+                                                    <div className="col-sm-9 text-secondary">
+                                                        <textarea 
+                                                            type="text" className="form-control" 
+                                                            defaultValue={profile.descriptionProfile} 
+                                                            onChange={(e) => setDescriptionProfil(e.target.value)}
+                                                        ></textarea>
                                                     </div>
                                                 </div>
                                                 <div className="row mb-3">

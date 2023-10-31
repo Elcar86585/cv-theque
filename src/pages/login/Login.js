@@ -64,11 +64,11 @@ class Login extends React.Component {
                                 <Form>
                                     <div className="form-group">
                                         <label for="exampleDropdownFormEmail1" className="form-label">E-mail</label>
-                                        <Field type="email" name="email" className="form-control" placeholder="email@example.com" />
+                                        <Field type="email" name="email" required className="form-control" placeholder="email@example.com" />
                                     </div>
                                     <div className="form-group">
                                         <label for="exampleDropdownFormPassword1" className="form-label">Mot de pass</label>
-                                        <Field type="password" name="password" className="form-control" placeholder="Votre mot de passe" />
+                                        <Field type="password" name="password" required className="form-control" placeholder="Votre mot de passe" />
                                     </div>
                                     <div className="form-group">
                                         <div className="custom-control custom-checkbox">

@@ -72,7 +72,6 @@ export default function CV_candidat({ user, fun }) {
     let yearNow = moment(date_moment).year();
     let yearProfil = moment(cv.age).year();
     const ageCandidat = yearNow - yearProfil
-    console.log(cv)
     if (admin === true) {
         commentaire = (
             <>

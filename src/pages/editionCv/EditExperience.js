@@ -40,7 +40,6 @@ export default function EditExperience({data}) {
             }
         }).catch(error => console.log(error));
     }
-    console.log(experience)
     return (
         <form>
             <div className="row mb-3">
