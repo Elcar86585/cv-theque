@@ -126,7 +126,7 @@ function ModalShow({ data, close }) {
                         Fermer
                     </Button>
                     <Button variant="primary" onClick={hangleMdp} >
-                        Enregistrer les modifications
+                        Envoyer
                     </Button>
                 </Modal.Footer>
             </Modal>

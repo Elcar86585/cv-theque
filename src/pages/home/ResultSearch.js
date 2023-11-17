@@ -9,7 +9,7 @@ export default function ResultSeach({ sea }) {
     
     return (
         <>
-            <table class="table table-actions table-striped table-hover mb-0">
+            <table className="table table-actions table-striped table-hover mb-0">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -17,6 +17,7 @@ export default function ResultSeach({ sea }) {
                         <th scope="col">Natinnalité</th>
                         <th scope="col">Expérience</th>
                         <th scope="col">Disponibilité</th>
+                        <th scope="col">Contrat</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -27,13 +28,13 @@ export default function ResultSeach({ sea }) {
                             const url = cv.photo.url;
                             image = (
                                 <>
-                                    <img src={`http://cvtheque.activsolution.fr:33066/${url}`} style={{ "width": "50px", "borderRadius": "50%", "height": "50px", }} class="img-thumbnail" alt="image CV thèque Activ solution" />
+                                    <img src={`http://cvtheque.activsolution.fr:33066/${url}`} style={{ "width": "50px", "borderRadius": "50%", "height": "50px", }} className="img-thumbnail" alt="image CV thèque Activ solution" />
                                 </>
                             )
                         } else {
                             image = (
                                 <>
-                                    <img src="https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png" style={{ "width": "50px", "height": "50px", "borderRadius": "50%" }} class="img-thumbnail" alt="..." />
+                                    <img src="https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png" style={{ "width": "50px", "height": "50px", "borderRadius": "50%" }} className="img-thumbnail" alt="..." />
                                 </>)
                         }
 
@@ -46,13 +47,16 @@ export default function ResultSeach({ sea }) {
                                     <th>
                                         {image}
                                     </th>
-                                    <td>{cv.nationalite} </td>
-                                    <td>{cv.aExperience} </td>
-                                    <td>
-                                        <h6><span class="badge bg-success">{cv.disponibility}</span></h6>
+                                    <td className="align-middle">{cv.nationalite} </td>
+                                    <td className="align-middle">{cv.aExperience} </td>
+                                    <td className="align-middle">
+                                        <h6><span className="badge bg-success">{cv.disponibility}</span></h6>
                                     </td>
-                                    <td>
-                                        <Link to={`cv/${cv.id}`}><button type="button" class="btn btn-primary">Voir le CV</button></Link>
+                                    <td className="align-middle">
+                                        <h6><span className="badge bg-info">{cv.contrat}</span></h6>
+                                    </td>
+                                    <td className="align-middle">
+                                        <Link to={`cv/${cv.id}`}><button type="button" className="btn btn-primary btn-sm">Voir le CV</button></Link>
                                     </td>
                                 </tr>
                             )

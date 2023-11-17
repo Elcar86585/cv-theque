@@ -19,7 +19,7 @@ class CV_template extends React.Component {
         const formdata = new FormData;
         formdata.append('nomPrenom', data.nomPrenom);
         formdata.append('email', data.email);
-        formdata.append('telephone', data.telephone)
+        formdata.append('telephone', data.telephone);
         formdata.append('age', data.age);
         formdata.append('adresse', data.adresse);
         if (data.sousCat) {formdata.append('sous_category_id', data.sousCat)}else{
@@ -163,7 +163,6 @@ class CV_template extends React.Component {
         let yearProfil = moment(old).year();
         const ageProfil = yearNow - yearProfil;
         const sudo = localStorage.url
-        console.log(this.props.data.pretention)
         return (
             <>
                 <div id="cvtel">
@@ -334,7 +333,6 @@ class CV_template extends React.Component {
                                     </div>
                                 </div>
                             </div>
-
 
                         </div>
                         <br />

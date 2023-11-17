@@ -60,10 +60,12 @@ export default class CategorieAll extends React.Component {
                                                     <p class="mb-1">{cat.description}</p>
                                                     <Link class="badge badge-info" to={`/candidats/${cat.id}`}>Voir tous les CV</Link>
                                                     <hr />
-                                                    <p>Sous catégorie :</p>
-                                                    <ul>
+                                                    <div class="card">
+                                                    <div class="card-header">
+                                                        <b>Sous catégorie :</b>
+                                                    </div>
                                                         <GetSousCategorie data={cat.id} />
-                                                    </ul>
+                                                    </div>
                                                     <Link to={`/categorie/${cat.id}`}>
                                                         <Button onClick={this.handleShow} datatarget={cat.id} className="btn btn-sm btn-primary" _msttexthash="88283" _msthash="86">
                                                             Voir les détailes
@@ -99,10 +101,12 @@ function GetSousCategorie({ data }) {
             {sousCat && sousCat.map(sc => {
                 return (
                     <>
-                        <li>
-                            <b>{sc.categorie} :</b> {sc.description}<br/>
+                        <div class="card-body">
+                            <h5 class="card-title">{sc.categorie}</h5>
+                            <p class="card-text">{sc.description}</p>
                             <Link class="badge badge-primary" to={`/souscategorie/${sc.id}`}>Voir tous les CV</Link>
-                        </li>
+                        </div>
+                        <hr/>
                     </>
                 )
             })}

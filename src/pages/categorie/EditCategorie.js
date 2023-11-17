@@ -109,10 +109,10 @@ export default function EditCategorie() {
                                                             <span class="text-secondary">
                                                                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                                                     <button type="button" onClick={() => handleDeleteSousCat(sc.id)} class="btn btn-danger btn-sm">
-                                                                        <i className="bi bi-trash3"></i>
+                                                                        <i className="bi bi-trash3"></i> Supprimer
                                                                     </button>
                                                                     <button onClick={() => setEditSous(sc.id)} type="button" class="btn btn-primary btn-sm">
-                                                                        <i className="bi bi-pencil-square"></i>
+                                                                        <i className="bi bi-pencil-square"></i> Modifier
                                                                     </button>
                                                                 </div>
                                                             </span>
@@ -136,10 +136,11 @@ export default function EditCategorie() {
                                             </Tabs>
                                         </div>
                                     </div>
+                                    <br/>
                                     {editSous ? (
                                         <>
                                             <div class="card mb-3">
-                                                <div class="card-body">
+                                                <div class="card-body" style={{backgroundColor: "#e9ecef"}}>
                                                     <EditSousCategorie idSous={editSous} funct={getCatego}  />
                                                 </div>
                                             </div>
@@ -162,10 +163,11 @@ function EditSousCategorie({idSous, funct}) {
     useEffect(() => {
         axios.get(`sous_categories/${idSous}`).then(resp => {
             if(resp.status === 200){
-                setSous(resp.data);
+                setSous(resp.data.sc);
             }
         })
     }, [idSous])
+
 
     const handleUpdateSous = (e) => {
         e.preventDefault();
@@ -175,10 +177,10 @@ function EditSousCategorie({idSous, funct}) {
         if(desSousCat){dataForm.append('description', desSousCat)}
         axios.put(`sous_categories/${idSous}`, dataForm).then(resp => {
             if(resp.status === 200){
-                NotificationManager.success('Modifier', 'Sous catégorie modilier avec succée', 4000)
+                NotificationManager.success('Modifier', 'Sous catégorie modilier avec succée', 4000);
                 funct();
             }else{
-                NotificationManager.warning('Erreur', 'Une erreur est survenue lors de la modification', 4000)
+                NotificationManager.warning('Erreur', 'Une erreur est survenue lors de la modification', 4000);
             }
         })
     }
