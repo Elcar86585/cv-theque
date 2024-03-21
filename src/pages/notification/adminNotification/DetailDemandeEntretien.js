@@ -107,14 +107,14 @@ function Tabulation({ data, valide, refuse, deletetion }) {
                     <>
                         <div class="alert alert-success" role="alert">
                             <i className="bi bi-check-all"></i> Valider /.../&nbsp;
-                            <b>{user.name}</b> veux avoir un entretien avec <b>{candidat.nomPrenom}</b> entre le date de {data.drdv} à {data.hrdv} heurre
+                            <b>{user.name} {user.prenom}</b> veux avoir un entretien avec <b>{candidat.nomPrenom} {candidat.prenom}</b> entre le date de {data.drdv} à {data.hrdv} heurre
                         </div>
                     </>
                 ) : (
                     <>
                         <div class="alert alert-primary" role="alert">
                             <i className="bi bi-caret-right"></i>&nbsp;
-                            <b>{user.name}</b> veux avoir un entretien avec <b>{candidat.nomPrenom}</b> entre le date de {data.drdv} à {data.hrdv} heurre
+                            <b>{user.name} {user.prenom}</b> veux avoir un entretien avec <b>{candidat.nomPrenom} {candidat.prenom} </b> entre le date de {data.drdv} à {data.hrdv} heurre
                         </div>
                     </>
                 )}
@@ -126,10 +126,10 @@ function Tabulation({ data, valide, refuse, deletetion }) {
                             <div className="card">
                                 <div className="card-body">
                                     <div className="">
-                                        <h5>A propos de {user.name} </h5>
+                                        <h5>A propos de {user.name} {user.prenom} </h5>
                                         <hr />
                                         <div className="mt-3">
-                                            <strong>Nom :  {user.name} </strong><hr />
+                                            <strong>Nom :  {user.name} {user.prenom} </strong><hr />
                                             <p className="text-secondary mb-1">E-mail : {user.email} </p>
                                             <hr />
                                             <p className="text-secondary mb-1">Téléphone : {user.phone} </p>
@@ -194,7 +194,7 @@ function CandidatTabe({cv, experience, formation, lang, loisir, informatique}) {
                 <Tab eventKey="langue" title="Langue">
                     <LangueDetail langu={lang} />
                 </Tab>
-                <Tab eventKey="loisir" title="Loisir">
+                <Tab eventKey="loisir" title="Competence">
                     <LoisirDetail loi={loisir}  />
                 </Tab>
                 <Tab eventKey="connaissance en informatique" title="Connaissance en informatique">

@@ -64,7 +64,7 @@ function Contenu({ dem, date, fun }) {
                 <div className="media-body">
                     <h6>
                         <Link to="#" data-toggle="collapse" data-target=".forum-content" className="text-body">
-                            {use.name}
+                            <b>{use.name} {use.prenom}</b>
                         </Link>
                     </h6>
                     <p className="text-secondary">

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {NotificationManager} from 'react-notifications';
+import { useNavigate } from "react-router-dom";
 
 export default function EditEtude({id}) {
     const [etude, setEtude] = useState('');
     const [ecole, setEcole] = useState('');
+    const navigate = useNavigate();
     const [dateEtude, setDateEtude] = useState('');
     const [dateFinEcole, setDateFinEcole] = useState('');
     const [descEtude, setDescetude] = useState('');
@@ -35,13 +37,23 @@ export default function EditEtude({id}) {
     }
 
     const deletion = () => {
-        axios.delete(`diplomes/${id}`).then(resp => {
-            if(resp.status === 204) {
-                NotificationManager.success('Vous avec supprimer une etude ou formation', 'Suprimer avec succèes', 4000)
-            }
-        }).catch(error => console.log(error))
+        if(window.confirm("Vous êtes Sûr ?") === true){
+            axios.delete(`diplomes/${id}`).then(resp => {
+                if(resp.status === 204) {
+                    NotificationManager.success('Vous avec supprimer une etude ou formation', 'Suprimer avec succèes', 4000)
+                    setTimeout(() => {
+                        navigate('/cv');
+                    }, 3000)
+                }
+            }).catch(error => console.log(error))
+        }
+    }
+    const datable = [];
+    for (let anne = 1990; anne <= 2040; anne++) {
+        datable.push(`${anne}`);
     }
     
+    console.log(etude)
     return (
         <form>
             <div className="row mb-3">
@@ -60,16 +72,26 @@ export default function EditEtude({id}) {
                     <h6 className="mb-0">Date d'etude</h6>
                 </div>
                 <div className="col-sm-5 text-secondary">
-                    <input type="date" 
+                    <select type="date" 
                         className="form-control" defaultValue={etude.datecole}
                         onChange={(e) => setDateEtude(e.target.value)}
-                    />
+                    >
+                        <option selected> {etude.datecole} </option>
+                        {datable.map((date) => (
+                            <option value={date} >{date}</option>
+                        ))}
+                    </select>
                 </div>
                 <div className="col-sm-4 text-secondary">
-                    <input type="date" 
+                    <select type="date" 
                         className="form-control" defaultValue={etude.datefinecole}
                         onChange={(e) => setDateFinEcole(e.target.value)}
-                    />
+                    >
+                        <option selected> {etude.datefinecole} </option>
+                        {datable.map((date) => (
+                            <option value={date} >{date}</option>
+                        ))}
+                    </select>
                 </div>
             </div>
             <div className="row mb-3">

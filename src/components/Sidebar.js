@@ -117,6 +117,17 @@ export default class Sidebar extends React.Component {
                                 </span>
                             </NavLink>
                         </li>
+                        <li className="sidebar-nav-item">
+                            <NavLink to="/favoris" className="sidebar-nav-link">
+                                <span className="sidebar-nav-abbr">
+                                    <i style={{ 'fontSize': '20px' }} className="bi bi-star-fill"></i>
+                                </span>
+                                <span className="sidebar-nav-name">
+                                    Favoris
+                                </span>
+                            </NavLink>
+                        </li>
+                        <li><hr/></li>
                         {cate && cate.map(categorie => {
                             return (
                                 <>
@@ -126,7 +137,7 @@ export default class Sidebar extends React.Component {
                                                 <i style={{ 'fontSize': '20px' }} className="bi bi-folder-fill"></i>
                                             </div>
                                             <span className="sidebar-nav-name">
-                                                {categorie.categorie}
+                                                {categorie.categorie} <GetCategoryCvcount dId={categorie.id} />
                                             </span>
                                         </NavLink>
                                         <GetSousCat datar={categorie.id} />
@@ -220,4 +231,20 @@ function GetSousCat({datar}) {
             </>
         )
     }
+}
+
+function GetCategoryCvcount({dId}) {
+    const [cvCounter, setCvConter] = useState('');
+    useEffect(() => {
+        axios.get(`categorie_cvs/${dId}`).then(resp => {
+            if(resp.status === 200){
+                setCvConter(resp.data.counter)
+            }
+        })
+    }, [dId])
+    return (
+        <b>
+            ({cvCounter})
+        </b>
+    )
 }

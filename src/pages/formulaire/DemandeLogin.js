@@ -181,8 +181,8 @@ class DemandeLogin extends React.Component {
                                                             class="form-control" required aria-describedby="emailHelp" />
                                                     </div>
                                                     <div class="mb-3">
-                                                        <label for="exampleInputEmail1" class="form-label">Post</label>
-                                                        <input name="name" onChange={(e) => this.setState({ post: e.target.value })} placeholder="Votre post" type="text" class="form-control" required aria-describedby="emailHelp" />
+                                                        <label for="exampleInputEmail1" class="form-label">Poste</label>
+                                                        <input name="name" onChange={(e) => this.setState({ post: e.target.value })} placeholder="Votre poste" type="text" class="form-control" required aria-describedby="emailHelp" />
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="exampleInputEmail1" class="form-label">Adresse E-mail</label>
@@ -208,7 +208,7 @@ class DemandeLogin extends React.Component {
                                                         <label for="exampleInputEmail1" class="form-label">Numéro téléphone</label>
                                                         <input name="phone" onChange={this.handlePhone} defaultValue={trace.country_calling_code} type="text" 
                                                         class="form-control" required maxLength={15} aria-describedby="emailHelp" />
-                                                        <div class="form-text">Votre numéro téléphone ne sera pas publier.</div>
+                                                        <div class="form-text">Votre numéro de téléphone ne sera pas publier.</div>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="exampleInputEmail1" class="form-label">Pays </label>
@@ -235,7 +235,7 @@ class DemandeLogin extends React.Component {
                                                     <br />
                                                     <div class="mb-3 form-check">
                                                         <Field type="checkbox" class="form-check-input" id="exampleCheck1" />
-                                                        <label class="form-check-label" for="exampleCheck1">Inscrire à la newslatter</label>
+                                                        <label class="form-check-label" for="exampleCheck1">Inscrire à la newsletter</label>
                                                     </div>
                                                     <button type={this.state.type} class="btn btn-primary">Envoyer la demande</button>
                                                 </Form>

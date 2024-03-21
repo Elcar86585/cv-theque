@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { NotificationManager } from 'react-notifications'
+import { useNavigate } from "react-router-dom";
 
 export default function EditUser({ user }) {
     const [name, setName] = useState('');
@@ -15,6 +16,7 @@ export default function EditUser({ user }) {
     const [site, setSite] = useState('');
     const [role, setRole] = useState('');
     const [adresse, setAdresse] = useState('');
+    const navigation = useNavigate()
     const [priorisation, setPriorisation] = useState('');
 
     const handleSubmit = (evt) => {
@@ -36,7 +38,7 @@ export default function EditUser({ user }) {
         axios.put(`users/${user.id}`, fromdata).then(resp => {
             if (resp.status === 200) {
                 NotificationManager.success('Utilisateur Modifier avec succée', 'Modification valider', 4000)
-                window.location.reload()
+                navigation('/user');
             } else {
                 NotificationManager.warning('Une erreur est survenu lors de la validation', 'Erreur', 4000)
             }

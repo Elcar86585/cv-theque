@@ -10,6 +10,8 @@ import EditLangue from "./Editlangue";
 import EditLoisir from "./EditLoisir";
 import {NotificationManager} from "react-notifications";
 import {useHistory } from 'react-router-dom'
+import AddExperience from "./addContent/AddExperience";
+import AddEtude from "./addContent/AddEtude";
 
 export default function EditCV() {
     const {id} = useParams();
@@ -23,10 +25,13 @@ export default function EditCV() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [telephone, setTelephone] = useState('');
+    const [telephone1, setTelephone1] = useState('');
+    const [telephone2, setTelephone2] = useState('');
     const [facebook, setFacebook] = useState('');
     const [linkedin, setlinkedin] = useState('');
     const [adresse, setAdresse] = useState('');
     const [nationalite, setNationalité] = useState('');
+    const [national, setNational] = useState('');
     const [dispo, setDispo] = useState('');
     const [post, setPost] = useState('');
     const [age, setAge] = useState('');
@@ -38,18 +43,11 @@ export default function EditCV() {
     const [prenom, setPrenom] = useState('');
     const [pretention, setPretention] = useState('');
     const [descriptionProfil, setDescriptionProfil] = useState('');
+    const [resume, setResume] = useState('');
 
     useEffect(() => {
-        axios.get(`cvs/${id}`).then(resp => {
-            if(id){
-                setCvall(resp.data.cv);       
-                setExperience(resp.data.exp)
-                setEtude(resp.data.diplo)
-                setInfo(resp.data.info)
-                setLangue(resp.data.langage)
-                setLoisir(resp.data.loisir)
-            }
-        }).catch(error => console.log(error));
+        getCVID();
+
         axios.get('categorie_cvs').then(resp => {
             if(resp.status === 200) {
                 setCategorie(resp.data)
@@ -61,16 +59,33 @@ export default function EditCV() {
             }
         })
     }, [id])
+
+    const getCVID = () => {
+        axios.get(`cvs/${id}`).then(resp => {
+            if(id){
+                setCvall(resp.data.cv);       
+                setExperience(resp.data.exp)
+                setEtude(resp.data.diplo)
+                setInfo(resp.data.info)
+                setLangue(resp.data.langage)
+                setLoisir(resp.data.loisir)
+            }
+        }).catch(error => console.log(error));
+    }
+
     const profile = cvall
     const handleSubmit = () => {
         const formdata = new FormData;
         if(name){formdata.append('nomPrenom', name)}
         if(email){formdata.append('email', email)}
         if(telephone){formdata.append('telephone', telephone)}
+        if(telephone1){formdata.append('telephone', telephone1)}
+        if(telephone2){formdata.append('telephone', telephone2)}
         if(facebook){formdata.append('facebook', facebook)}
         if(linkedin){formdata.append('linkedin', linkedin)}
         if(adresse){formdata.append('adresse', adresse)}
         if(nationalite){formdata.append('nationalite', nationalite)}
+        if(nationalite){formdata.append('national', national)}
         if(dispo){formdata.append('disponibility', dispo)}
         if(post){formdata.append('categorie_cv_id', post)}
         if(age){formdata.append('age', age)}
@@ -81,9 +96,10 @@ export default function EditCV() {
         if(prenom){formdata.append('prenom', prenom)}
         if(pretention){formdata.append('pretention', pretention)}
         if(descriptionProfil){formdata.append('descriptionProfile', descriptionProfil)}
+        if(resume){formdata.append('resume', resume)}
         axios.put(`cvs/${id}`, formdata).then(resp => {
             if(resp.status === 200){
-                NotificationManager.success(`CV de ${profile.nomPrenom} modifier`, `Modification valider`, 4000)
+                NotificationManager.success(`CV de ${profile.nomPrenom} modifier`, `Modification valider`, 4000);
                 axios.get(`cvs/${id}`).then(resp => {
                     setCvall(resp.data.cv);       
                     setExperience(resp.data.exp);
@@ -97,7 +113,7 @@ export default function EditCV() {
     }
 
     const handleDeleteCv = () => {
-        const confirme = window.confirm('Vous voulez vraiment le supprimer')
+        const confirme = window.confirm('Vous voulez vraiment le supprimer');
         if(confirme === true){
             axios.delete(`cvs/${id}`).then(response =>  {
                 if(response.status === 204){
@@ -121,7 +137,7 @@ export default function EditCV() {
           setImage(file);
         });
     }
-    console.log(profile.descriptionProfile)
+    console.log(profile)
     return (
         <>
             <div className="adminx-content">
@@ -134,7 +150,7 @@ export default function EditCV() {
                                     <div className="d-flex flex-column align-items-center text-center">
                                         {profile.photo && profile.photo.url ? (
                                             <>
-                                                <img src={`http://cvtheque.activsolution.fr:33066/${profile.photo.url}`} alt="Admin" 
+                                                <img src={`https://cvtheque.activsolution.fr:33066/${profile.photo.url}`} alt="Admin" 
                                                 className="rounded-circle p-1 bg-primary" width="110" height={110} onClick={handleClick}/>
                                             </>
                                         ):(<>
@@ -217,6 +233,30 @@ export default function EditCV() {
                                                 </div>
                                                 <div className="row mb-3">
                                                     <div className="col-sm-3">
+                                                        <h6 className="mb-0">Autres téléphone</h6>
+                                                    </div>
+                                                    <div className="col-sm-9 text-secondary">
+                                                        <input 
+                                                            type="text" defaultValue={profile.telephone1} 
+                                                            className="form-control"
+                                                            onChange={(e) => setTelephone1(e.target.value)}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <div className="col-sm-3">
+                                                        <h6 className="mb-0">Autre téléphone</h6>
+                                                    </div>
+                                                    <div className="col-sm-9 text-secondary">
+                                                        <input 
+                                                            type="text" defaultValue={profile.telephone2} 
+                                                            className="form-control"
+                                                            onChange={(e) => setTelephone2(e.target.value)}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <div className="col-sm-3">
                                                         <h6 className="mb-0">Année d'experience(s)</h6>
                                                     </div>
                                                     <div className="col-sm-9 text-secondary">
@@ -285,17 +325,31 @@ export default function EditCV() {
                                                 </div>
                                                 <div className="row mb-3">
                                                     <div className="col-sm-3">
-                                                        <h6 className="mb-0">Nationalité</h6>
+                                                        <h6 className="mb-0">Localisation</h6>
                                                     </div>
                                                     <div className="col-sm-9 text-secondary">
                                                         <select type="text" className="form-control"
                                                             onChange={(e) => setNationalité(e.target.value)}
                                                         >
                                                             <option defaultValue={profile.nationalite} selected>{profile.nationalite} </option>
-                                                            <option value="Malagasy">Malagasy</option>
+                                                            <option value="Madagascar">Madagascar</option>
+                                                            <option value="Maurice">Maurice</option>
+                                                            <option value="Autre resident">Autre resident</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <div className="col-sm-3">
+                                                        <h6 className="mb-0">Nationalité</h6>
+                                                    </div>
+                                                    <div className="col-sm-9 text-secondary">
+                                                        <select type="text" className="form-control"
+                                                            onChange={(e) => setNational(e.target.value)}
+                                                        >
+                                                            <option defaultValue={profile.nationalite} selected>{profile.national} </option>
+                                                            <option value="Malgache">Malgache</option>
                                                             <option value="Mauricien">Mauricien</option>
-                                                            <option value="Autre resident Madagascar">Autre resident Madagascar</option>
-                                                            <option value="Autre resident Maurice">Autre resident Maurice</option>
+                                                            <option value="Autre resident">Autre nationalité</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -309,10 +363,8 @@ export default function EditCV() {
                                                         >
                                                             <option defaultValue={profile.disponibility} >{profile.disponibility} </option>
                                                             <option value="Disponible immediat" >Disponible immediat </option>
-                                                            <option value="Temps plein" >Temps plein </option>
-                                                            <option value="Temps partiel" >Temps partiel</option>
-                                                            <option value="Indisponible" >Indisponible</option>
-                                                            <option value="Temps partiel" >Ouvert à toutes proposition</option>
+                                                            <option value="Temps plein" >Disponible  avec préavis </option>
+                                                            <option value="Temps partiel" >En poste</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -401,6 +453,17 @@ export default function EditCV() {
                                                 </div>
                                                 <div className="row mb-3">
                                                     <div className="col-sm-3">
+                                                        <h6 className="mb-0">Changer le CV</h6>
+                                                    </div>
+                                                    <div className="col-sm-9 text-secondary">
+                                                        <input 
+                                                            type="file" className="form-control" 
+                                                            onChange={(e) => setResume(e.target.files[0])}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="row mb-3">
+                                                    <div className="col-sm-3">
                                                         <h6 className="mb-0">Status</h6>
                                                     </div>
                                                     <div className="col-sm-9 text-secondary">
@@ -459,7 +522,7 @@ export default function EditCV() {
                                         {loisir && loisir.map(loi => {
                                             return (
                                                 <>
-                                                    <h5 className="d-flex align-items-center mb-3">Loisirs ({loi}) </h5>
+                                                    <h5 className="d-flex align-items-center mb-3">Autre compétence ({loi}) </h5>
                                                     <EditLoisir id={loi} />
                                                     <hr/>
                                                 </>
@@ -482,6 +545,7 @@ export default function EditCV() {
                                             </>
                                         )
                                     })}
+                                    <AddExperience idCv={profile.id}  />
                                 </div>
                             </div>
                             <div className="row">
@@ -497,6 +561,7 @@ export default function EditCV() {
                                                     </>
                                                 )
                                             })}
+                                            <AddEtude idCv={profile.id} />
                                         </div>
                                     </div>
                                 </div>

@@ -3,6 +3,7 @@ import React from 'react';
 import moment from 'moment/moment';
 import { NotificationManager } from 'react-notifications'
 import UserProfil from './profil/UserProfil';
+import Loader from '../Loader';
 
 
 class Profile extends React.Component {
@@ -12,7 +13,8 @@ class Profile extends React.Component {
         type: 'password',
         pass: this.props.user.pass,
         mdp: '',
-        usage: {}
+        usage: {},
+        loader: true
     }
 
     componentDidMount = () => {
@@ -22,7 +24,10 @@ class Profile extends React.Component {
     getUser = () => {
         if (localStorage.token) {
             axios.get(`users/${localStorage.curent_user}`).then(resp => {
-                this.setState({usage: resp.data})
+                if(resp.status === 200){
+                    this.setState({usage: resp.data});
+                    setTimeout(() => {this.setState({loader: false})}, 3000)
+                }
             })
         }
     }
@@ -30,7 +35,7 @@ class Profile extends React.Component {
     handlePasswordShow = () => {
         if (this.state.password === false) {
             this.setState({ password: true });
-            this.setState({ type: 'text' })
+            this.setState({ type: 'text' });
         } else {
             this.setState({ password: false });
             this.setState({ type: 'password' });
@@ -42,7 +47,7 @@ class Profile extends React.Component {
         if (compare === true) {
             const formData = new FormData;
             formData.append('pass', this.state.pass);
-            formData.append('password', this.state.mdp)
+            formData.append('password', this.state.mdp);
             axios.put(`users/${id}`, formData).then(resp => {
                 if (resp.status === 200) {
                     NotificationManager.success('Votre mot de passe a été changer avec succès', 'Modifier', 4000)
@@ -60,12 +65,17 @@ class Profile extends React.Component {
     handleMdp = (e) => {
         this.setState({ mdp: e.target.value })
     }
+
     render() {
         const show = this.state.password;
         const user = this.props.user;
         const date = moment(user.created_at).format('LL');
         const expireDate = moment(user.expire).format('LL');
         const deta = this.state.usage;
+
+        if(this.state.loader === true){
+            return <Loader />
+        }
         return (
             <>
                 <div className="adminx-content">

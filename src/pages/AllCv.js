@@ -5,15 +5,25 @@ import { Tab, Tabs } from 'react-bootstrap';
 import CvTous from "./cv/CvTous";
 import Cvpublique from "./cv/Cvpublique";
 import CvBrouillon from "./cv/CvBrouillon";
+import Ratage from "./cv/Ratage";
+import GetSousCategories from "./cv/getCateogtieCv/GetSousCategories";
+import Categoriename from "./cv/getCateogtieCv/Categoriename";
+import Loader from "../Loader";
+import NavSearchCv from "./cv/NavSearchCv";
 
 class AllCv extends React.Component {
     state = {
         cvs: [],
-        tabKey: 'one'
+        tabKey: 'one',
+        ncv: 9,
+        loading: true,
+        cvsu: [],
+        limit: 150
     }
 
     componentDidMount = () => {
         this.getCv();
+        this.getCvUser();
     }
 
     handleTabs = (key) => {
@@ -21,19 +31,56 @@ class AllCv extends React.Component {
     }
 
     getCv = () => {
-        axios.get('cvs').then(resp => {
-            this.setState({
-                cvs: resp.data
-            })
-        }).catch(error => console.log(error))
+        if(this.props.user.role === 'Administrateur'){
+            axios.get('cvs?limit=10').then(resp => {
+                if(resp.status === 200){
+                    this.setState({
+                        cvs: resp.data
+                    })
+                    setTimeout(() => {
+                        this.setState({loading: false})
+                    }, 3000)
+                }
+            }).catch(error => console.log(error))
+        }
     }
 
+    getCvUser = () => {
+        if(this.props.user.role !== 'Administrateur'){
+            axios.get('cvs?limit=10').then(resp => {
+                if(resp.status === 200){
+                    this.setState({
+                        cvsu: resp.data
+                    })
+    
+                    if(this.state.cvs){
+                        this.setState({loading: false})
+                    }
+                    // setTimeout(() => {
+                    // }, 3000)
+                }
+            }).catch(error => console.log(error))
+        }
+    }
+
+
+    handleClick = () => {
+        this.setState({limit: this.state.limit + 100})
+    }
+
+
     render() {
+        
         const allcounter = this.state.cvs.length
         const cv = this.state.cvs
+        const cvall = this.state.cvsu.slice(0, this.state.limit)
         const user = this.props.user
         const publique = cv.filter(c => c.status === true)
         const prive = cv.filter(c => c.status === false || c.status === null)
+
+        if(this.state.loading === true){
+            return <Loader/>
+        }
         
         return (
             <>
@@ -48,29 +95,41 @@ class AllCv extends React.Component {
                                 </ol>
                             </nav>
 
-                            <div className="pb-3">
-                                <h3>Tous les candidats</h3>
+                            <div className="pb-3 d-flex justify-content-between">
+                                <h3>
+                                    Tous les candidats
+                                </h3>
+                                <button type="boutton" className="btn btn-primary btn-sm" onClick={() => window.history.back()} >
+                                    <i className="bi bi-arrow-left-short"></i>
+                                    Retour
+                                </button>
                             </div>
                             {user.role === 'Administrateur' ? (
                                 <>
                                     <Tabs activeKey={this.state.tabKey} onSelect={(e) => this.handleTabs(e)}>
                                         <Tab eventKey="one" title={`Tous les CV (${allcounter})`}>
+                                            <br />
+                                            <NavSearchCv candydat={cv} />
                                             <br/>
                                             <div className="table-responsive-md">
-                                                <div className="row" >
+                                                <>
                                                     <CvTous candy={cv} utilisateur={user} />
-                                                </div>
+                                                </>
                                             </div>
                                         </Tab>
                                         <Tab eventKey="two" title={`tous les CV publier (${publique.length})`}>
+                                            <br />
+                                            <NavSearchCv candydat={cv} />   
                                             <br/>
                                             <div className="table-responsive-md">
-                                                <div className="row" >
+                                                <>
                                                     <Cvpublique candy={cv} utilisateur={user} />
-                                                </div>
+                                                </>
                                             </div>
                                         </Tab>
                                         <Tab eventKey="three" title={`Tous les CV en Brouillon (${prive.length})`}>
+                                            <br />
+                                            <NavSearchCv candydat={cv} />
                                             <br/>
                                             <div className="table-responsive-md">
                                                 <div className="row" >
@@ -83,11 +142,11 @@ class AllCv extends React.Component {
                             ) : <></>}
                             <div className="table-responsive-md">
                                 <div className="row" >
-                                    {cv && cv.map(profil => {
+                                    {cvall && cvall.map(profil => {
                                         let image;
                                         if (profil.photo && profil.photo.url) {
                                             image = (
-                                                <span style={{ "background-image": `url(http://cvtheque.activsolution.fr:33066/${profil.photo.url})` }} className="avatar avatar-xl mr-3">
+                                                <span style={{ "background-image": `url(https://cvtheque.activsolution.fr:33066/${profil.photo.url})` }} className="avatar avatar-xl mr-3">
                                                 </span>
                                             )
                                         } else {
@@ -112,11 +171,16 @@ class AllCv extends React.Component {
                                                                         <p className="card-text">
                                                                             Expereince : {profil.aExperience}<br />
                                                                             <p>
-                                                                                <Categoriename catId={profil.categorie_cv_id} />
+                                                                                {profil.sous_category_id ? (
+                                                                                    <GetSousCategories catid={profil.sous_category_id} />
+                                                                                ) : (
+                                                                                    <Categoriename catId={profil.categorie_cv_id} />
+                                                                                )}
                                                                             </p>
                                                                             <p className="card-text">
                                                                                 {profil.disponibility}
                                                                             </p>
+                                                                            <Ratage dCv={profil} />
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -130,7 +194,15 @@ class AllCv extends React.Component {
                                     })}
                                 </div>
                             </div>
+                            <center>
+                            {user.role !== 'Administrateur' ? (
+                                <button type="button" onClick={this.handleClick} class="btn btn-primary btn-lg ">
+                                    Monter plus de CV
+                                </button>
+                            ):(<></>)}
+                            </center>
                         </div>
+                        
                     </div>
                 </div>
             </>
@@ -139,22 +211,3 @@ class AllCv extends React.Component {
 }
 
 export default AllCv;
-
-
-function Categoriename({ catId }) {
-    const [categorie, setCategorie] = useState('')
-    useEffect(() => {
-        if (catId) {
-            axios.get(`categorie_cvs/${catId}`).then(resp => {
-                if (resp.status === 200) {
-                    setCategorie(resp.data.cat)
-                }
-            })
-        }
-    }, [catId])
-    return (
-        <p className="card-text text-muted">
-            {categorie.categorie}
-        </p>
-    )
-}

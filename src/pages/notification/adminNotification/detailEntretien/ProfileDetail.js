@@ -11,7 +11,7 @@ export default function ProfileDetail({profil}) {
                             <div className="d-flex flex-column align-items-center text-center">
                                 {profil.photo && profil.photo.url ? (
                                     <>
-                                        <img src={`http://cvtheque.activsolution.fr:33066/${profil.photo.url}`} alt="Admin" className="rounded-circle" width="150" height={150} />
+                                        <img src={`https://cvtheque.activsolution.fr:33066/${profil.photo.url}`} alt="Admin" className="rounded-circle" width="150" height={150} />
                                     </>
                                 ): (
                                     <>
@@ -20,7 +20,7 @@ export default function ProfileDetail({profil}) {
                                 )}
                                 <div className="mt-3">
                                     <h4>
-                                        {profil.nomPrenom}
+                                        {profil.nomPrenom} {profil.prenom}
                                     </h4>
                                     <GetCat id={profil.categorie_cv_id} />
                                     <p className="text-secondary mb-1">{profil.aExperience} d'expereince(s) </p>

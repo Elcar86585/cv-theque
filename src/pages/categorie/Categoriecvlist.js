@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import ReactStars from 'react-stars';
+import Loader from "../../Loader";
 
-export default function Categoriecvlist({ cv, userLog }) {
+export default function Categoriecvlist({ cv, userLog, spinner, lim }) {
+
     
-    if (cv.length > 0) {
+    if(spinner === true){
+        return <Loader/>
+    }
+
+    const cvs = cv.slice(0, lim)
+
+
+    if (cvs.length > 0) {
         return (
             <div className="row">
-                {cv && cv.map(c => {
+                {cvs && cvs.map(c => {
 
                     return (
                         <>
                             <CvCard id={c} user={userLog} />
+                            
                         </>
                     )
                 })}
@@ -30,17 +41,21 @@ export default function Categoriecvlist({ cv, userLog }) {
 
 function CvCard({id, user}) {
     const [cv, setCv] = useState('')
+    const [cvRate, setCvRate] = useState('');
+    const [rating, setRating] = useState('');
     useEffect(() => {
         if(id) {
             axios.get(`cvs/${id}`).then(resp => {
-                setCv(resp.data.cv)
+                setCv(resp.data.cv);
+                setCvRate(resp.data.cvRat);
+                setRating(resp.data.rating);
             })
         }
     }, [id])
     let image;
     if(cv.photo && cv.photo.url){
         image = (
-            <span style={{ "background-image": `url(http://cvtheque.activsolution.fr:33066/${cv.photo.url})` }} className="avatar avatar-xl mr-3">
+            <span style={{ "background-image": `url(https://cvtheque.activsolution.fr:33066/${cv.photo.url})` }} className="avatar avatar-xl mr-3">
             </span>
         )
     }else {
@@ -58,9 +73,11 @@ function CvCard({id, user}) {
             console.log('viewws');
         }).catch(error => console.log(error))
     }
-    
+
+    const calculateur = (cvRate / rating)
+    const valueRate = Math.ceil(calculateur)
+
     if(cv.status === true || cv.status === null){
-        console.log(cv)
         if(user.role === 'Administrateur') {
             return (
                 <div className="col-md-6 col-xl-4">
@@ -76,14 +93,12 @@ function CvCard({id, user}) {
                                         Expereince : {cv.aExperience}<br />
                                         <i>{cv.disponibility}</i>
                                     </p>
+                                    <p><ReactStars count={5} value={cvRate} size={20} /></p>
                                     <Link to={`/editCv/${cv.id}`}><button type="button" className="btn btn-secondary btn-sm" title="Modifier">
-                                        <i className="bi bi-pencil-square"></i>
+                                        <i className="bi bi-pencil-square"></i> Modifier
                                     </button></Link>&nbsp;&nbsp;
                                     <Link to={`/cv/${cv.id}`} ><button type="button" className="btn btn-primary btn-sm" title="Voir le CV">
-                                        <i className="bi bi-eye-fill"></i>
-                                    </button></Link>&nbsp;&nbsp;
-                                    <Link><button type="button" className="btn btn-danger btn-sm" title="Voir le CV">
-                                        <i className="bi bi-trash"></i>
+                                        <i className="bi bi-eye-fill"></i> Voir le CV
                                     </button></Link>
                                 </div>
                             </div>
@@ -100,19 +115,23 @@ function CvCard({id, user}) {
                             <div className="media align-items-center">
                                 {image}
                                 <div className="media-body overflow-hidden">
-                                    <h5 className="card-text mb-0">
-                                        <strong>CV ID : {cv.id}</strong>
-                                    </h5>
+                                        <h5 className="card-text mb-0">
+                                            <strong>CV ID : {cv.id}</strong>
+                                        </h5> 
+                                    
+                                        <ReactStars count={5} value={cvRate} size={20} />
                                     <Categoriename catId={cv.categorie_cv_id} />
                                     <p className="card-text">
                                         Expereince : {cv.aExperience}<br />
                                         <i>{cv.disponibility}</i>
                                     </p>
+                                    
                                 </div>
                             </div>
                         </div>
                         <Link onClick={() => handleView(cv.id)} to={`/cv/${cv.id}`} className="tile-link"></Link>
                     </div>
+                    
                 </div>
             )
         }
@@ -132,14 +151,12 @@ function CvCard({id, user}) {
                                     Expereince : {cv.aExperience} <br />
                                     <i>{cv.disponibility}</i>
                                 </p>
+                                <p><ReactStars count={5} value={cvRate} size={20} /></p>
                                 <Link to={`/editCv/${cv.id}`} ><button type="button" className="btn btn-secondary btn-sm" title="Modifier">
-                                    <i className="bi bi-pencil-square"></i>
+                                    <i className="bi bi-pencil-square"></i> Modifier
                                 </button></Link>&nbsp;&nbsp;
                                 <Link to={`/cv/${cv.id}`}><button type="button" className="btn btn-primary btn-sm" title="Voir le CV">
-                                    <i className="bi bi-eye-fill"></i>
-                                </button></Link>&nbsp;&nbsp;
-                                <Link to=''><button type="button" className="btn btn-danger btn-sm" title="Voir le CV">
-                                    <i className="bi bi-trash"></i>
+                                    <i className="bi bi-eye-fill"></i> Voir le CV
                                 </button></Link>
                             </div>
                         </div>

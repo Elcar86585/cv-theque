@@ -1,17 +1,29 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Ratage from "./Ratage";
+import GetSousCategories from "./getCateogtieCv/GetSousCategories";
+import Categoriename from "./getCateogtieCv/Categoriename";
 
 export default function CvTous({candy, utilisateur}) {
-    const cv = candy;
-    const user = utilisateur
+    const user = utilisateur;
+    const [dataInf, setDataInf] = useState(18);
+    const cv = candy.slice(0, dataInf)
+
+    const cvCount = cv
+
+    const handleClick = () => {
+        setDataInf(dataInf * 2)
+    }
+
+
     return (
         <>
+        <div className="row" >
             {cv && cv.map(profil => {
                 let image;
                 if (profil.photo && profil.photo.url) {
                     image = (
-                        <span style={{ "background-image": `url(http://cvtheque.activsolution.fr:33066/${profil.photo.url})` }} className="avatar avatar-xl mr-3">
+                        <span style={{ "background-image": `url(https://cvtheque.activsolution.fr:33066/${profil.photo.url})` }} className="avatar avatar-xl mr-3">
                         </span>
                     )
                 } else {
@@ -22,8 +34,7 @@ export default function CvTous({candy, utilisateur}) {
                 }
                 if (user.role === 'Administrateur') {
                     <div>
-                        <h2 className="mb-3">React Js Tabs Component Example</h2>
-
+                        <h2 className="mb-3">Tous les CV</h2>
                     </div>
                     if (profil.status === true) {
                         
@@ -49,6 +60,7 @@ export default function CvTous({candy, utilisateur}) {
                                                     <p className="card-text">
                                                         {profil.disponibility}
                                                     </p>
+                                                    <Ratage dCv={profil} />
                                                 </p>
                                                 <Link to={`/editCv/${profil.id}`}><button type="button" className="btn btn-secondary btn-sm" title="Modifier">
                                                     <i className="bi bi-pencil-square"></i> Modifier
@@ -87,6 +99,7 @@ export default function CvTous({candy, utilisateur}) {
                                                     <p className="card-text">
                                                         {profil.disponibility}
                                                     </p>
+                                                    <Ratage dCv={profil} />
                                                 </p>
                                                 <Link to={`/editCv/${profil.id}`}><button type="button" className="btn btn-secondary btn-sm" title="Modifier">
                                                     <i className="bi bi-pencil-square"></i> Modifier
@@ -103,42 +116,17 @@ export default function CvTous({candy, utilisateur}) {
                     }
                 }
             })}
+        </div>
+            <br/>
+            <div className="row">
+                <div class="mx-auto">
+                    {cv ? (
+                        <button type="button" className="btn btn-lg btn-primary" onClick={handleClick}>
+                            Charger plus de CV 
+                        </button>
+                    ):(<></>)}
+                </div>
+            </div>
         </>
-    )
-}
-
-function Categoriename({ catId }) {
-    const [categorie, setCategorie] = useState('');
-    useEffect(() => {
-        if (catId) {
-            axios.get(`categorie_cvs/${catId}`).then(resp => {
-                if (resp.status === 200) {
-                    setCategorie(resp.data.cat)
-                }
-            }).catch(error => console.log(error))
-        }
-    }, [catId])
-    return (
-        <p className="card-text text-muted">
-            {categorie.categorie}
-        </p>
-    )
-}
-
-function GetSousCategories({ catid }) {
-    const [cata, setSousCata] = useState('')
-    useEffect(() => {
-        if (catid) {
-            axios.get(`sous_categories/${catid}`).then(resp => {
-                if (resp.status === 200) {
-                    setSousCata(resp.data.sc)
-                }
-            }).catch(errror => console.log(errror))
-        }
-    }, [catid])
-    return (
-        <p className="card-text text-muted">
-            {cata.categorie}
-        </p>
     )
 }

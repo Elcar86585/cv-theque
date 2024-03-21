@@ -28,24 +28,26 @@ export default function EditLoisir({id}) {
     }
 
     const deleteLoisir = () => {
-        axios.delete(`loisirs/${id}`).then(resp => {
-            if(resp.status === 204) {
-                NotificationManager.success('Vous avec supprimer un loisirs', 'Suprimer avec succèes', 4000)
-            }
-        }).catch(error => console.log(error))
+        if(window.confirm("Vous êtes Sûr ?") === true){
+            axios.delete(`loisirs/${id}`).then(resp => {
+                if(resp.status === 204) {
+                    NotificationManager.success('Vous avec supprimer un loisirs', 'Suprimer avec succèes', 4000)
+                }
+            }).catch(error => console.log(error))
+        }
     }
 
     return (
         <>
             <div className="row mb-3">
                 <div className="col-sm-3">
-                    <h6 className="mb-0">Loisir</h6>
+                    <h6 className="mb-0">Compétence</h6>
                 </div>
                 <div className="col-sm-9 text-secondary">
-                    <input 
+                    <textarea 
                         type="text" className="form-control" defaultValue={loisir.loisir}
                         onChange={(e) => setLois(e.target.value)}
-                    />
+                    ></textarea>
                 </div>
             </div>
             

@@ -45,7 +45,6 @@ class App extends React.Component {
     }
   }
 
-
   getUser = () => {
     const id = localStorage.curent_user
     axios.get(`users/${id}`).then(resp => {
@@ -62,7 +61,11 @@ class App extends React.Component {
       } else {
         NotificationManager.warning('Une erreur est survenue lors de la traitement de votre requêtte', 'ERREUR', 10000)
       }
-    }).catch(error => {console.log(error)})
+    }).catch(error => {
+
+      console.log(error)
+
+    })
   }
 
   handleSearch = (e) => {
@@ -70,17 +73,18 @@ class App extends React.Component {
   }
 
   handleDeleteSearch = () => {
-    this.setState({search: ''})
+    this.setState({ search: '' })
   }
 
   render() {
+
     const userLog = this.state.user;
     const tokenUser = this.state.user.authentication_token
     const compare = localStorage.user_token === tokenUser
     if (localStorage.user_token) {
       if (compare === true) {
         let admin;
-        if(userLog.role === 'Administrateur'){
+        if (userLog.role === 'Administrateur') {
           admin = (
             <>
               <Route exact path="categories" element={<Categorie />} />
@@ -103,7 +107,7 @@ class App extends React.Component {
                   <>
                     <IdSearch recherche={this.state.search} fonc={this.handleDeleteSearch} />
                   </>
-                ):(<>
+                ) : (<>
                   <Routes>
                     {admin}
                     <Route exact path="cv/:id" element={<CV_candidat user={userLog} />} />
@@ -123,10 +127,10 @@ class App extends React.Component {
             </div>
           </>
         )
-      }else{
+      } else {
         return (
           <div className="adminx-content">
-            <br/>
+            <br />
             <p>Redirection en cours ...</p>
             <a href='#' onClick={() => localStorage.clear(window.location.reload())}>Click ici</a>
           </div>

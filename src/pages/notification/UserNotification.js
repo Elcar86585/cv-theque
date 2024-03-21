@@ -2,10 +2,27 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Loader from "../../Loader";
 
 export default function UserNotification({ user, id }) {
     const notif = user
     const [cv, setCv] = useState('');
+    const [load, setLoad] = useState(true);
+
+    useEffect(() => {
+        loading();
+    }, [id])
+
+    const loading = () => {
+        setTimeout(() => {
+            setLoad(false)
+        }, 4000)
+    }
+
+    if(load === true){
+        return <Loader />
+    }
+
     return (
         <>
             <div className="adminx-content">
@@ -148,13 +165,17 @@ function Notification({ idCv }) {
     useEffect(() => {
         if (idCv) {
             axios.get(`cvs/${idCv}`).then(resp => {
-                setProfile(resp.data.cv)
+                if(resp.status === 200){
+                    setProfile(resp.data.cv)
+                }
             }).catch(error => console.log(error))
         }
         if (profil) {
             const id = profil.categorie_cv_id
             axios.get(`categorie_cvs/${id}`).then(resp => {
-                setCat(resp.data.cat)
+                if(resp.status === 200){
+                    setCat(resp.data.cat)
+                }
             }).catch(error => console.log(error))
         }
     }, [idCv])

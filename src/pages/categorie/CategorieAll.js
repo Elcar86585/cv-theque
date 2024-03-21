@@ -4,6 +4,7 @@ import { NotificationManager } from 'react-notifications'
 import { Button, Form, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import SeachCategory from './categoryComponent/SearchCategory';
 
 export default class CategorieAll extends React.Component {
     state = {
@@ -46,7 +47,8 @@ export default class CategorieAll extends React.Component {
                     <div id="DataTables_Table_0_wrapper" className="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
                         <div className="row">
                             <div className="col-sm-12">
-
+                                <SeachCategory searchable={categorie}/>
+                                <hr/>
                                 {categorie && categorie.map(cat => {
                                     const daty = moment(cat.created_at).endOf('day').fromNow();
                                     return (

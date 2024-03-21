@@ -49,7 +49,7 @@ class Search extends React.Component {
         axios.post(`/recherche?categorie_cv_id=${this.state.categorie}&nationalite=${this.state.nationalite}&disponibility=${this.state.dispo}&contrat=${this.state.contrat}&aExperience=${this.state.exp}&`).then(resp => {
             if(resp.status === 200){
                 this.setState({
-                    result: resp.data.recherche
+                    result: resp.data.recherche.slice(0, 7)
                 })
             }
         })
@@ -69,7 +69,7 @@ class Search extends React.Component {
             <div className="alert alert-warning" role="alert">
                 <center>
                     <br />
-                    <h3>Aucune resultat</h3>
+                        <h3>Aucune resultat</h3>
                     <br />
                 </center>
             </div>
@@ -82,7 +82,7 @@ class Search extends React.Component {
                             <div className="card-body d-flex flex-column">
                                 <div className="d-flex justify-content-between mb-3">
                                 <h5 className="card-title mb-0">
-                                    Recherche de profil
+                                    Rechercher un profil
                                 </h5>   
                                 </div>
 

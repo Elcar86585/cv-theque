@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 
 export default function CandidatLoisir({loi}) {
     return(
-        <>
+        <div class="container">
+            <div className='row'>
             <ul className="list-inline">
                 {loi && loi.map(lo => {
                     return(
@@ -13,7 +14,8 @@ export default function CandidatLoisir({loi}) {
                     )
                 })}
             </ul>
-        </>
+            </div>
+        </div>
     )
 }
 
@@ -26,7 +28,7 @@ function GetLoisir({id}) {
     }, [id])
     return(
         <>
-            <li className="list-inline-item"><span className="badge badge-light">{loisir.loisir} </span></li>
+            <li className="list-inline-item">{loisir.loisir}</li>
         </>
     )
 }

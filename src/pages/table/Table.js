@@ -6,6 +6,7 @@ import Mailing from "./Mailing";
 import Telephonique from "./Telephonique";
 import SocialNet from "./SocialNet";
 import Notified from "./Notified";
+import Loader from "../../Loader";
 
 class Table extends React.Component {
     state = {
@@ -16,7 +17,9 @@ class Table extends React.Component {
         alltelephone: false, 
         allSocial: false,
         email: [],
-        e_mail: ''
+        e_mail: '',
+        cat_id: null,
+        loader: true
     }
 
     componentDidMount = () => {
@@ -30,15 +33,25 @@ class Table extends React.Component {
                 this.setState({
                     categorie: resp.data
                 })
+
+                setTimeout(() => {
+                    this.setState({loader: false})
+                }, 3000)
             }
         }).catch(error => console.log(error))
     }
 
     getCv = () => {
         axios.get('cvs').then(resp => {
-            this.setState({
-                cvall: resp.data
-            })
+            if(resp.status === 200){
+                this.setState({
+                    cvall: resp.data
+                })
+
+                setTimeout(() => {
+                    this.setState({loader: false})
+                }, 3000)
+            }
         }).catch(error => console.log(error))
     }
 
@@ -100,8 +113,12 @@ class Table extends React.Component {
         //     }))
         // }
     }
+
     render() {
         const categories = this.state.categorie;
+        if(this.state.loader === true){
+            return <Loader />
+        }
         return (
             <>
                 <div className="adminx-content">
@@ -135,7 +152,7 @@ class Table extends React.Component {
                                                         <div class="dataTables_length" id="DataTables_Table_0_length">
                                                             <label>
                                                                 <font _mstmutation="1" _msttexthash="97825" _msthash="69">Montrer &nbsp; </font>
-                                                                <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" style={{ "width": "200px" }} class="form-control form-control-sm">
+                                                                <select name="DataTables_Table_0_length" onChange={(e) => this.setState({cat_id: e.target.value})} aria-controls="DataTables_Table_0" style={{ "width": "200px" }} class="form-control form-control-sm">
                                                                     {categories && categories.map(c => {
                                                                         return (
                                                                             <option value={c.id} _msttexthash="9451" _msthash="70">{c.categorie} </option>

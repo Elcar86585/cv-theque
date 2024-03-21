@@ -5,14 +5,12 @@ import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
 
 
-axios.defaults.baseURL = 'http://cvtheque.activsolution.fr:33066';
-axios.defaults.https = false;
+axios.defaults.baseURL = 'https://cvtheque.activsolution.fr:33066';
+axios.defaults.ignoreHTTPSErrors = true;
+// axios.defaults.https = false;
+// axios.defaults.ignoreSSL = true;
 // axios.defaults.trustAsAny = true;
 // axios.defaults.withCredentials = true;
-// axios.defaults.ignoreHTTPSErrors = true;
-// axios.defaults.ignoreSSL = true;
-
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

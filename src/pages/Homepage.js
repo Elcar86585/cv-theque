@@ -8,11 +8,14 @@ import CardsAdmin from "./home/CardsAdmin";
 import CandidatRecent from "./home/CandidatRecent";
 import SousCategorieCounter from "./componentsHomepage/SousCategorieCounter";
 import RecentIdealProfil from "./home/RecentIdealProfil";
+import Loader from "../Loader";
+import CategorySearch from "./home/CategorySearch";
 
 class Homepage extends React.Component {
     state = {
         categories: [],
-        sousCategories: []
+        sousCategories: [],
+        spin: true
     }
 
     componentDidMount = () => {
@@ -26,6 +29,9 @@ class Homepage extends React.Component {
                 this.setState({
                     categories: resp.data
                 })
+                setTimeout(() => {
+                    this.setState({spin: false})
+                }, 4000)
             }
         }).catch(error => console.log(error))
     }
@@ -36,8 +42,11 @@ class Homepage extends React.Component {
                 this.setState({
                     sousCategories: resp.data
                 })
+                setTimeout(() => {
+                    this.setState({spin: false})
+                }, 4000)
             }
-        })
+        }).catch(error => console.log(error))
     }
     render() {
         const sousCat = this.state.sousCategories
@@ -62,6 +71,11 @@ class Homepage extends React.Component {
                 <Cards usr={user} />
             )
         }
+
+        if(this.state.spin === true){
+            return <Loader />
+        }
+
         return (
             <>
                 <div className="adminx-content">
@@ -85,10 +99,14 @@ class Homepage extends React.Component {
                                 <div className="col-lg-8">
                                     <div className="card">
                                         <div className="card-header d-flex justify-content-between align-items-center">
-                                            <div className="card-header-title">List </div>
-
+                                            <div className="card-header-title">List 
+                                            </div>
                                         </div>
-                                        <div className="card-body collapse show" id="card1">
+                                        
+                                        <div style={{padding: 15}}>
+                                            <CategorySearch searchable={categories}/>
+                                        </div>
+                                        <div className="card-body collapse show table-wrapper-scroll-y my-custom-scrollbar" id="card1">
                                             <table className="table table-actions table-striped table-hover mb-0">
                                                 <thead>
                                                     <tr>
@@ -98,6 +116,7 @@ class Homepage extends React.Component {
                                                         <th scope="col">Actions</th>
                                                     </tr>
                                                 </thead>
+                                                    
                                                 <tbody>
                                                     {categories && categories.map(categorie => {
                                                         let actionButton;
@@ -122,6 +141,7 @@ class Homepage extends React.Component {
                                                                         {actionButton}
                                                                     </td>
                                                                 </tr>
+                                                                
                                                             </>
                                                         )
                                                     })}

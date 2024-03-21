@@ -79,3 +79,8 @@ module.exports = __webpack_require__(1);
 
 /***/ })
 /******/ ]);
+
+$('.date-own').datepicker({
+    minViewMode: 2,
+    format: 'yyyy'
+});

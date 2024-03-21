@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import favicon from '../images/favicon.png'
 class Navebarmenu extends React.Component {
     state={
         notificationCounter: '',
@@ -72,8 +73,8 @@ class Navebarmenu extends React.Component {
             <>
                 <nav className="navbar navbar-expand justify-content-between fixed-top">
                         <a className="navbar-brand mb-0 h1 d-none d-md-block" href="/cvtheque">
-                        <img src="https://www.activsolution.fr/superawesome/2022/11/logo-activ-solution-250.png" className="navbar-brand-image d-inline-block align-top mr-2" alt=""/>
-                            CV thèque Activ Solution Océan Indien
+                        <img src={favicon} className="navbar-brand-image d-inline-block align-top mr-2" alt=""/>
+                            CVthèque Activ Solution Océan Indien
                         </a>
 
                         <div  className="form-inline form-quicksearch d-none d-md-block mx-auto">

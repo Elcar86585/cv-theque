@@ -27,7 +27,7 @@ export default function Telephonique({main, checked, fon}) {
         </div>
             <table className="table table-actions table-striped table-hover mb-0 dataTable no-footer" data-table="" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
                 <thead>
-                    <tr role="row"><th scope="col" className="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" : activer pour trier la colonne décroissante" _mstaria-label="947050" _msthash="76" style={{ "width": "37.0156px" }}>
+                    <tr role="row"><th scope="col" className="sorting_asc" tabindex="0">
                         <label className="custom-control custom-checkbox m-0 p-0">
                             <div className="form-check">
                                 <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" 
@@ -36,16 +36,16 @@ export default function Telephonique({main, checked, fon}) {
                             </div>
                         </label>
                     </th>
-                    <th scope="col" className="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" _mstaria-label="1399710" _msthash="77" _msttexthash="93574" style={{ "width": "70.094px" }}>
+                    <th scope="col" className="sorting" >
                         <strong>ID</strong>
                     </th>
-                    <th scope="col" className="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" _mstaria-label="1336686" _msthash="78" _msttexthash="31395" style={{ "width": "238.391px" }}>
+                    <th scope="col" className="sorting"  >
                         Nom et prénom
                     </th>
-                    <th scope="col" className="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" _mstaria-label="1342055" _msthash="79" _msttexthash="1486862" style={{ "width": "160.109px" }}>
+                    <th scope="col" className="sorting" >
                         Téléphone
                     </th>
-                    <th scope="col" className="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" _mstaria-label="1165099" _msthash="80" _msttexthash="75049" style={{ "width": "160.156px" }}>
+                    <th scope="col" className="sorting" >
                         Disponibilité
                     </th>
                     </tr>

@@ -31,7 +31,7 @@ function LangueContent({id}) {
     const progress = langue.progresslangue + "%"
     return(
         <>
-             <div className="resume-skill-name">{langue.langue} </div>
+            <div className="resume-skill-name">{langue.langue} </div>
                 <div className="progress resume-progress">
                 <div className="progress-bar theme-progress-bar-dark" role="progressbar" style={{"width": `${progress}`}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
             </div>

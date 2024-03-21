@@ -9,7 +9,6 @@ export default function ResumeModal({res}) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    // const file = `http://cvtheque.activsolution.fr:33066/${res.url}`
     const type = 'pdf'
     const onError = e => {
         console.log(e, "error in file-viewer");
@@ -39,7 +38,7 @@ export default function ResumeModal({res}) {
                         <>
                             <FileViewer
                                 fileType={type}
-                                filePath={`http://cvtheque.activsolution.fr:33066/${res.url}`}
+                                filePath={`https://cvtheque.activsolution.fr:33066/${res.url}`}
                                 onError={onError}
                             />
                         </>

@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Loader from "../../Loader";
 
 
 export default function Favorit({ id, fav }) {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        setTimeout(() => {setLoading(false)}, 3000)
+    }, [id.id])
+
+    if(loading === true){
+        return <Loader />
+    }
     return (
         <>
             <div className="adminx-content">
@@ -42,7 +52,9 @@ function Favori({idCv}) {
     useEffect(() => {
         if(idCv) {
             axios.get(`cvs/${idCv}`).then(resp => {
-                setCv(resp.data.cv)
+                if(resp.status === 200){
+                    setCv(resp.data.cv)
+                }
             }).catch(error => console.log(error))
         }
         if(cv) {
@@ -57,7 +69,7 @@ function Favori({idCv}) {
                 <div className="card-body d-flex">
                     <div className="icon-lg rounded-3 text-white">
                         {cv.photo && cv.photo.url ? (<>
-                            <img src={`http://cvtheque.activsolution.fr:33066/${cv.photo.url}`} width={70} />
+                            <img src={`https://cvtheque.activsolution.fr:33066/${cv.photo.url}`} width={70} />
                         </>) : (
                             <>
                                 <img src="https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png" width={70} />
@@ -68,16 +80,16 @@ function Favori({idCv}) {
                         <h5 className="h6 mb-2">
                             <Link className="stretched-link text-reset" to={`/cv/${cv.id}`}>
                                 <strong>
-                                   Profil ID : {cv.id}
+                                   Profil ID : 00{cv.id}
                                 </strong>
                             </Link>
                         </h5>
                         <hr/>
                         <p className="m-0">
-                            {cat.categorie}
+                            <b>{cat.categorie}</b>
                         </p>
                         <p className="m-0">
-                            {cv.disponibility}
+                            <i>{cv.disponibility}</i>
                         </p>
                         <p className="m-0">
                             Année d'experience : {cv.aExperience}
@@ -87,7 +99,7 @@ function Favori({idCv}) {
                         </p>
                         <br />
                         <div className="btn-group">
-                            <Link to={`/cv/${cv.id}`} className="btn btn-primary">Voir les detailes </Link>
+                            <Link to={`/cv/${cv.id}`} className="btn btn-primary">Voir le CV </Link>
                         </div>
                     </div>
                 </div>

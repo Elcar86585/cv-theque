@@ -1,18 +1,27 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Ratage from "./Ratage";
+import GetSousCategories from "./getCateogtieCv/GetSousCategories";
+import Categoriename from "./getCateogtieCv/Categoriename";
 
 
 export default function Cvpublique({ candy, utilisateur }) {
-    const cv = candy;
     const user = utilisateur
+    const [dataInfi, setDataInfi] = useState(150);
+    const cv = candy.slice(0, dataInfi)
+
+    const handleClick = () => {
+        setDataInfi(dataInfi * 2)
+    }
+
     return (
         <>
+        <div className="row" >
             {cv && cv.map(profil => {
                 let image;
                 if (profil.photo && profil.photo.url) {
                     image = (
-                        <span style={{ "background-image": `url(http://cvtheque.activsolution.fr:33066/${profil.photo.url})` }} className="avatar avatar-xl mr-3">
+                        <span style={{ "background-image": `url(https://cvtheque.activsolution.fr:33066/${profil.photo.url})` }} className="avatar avatar-xl mr-3">
                         </span>
                     )
                 } else {
@@ -49,6 +58,7 @@ export default function Cvpublique({ candy, utilisateur }) {
                                                     <p className="card-text">
                                                         {profil.disponibility}
                                                     </p>
+                                                    <Ratage dCv={profil} />
                                                 </p>
                                                 <Link to={`/editCv/${profil.id}`}><button type="button" className="btn btn-secondary btn-sm" title="Modifier">
                                                     <i className="bi bi-pencil-square"></i> Modifier
@@ -65,42 +75,17 @@ export default function Cvpublique({ candy, utilisateur }) {
                     }
                 }
             })}
+        </div>
+            <br/>
+            <div className="row">
+                <div class="mx-auto">
+                    {cv ? (
+                        <button type="button" className="btn btn-lg btn-primary" onClick={handleClick}>
+                            Charger plus de CV 
+                        </button>
+                    ):(<></>)}
+                </div>
+            </div>
         </>
-    )
-}
-
-function Categoriename({ catId }) {
-    const [categorie, setCategorie] = useState('')
-    useEffect(() => {
-        if (catId) {
-            axios.get(`categorie_cvs/${catId}`).then(resp => {
-                if (resp.status === 200) {
-                    setCategorie(resp.data.cat)
-                }
-            })
-        }
-    }, [catId])
-    return (
-        <p className="card-text text-muted">
-            {categorie.categorie}
-        </p>
-    )
-}
-
-function GetSousCategories({ catid }) {
-    const [cata, setSousCata] = useState('')
-    useEffect(() => {
-        if (catid) {
-            axios.get(`sous_categories/${catid}`).then(resp => {
-                if (resp.status === 200) {
-                    setSousCata(resp.data.sc)
-                }
-            }).catch(errror => console.log(errror))
-        }
-    }, [catid])
-    return (
-        <p className="card-text text-muted">
-            {cata.categorie}
-        </p>
     )
 }

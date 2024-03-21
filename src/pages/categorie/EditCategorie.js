@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { Tab, Tabs } from 'react-bootstrap'
 import moment from "moment";
 import ModificationCategory from "./categoryComponent/ModificationCategory";
@@ -9,6 +9,7 @@ import { NotificationManager } from "react-notifications";
 
 export default function EditCategorie() {
     const [catego, setCatego] = useState('');
+    const navigate = useNavigate();
     const [sousCat, setSousCat] = useState('');
     const [tabKey, initTabKey] = useState('one');
     const [editSous, setEditSous] = useState(null);
@@ -17,7 +18,7 @@ export default function EditCategorie() {
         axios.get(`categorie_cvs/${id}`).then(resp => {
             if (resp.status === 200) {
                 setCatego(resp.data.cat)
-                setSousCat(resp.data.sousCategorie)
+                setSousCat(resp.data.sousCategorie);
             }
         }).catch(error => console.log(error))
     }, [id])
@@ -33,11 +34,11 @@ export default function EditCategorie() {
 
     const handleDeleteCat = () => {
         const confirme = window.confirm('Vous voulez vraiment supprimer cette categorie');
-        if(confirme === true){
+        if (confirme === true) {
             axios.delete(`categorie_cvs/${id}`).then(resp => {
-                if(resp.status === 204){
+                if (resp.status === 204) {
                     NotificationManager.success('Supprimer avec succées', 'Catégorie supprimer avec succées', 4000)
-                    window.location.replace('/cvtheque/categories');
+                    navigate('/cvtheque/categories');
                 }
             }).catch(error => console.log(error))
         }
@@ -45,12 +46,12 @@ export default function EditCategorie() {
 
     const handleDeleteSousCat = (data) => {
         const confirme = window.confirm('Vous voulez vraiment supprimer cette sous categorie');
-        if(confirme === true){
+        if (confirme === true) {
             axios.delete(`sous_categories/${data}`).then(resp => {
-                if(resp.status === 204){
+                if (resp.status === 204) {
                     NotificationManager.success('Supprimer', 'Sous catégorie supprimer avec succées', 4000)
                     getCatego();
-                }else{
+                } else {
                     NotificationManager.warning('Erreur', 'Une erreur est survenue lors de la suppression', 4000)
                 }
             }).catch(error => console.log(error))
@@ -73,7 +74,16 @@ export default function EditCategorie() {
                                 </li>
                             </ol>
                         </nav>
-
+                        <div className="pb-3 d-flex justify-content-between">
+                            <h3>
+                                Categorie id : {catego.id}
+                            </h3>
+                            <button type="boutton" className="btn btn-primary btn-sm" onClick={() => window.history.back()} >
+                                <i className="bi bi-arrow-left-short"></i>
+                                Retour
+                            </button>
+                        </div>
+                        <hr />
                         <div className="pb-3">
                             <h2 _msttexthash="234351" _msthash="67">Modifier un categorie</h2>
                         </div>
@@ -102,7 +112,7 @@ export default function EditCategorie() {
                                                 return (
                                                     <>
                                                         <li class="list-group-item">
-                                                            <h5 class="mb-0">{sc.categorie} </h5><br/>
+                                                            <h5 class="mb-0">{sc.categorie} </h5><br />
                                                             <p>
                                                                 {sc.description}
                                                             </p>
@@ -136,16 +146,16 @@ export default function EditCategorie() {
                                             </Tabs>
                                         </div>
                                     </div>
-                                    <br/>
+                                    <br />
                                     {editSous ? (
                                         <>
                                             <div class="card mb-3">
-                                                <div class="card-body" style={{backgroundColor: "#e9ecef"}}>
-                                                    <EditSousCategorie idSous={editSous} funct={getCatego}  />
+                                                <div class="card-body" style={{ backgroundColor: "#e9ecef" }}>
+                                                    <EditSousCategorie idSous={editSous} funct={getCatego} />
                                                 </div>
                                             </div>
                                         </>
-                                    ):(<></>)}
+                                    ) : (<></>)}
                                 </div>
                             </div>
                         </div>
@@ -156,13 +166,13 @@ export default function EditCategorie() {
     )
 }
 
-function EditSousCategorie({idSous, funct}) {
+function EditSousCategorie({ idSous, funct }) {
     const [sous, setSous] = useState('');
     const [catSous, setCatSous] = useState('');
     const [desSousCat, setDesSousCat] = useState('')
     useEffect(() => {
         axios.get(`sous_categories/${idSous}`).then(resp => {
-            if(resp.status === 200){
+            if (resp.status === 200) {
                 setSous(resp.data.sc);
             }
         })
@@ -173,13 +183,13 @@ function EditSousCategorie({idSous, funct}) {
         e.preventDefault();
         const dataForm = new FormData;
 
-        if(catSous){dataForm.append('categorie', catSous)}
-        if(desSousCat){dataForm.append('description', desSousCat)}
+        if (catSous) { dataForm.append('categorie', catSous) }
+        if (desSousCat) { dataForm.append('description', desSousCat) }
         axios.put(`sous_categories/${idSous}`, dataForm).then(resp => {
-            if(resp.status === 200){
+            if (resp.status === 200) {
                 NotificationManager.success('Modifier', 'Sous catégorie modilier avec succée', 4000);
                 funct();
-            }else{
+            } else {
                 NotificationManager.warning('Erreur', 'Une erreur est survenue lors de la modification', 4000);
             }
         })
@@ -190,13 +200,13 @@ function EditSousCategorie({idSous, funct}) {
             <form onSubmit={handleUpdateSous}>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Sous catégorie </label>
-                    <input type="text" class="form-control" defaultValue={sous.categorie} 
+                    <input type="text" class="form-control" defaultValue={sous.categorie}
                         onChange={(e) => setCatSous(e.target.value)}
                     />
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Description du catégorie</label>
-                    <textarea type="text" class="form-control" defaultValue={sous.description} 
+                    <textarea type="text" class="form-control" defaultValue={sous.description}
                         onChange={(e) => setDesSousCat(e.target.value)}
                     >
                     </textarea>

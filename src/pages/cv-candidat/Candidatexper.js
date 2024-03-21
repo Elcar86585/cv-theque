@@ -36,19 +36,26 @@ function ContentExp({id}) {
             <h3 className="resume-position-title font-weight-bold mb-1">XXXXXXX </h3>
         )
     }
-    const dexp = moment(experience.datexp).format("Do MMM YYYY");
-    const fexp = moment(experience.datefin).format("Do MMM YYYY");
-    const exper = moment(experience.datefin).format('YYYY') - moment(experience.datexp).format('YYYY')
+    
+    const exper = experience.datefin - experience.datexp
+    
     return(
         <>
             <div className="resume-timeline-item-header mb-2">
                 <div className="d-flex flex-column flex-md-row">
                     {societe}
                     <div className="resume-company-name ml-auto"> 
-                        {exper} an(s)
+                        
+                        {exper <= 0 ? (
+                            <> moins d'un an</>
+                        ):(
+                            <>{exper} an(s)</>
+                        )}
                     </div>
                 </div>
-                <div className="resume-position-time">{dexp} - {fexp} </div>
+               
+                <div className="resume-position-time">{experience.datexp} - {experience.datefin} </div>
+                
             </div>
             <div className="resume-timeline-item-desc">
                 <p>

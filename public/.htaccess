@@ -1,15 +1,7 @@
-<IfModule mod_rewrite.c> 
-    <IfModule mod_negotiation.c> 
-        Options -MultiViews 
-    </IfModule> 
-    RewriteEngine On 
-    RewriteRule ^(.*)/$ /$1 [L,R=301] 
-    RewriteCond %{REQUEST_FILENAME} !-d 
-    RewriteCond %{REQUEST_FILENAME} !-f 
-    RewriteRule ^ index.html [L] 
-    
-    Allow from cvtheque.activsolution.fr
-
-    RewriteCond %{HTTP:X-Forwarded-Proto} =https
-    RewriteRule ^(.*)$ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-</IfModule>
+<IfModule mod_rewrite.c>
+    Options -MultiViews
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.html [QSA,L]
+  </IfModule>
+  

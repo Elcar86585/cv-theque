@@ -1,6 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Ratage from "./Ratage";
+import Categoriename from "./getCateogtieCv/Categoriename";
+import GetSousCategories from "./getCateogtieCv/GetSousCategories";
 
 export default function CvBrouillon({candy, utilisateur}) {
     const cv = candy;
@@ -11,7 +13,7 @@ export default function CvBrouillon({candy, utilisateur}) {
                 let image;
                 if (profil.photo && profil.photo.url) {
                     image = (
-                        <span style={{ "background-image": `url(http://cvtheque.activsolution.fr:33066/${profil.photo.url})` }} className="avatar avatar-xl mr-3">
+                        <span style={{ "background-image": `url(https://cvtheque.activsolution.fr:33066/${profil.photo.url})` }} className="avatar avatar-xl mr-3">
                         </span>
                     )
                 } else {
@@ -48,6 +50,7 @@ export default function CvBrouillon({candy, utilisateur}) {
                                                     <p className="card-text">
                                                         {profil.disponibility}
                                                     </p>
+                                                    <Ratage dCv={profil} />
                                                 </p>
                                                 <Link to={`/editCv/${profil.id}`}><button type="button" className="btn btn-secondary btn-sm" title="Modifier">
                                                     <i className="bi bi-pencil-square"></i> Modifier
@@ -65,41 +68,5 @@ export default function CvBrouillon({candy, utilisateur}) {
                 }
             })}
         </>
-    )
-}
-
-function Categoriename({ catId }) {
-    const [categorie, setCategorie] = useState('')
-    useEffect(() => {
-        if (catId) {
-            axios.get(`categorie_cvs/${catId}`).then(resp => {
-                if (resp.status === 200) {
-                    setCategorie(resp.data.cat)
-                }
-            })
-        }
-    }, [catId])
-    return (
-        <p className="card-text text-muted">
-            {categorie.categorie}
-        </p>
-    )
-}
-
-function GetSousCategories({ catid }) {
-    const [cata, setSousCata] = useState('')
-    useEffect(() => {
-        if (catid) {
-            axios.get(`sous_categories/${catid}`).then(resp => {
-                if (resp.status === 200) {
-                    setSousCata(resp.data.sc)
-                }
-            }).catch(errror => console.log(errror))
-        }
-    }, [catid])
-    return (
-        <p className="card-text text-muted">
-            {cata.categorie}
-        </p>
     )
 }

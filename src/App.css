@@ -1,3 +1,84 @@
+/* scrollbar */
+
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+	border-radius: 10px;
+}
+
+::-webkit-scrollbar
+{
+	width: 5px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+	border-radius: 11px;
+	background-image: -webkit-gradient(linear,
+									   left bottom,
+									   left top,
+									   color-stop(0.44, rgb(122,153,217)),
+									   color-stop(0.72, rgb(73,125,189)),
+									   color-stop(0.86, rgb(77, 111, 212)));
+}
+/* Au survol de la poignée de défilement */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+/* End scrollbar */
+
+.jiMOeR .wrapper {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid rgb(223, 225, 229);
+  border-radius: 24px;
+  background-color: white;
+  color: rgb(33, 33, 33);
+  font-size: 16px;
+  font-family: Arial;
+  z-index: 2 !important;
+}
+
+.eUeawN .wrapper:hover {
+  box-shadow: rgba(32, 33, 36, 0.28) 0px 1px 6px 0px;
+  z-index: 5 !important;
+}
+
+.eUeawN {
+  position: relative;
+  height: 46px;
+  z-index: 5 !important;
+}
+
+.bNTaAG {
+  min-height: 44px;
+  width: 100%;
+  display: flex;
+  -moz-box-align: center;
+  align-items: center;
+  z-index: 5 !important;
+}
+
+.ui-datepicker-calendar {
+  display: none;
+}
+
+.my-custom-scrollbar {
+  position: relative;
+  height: 820px;
+  overflow: auto;
+  }
+  .table-wrapper-scroll-y {
+  display: block;
+  }
+
+
+
 .loader {
   border: 10px solid #f3f3f3;
   border-top: 10px solid #3498db;

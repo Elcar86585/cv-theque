@@ -80,7 +80,7 @@ function CvContent({id, cate, usage}){
     let image;
     if(candi.photo && candi.photo.url){
         image = (
-            <span style={{ "background-image": `url(http://cvtheque.activsolution.fr:33066/${candi.photo.url})` }} className="avatar avatar-xl mr-3">
+            <span style={{ "background-image": `url(https://cvtheque.activsolution.fr:33066/${candi.photo.url})` }} className="avatar avatar-xl mr-3">
             </span>
         )
     }else {

@@ -6,23 +6,29 @@ import { NotificationManager } from 'react-notifications';
 import moment from 'moment';
 import GetSousCat from './GetSousCat';
 import { Link } from 'react-router-dom';
+import LoaderA from '../../components/LoaderA';
 
 class CV_template extends React.Component {
     state = {
         cvId: null,
-        newCvid: null
+        newCvid: null,
+        mod: false
     }
 
 
     handleSubmit = () => {
+        this.setState({mod: true})
         const data = this.props.data
         const formdata = new FormData;
         formdata.append('nomPrenom', data.nomPrenom);
         formdata.append('email', data.email);
         formdata.append('telephone', data.telephone);
+        formdata.append('telephone1', data.telephone1);
+        formdata.append('telephone2', data.telephone2);
         formdata.append('age', data.age);
         formdata.append('adresse', data.adresse);
-        if (data.sousCat) {formdata.append('sous_category_id', data.sousCat)}else{
+        formdata.append('datedispo', data.dateDispo)
+        if (data.sousCat) { formdata.append('sous_category_id', data.sousCat) } else {
             formdata.append('categorie_cv_id', data.category);
         }
         formdata.append('descriptionProfile', data.profileDescription);
@@ -40,7 +46,7 @@ class CV_template extends React.Component {
 
         axios.post('cvs', formdata).then(response => {
             if (response.status === 201) {
-                this.setState({newCvid: response.data.id})
+                this.setState({ newCvid: response.data.id })
                 const exp = this.props.data.experience;
                 const diplo = this.props.data.diplome;
                 const lang = this.props.data.langage;
@@ -87,8 +93,16 @@ class CV_template extends React.Component {
                     axios.post('langages', formLang).then(resp => {
                         if (resp.status === 201) {
                             NotificationManager.success('Langages valider', 'Langages', 2000)
+                            setTimeout(() => {
+                                this.setState({mod: false});
+                                window.location.replace('/cvtheque/merci');
+                            }, 2000)
                         } else {
                             NotificationManager.warning('Une erreur est survenue lors de la validation de vos langages', 'Erreur', 2000)
+                            setTimeout(() => {
+                                this.setState({mod: false});
+                                window.location.replace('/cvtheque/merci');
+                            }, 2000)
                         }
                     }).catch(error => console.log(error))
                 })
@@ -119,8 +133,16 @@ class CV_template extends React.Component {
                     axios.post('diplomes', formDiplom).then(resp => {
 
                         if (resp.status === 201) {
-                            if(localStorage.url !== 'Administrateur'){
-                                window.location.replace('/cvtheque/merci');
+                            if (localStorage.url !== 'Administrateur') {
+                                setTimeout(() => {
+                                    this.setState({mod: false});
+                                    window.location.replace('/cvtheque/merci');
+                                }, 2000)
+                            } else {
+                                setTimeout(() => {
+                                    this.setState({mod: false});
+                                    window.location.replace(`/cvtheque`)
+                                }, 2000);
                             }
                             NotificationManager.success('Diplomes et formations valider', 'Diplomes et formations', 2000)
                         } else {
@@ -130,12 +152,11 @@ class CV_template extends React.Component {
                 })
 
             } else {
-                NotificationManager.warning('Une erreur est survenue lors de la valdation de votre CV', 'Erreur', 4000)
+
+                NotificationManager.warning(`Une erreur est survenue lors de la valdation de votre CV parece que ${response.data.message}`, 'Erreur', 2000)
             }
         }).catch(error => console.log(error))
     }
-
-
 
     render() {
         const experiences = this.props.data.experience
@@ -163,8 +184,10 @@ class CV_template extends React.Component {
         let yearProfil = moment(old).year();
         const ageProfil = yearNow - yearProfil;
         const sudo = localStorage.url
+        const dispodatee = this.props.data.dispo + ' ' + this.props.data.dateDispo
         return (
             <>
+                
                 <div id="cvtel">
                     <article className="resume-wrapper text-center position-relative" id='downCV'>
                         <div className="resume-wrapper-inner mx-auto text-left bg-white shadow-lg" >
@@ -201,7 +224,7 @@ class CV_template extends React.Component {
                             </header>
                             <div className="resume-body p-5">
                                 <section className="resume-section summary-section mb-5">
-                                    <h2 className="resume-section-title text-uppercase font-weight-bold pb-3 mb-3">profile / <span className="badge badge-pill badge-primary"> {this.props.data.dispo} </span></h2>
+                                    <h2 className="resume-section-title text-uppercase font-weight-bold pb-3 mb-3">profile / <span className="badge badge-pill badge-primary"> {dispodatee} </span></h2>
 
                                     <div className="resume-section-content">
                                         <p className="mb-0">
@@ -226,7 +249,7 @@ class CV_template extends React.Component {
                                                                             {/* <div className="resume-company-name ml-auto">
                                                                         2 ans</div> */}
                                                                         </div>
-                                                                        <div className="resume-position-time">{exp.dateState} </div>
+                                                                        <div className="resume-position-time">{exp.dateState} - {exp.dateFinExp} </div>
                                                                     </div>
                                                                     <div className="resume-timeline-item-desc">
                                                                         <p>
@@ -254,7 +277,7 @@ class CV_template extends React.Component {
                                                                                         {/* <div className="resume-company-name ml-auto">
                                                                                 2 ans</div> */}
                                                                                     </div>
-                                                                                    <div className="resume-position-time">{diplome.dateDipState} </div>
+                                                                                    <div className="resume-position-time">{diplome.dateDipState} - {diplome.dateFinDilpoState} </div>
                                                                                 </div>
                                                                                 <div className="resume-timeline-item-desc">
                                                                                     <p>
@@ -296,7 +319,7 @@ class CV_template extends React.Component {
                                                 </div>
 
                                                 <div className="resume-skill-item">
-                                                    <h4 className="resume-skills-cat font-weight-bold">Loisirs</h4>
+                                                    <h4 className="resume-skills-cat font-weight-bold">Autre compétance</h4>
                                                     <ul className="list-inline">
                                                         {loisirs && loisirs.map(loisir => {
                                                             return (
@@ -343,9 +366,9 @@ class CV_template extends React.Component {
                                 <>
                                     {sudo === 'Administrateur' ? (
                                         <Link to={`/editCv/${this.state.newCvid}`} className="btn btn-secondary btn-lg me-md-2" type="button">Modifier</Link>
-                                    ):(<></>)}
+                                    ) : (<></>)}
                                 </>
-                            ):(<></>)}
+                            ) : (<></>)}
                         </div>
                     </article>
 

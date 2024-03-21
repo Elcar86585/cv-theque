@@ -33,10 +33,17 @@ export default function EditInfo({id}) {
 
     const deleteInfo = () => {
         axios.delete(`informatiques/${id}`).then(resp => {
-            if(resp.status === 204) {
-                NotificationManager.success('Vous avec supprimer un connaissance en informatique', 'Suprimer avec succèes', 4000)
+            if(window.confirm("Vous êtes Sûr ?") === true){
+                if(resp.status === 204) {
+                    NotificationManager.success('Vous avec supprimer un connaissance en informatique', 'Suprimer avec succèes', 4000)
+                }
             }
         }).catch(error => console.log(error))
+    }
+
+    const ninfo = [];
+    for(let numbre = 10; numbre <= 100; numbre += 10){
+        ninfo.push(`${numbre}`)
     }
 
 
@@ -58,10 +65,16 @@ export default function EditInfo({id}) {
                     <h6 className="mb-0">Niveau</h6>
                 </div>
                 <div className="col-sm-9 text-secondary input-group">
-                    <input 
+                    <select
                         type="text" className="form-control" defaultValue={info.progressinfo}
                         onChange={(e) => setProgressinfo(e.target.value)}
-                    />
+                    >
+                        <option aria-checked > {info.progressinfo} </option>
+                        {ninfo.map((cent) => (
+                            <option value={cent} >{cent} </option>
+                        ))}
+
+                    </select>
                     <span class="input-group-text">%</span>
                 </div>
             </div>

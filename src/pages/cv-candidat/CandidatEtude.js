@@ -34,13 +34,12 @@ function EtudeContent({id}) {
                 setEtude(resp.data);
         })
     }, [id])
-    const detude = moment(etude.datecole).format("Do MMM YYYY");
-    const fetude = moment(etude.datefinecole).format("Do MMM YYYY");
+    
     return(
         <>
         <li className="mb-2">
             <div className="resume-degree font-weight-bold">{etude.ecole}</div>
-            <div className="resume-degree-time">{detude} - {fetude} </div>
+            <div className="resume-degree-time">{etude.datecole} - {etude.datefinecole} </div>
             <div className="resume-degree-org">
                 {etude.descriptionecole}
             </div>

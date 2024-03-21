@@ -2,10 +2,12 @@ import React from "react";
 import AddCategorie from "./AddCategorie";
 import CategorieAll from "./CategorieAll";
 import axios from "axios";
+import Loader from "../../Loader";
 
-class Categorie extends React.Component {
+export default class Categorie extends React.Component {
     state={
-        categories: []
+        categories: [],
+        loader: true
     }
 
     componentDidMount = () => {
@@ -14,13 +16,26 @@ class Categorie extends React.Component {
 
     getCategories = () => {
         axios.get('categorie_cvs').then(response => {
-            this.setState({
-                categories: response.data
-            })
+            if(response.status === 200){
+                this.setState({
+                    categories: response.data
+                })
+
+                setTimeout(() => {
+                    this.setState({loader: false})
+                }, 3000)
+            }
         })
     }
+
+
     render() {
         const cat = this.state.categories;
+        
+        if(this.state.loader === true){
+            return < Loader />
+        }
+
         return (
             <>
                 <div className="adminx-content">
@@ -88,5 +103,3 @@ class Categorie extends React.Component {
         )
     }
 }
-
-export default Categorie;

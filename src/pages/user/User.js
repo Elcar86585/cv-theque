@@ -2,11 +2,13 @@ import React from 'react';
 import Userall from './Userall';
 import Adduser from './Adduser';
 import axios from 'axios';
+import Loader from '../../Loader';
 
 
 class User extends React.Component {
     state={
-        users: []
+        users: [],
+        spinner: true
     }
 
     componentDidMount = () => {
@@ -15,13 +17,21 @@ class User extends React.Component {
 
     getUsers = () => {
         axios.get('users').then(response => {
-            this.setState({
-            users: response.data
-            })
+            if(response.status === 200){
+                this.setState({
+                users: response.data
+                })
+                setTimeout(() => {
+                    this.setState({spinner: false})
+                }, 4000)
+            }
         })
     };
     render() {
         const use = this.state.users
+        if(this.state.spinner === true){
+            return <Loader />
+        }
         return (
             <>
             <div className="adminx-content">
@@ -30,14 +40,19 @@ class User extends React.Component {
                             <nav aria-label="chapelure" role="navigation" _mstaria-label="157144" _msthash="63">
                                 <ol className="breadcrumb adminx-page-breadcrumb">
                                     <li className="breadcrumb-item"><a href="#" _msttexthash="111306" _msthash="64">Accueil</a></li>
-                                    <li className="breadcrumb-item"><a href="#" _msttexthash="2931006" _msthash="65">Éléments de l’interface utilisateur</a></li>
+                                    <li className="breadcrumb-item"><a href="#" _msttexthash="2931006" _msthash="65">Utilisateur</a></li>
                                     <li className="breadcrumb-item active  aria-current=" _msttexthash="234351" _msthash="66">Gestion des utilisteurs</li>
                                 </ol>
                                 </nav>
 
-                                <div className="pb-3">
-                                    <h1 _msttexthash="234351" _msthash="67">Gestion d'utilisateurs
-                                </h1>
+                                <div className="pb-3 d-flex justify-content-between">
+                                    <h3>
+                                        Gestion des utilisteurs
+                                    </h3>
+                                    <button type="boutton" className="btn btn-primary btn-sm" onClick={() => window.history.back()} >
+                                        <i className="bi bi-arrow-left-short"></i>
+                                        Retour
+                                    </button>
                                 </div>
 
                                 <div className="row">

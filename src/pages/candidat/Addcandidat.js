@@ -2,7 +2,10 @@ import React from 'react';
 import axios from 'axios';
 import CV_template from '../cv-template/CV_template';
 import moment from 'moment';
-import { NotificationManager } from 'react-notifications'
+import { NotificationManager } from 'react-notifications';
+import Loader from '../../Loader';
+
+
 class Addcandidat extends React.Component {
     componentDidMount = () => {
         this.getApi();
@@ -52,7 +55,11 @@ class Addcandidat extends React.Component {
         dateFinDiplo: '',
         pretention: '',
         money: '',
-        salaire: ''
+        salaire: '',
+        dateDispo: '',
+        telephone1: '',
+        telephone2: '',
+        loader: true
     }
 
     getApi = () => {
@@ -61,6 +68,17 @@ class Addcandidat extends React.Component {
         }).catch(error => console.log(error))
     }
 
+    handledateDispo = (e) => {
+        if(this.state.dispo === 'Disponible immédiat'){
+            this.setState({dateDispo: null})
+        }else{
+            this.setState({
+                dateDispo: e.target.value
+            })
+        }
+    }
+    
+    
     //onclik Loisir buttn
     handleClickLoisir = () => {
         const loisirState = this.state.loisir
@@ -120,9 +138,13 @@ class Addcandidat extends React.Component {
 
     getCategories = () => {
         axios.get('categorie_cvs').then(response => {
-            this.setState({
-                categories: response.data
-            })
+            if(response.status === 200){
+                this.setState({
+                    categories: response.data
+                })
+
+                setTimeout(() => {this.setState({loader: false})}, 3000)
+            }
         }).catch(error => console.log(error))
     }
 
@@ -233,7 +255,19 @@ class Addcandidat extends React.Component {
     //telephone form
     handleTelephone = (e) => {
         this.setState({
-            telephone: this.state.codall + e.target.value
+            telephone: this.state.codall + '.' + e.target.value
+        })
+    }
+
+    handleTelephone1 = (e) => {
+        this.setState({
+            telephone1: this.state.codall + '.' + e.target.value
+        })
+    }
+
+    handleTelephone2 = (e) => {
+        this.setState({
+            telephone2: this.state.codall + '' + e.target.value
         })
     }
 
@@ -438,6 +472,21 @@ class Addcandidat extends React.Component {
         const consDiplome = this.state.diplome;
         const categoriesPost = this.state.categories;
         const sousCat = this.state.sousCategorie;
+        const alpha = categoriesPost.sort((a, b) => a.categorie.localeCompare(b.categorie));
+        const dates = [];
+        for (let year = 1990; year <= 2040; year++) {
+            dates.push(`${year}`);
+        }
+
+        const pourcentages = [];
+        for(let number = 10; number <= 100; number += 10){
+            pourcentages.push(`${number}`)
+        }
+
+        if(this.state.loader === true){
+            return <Loader />
+        }
+        
         return (
             <>
 
@@ -483,7 +532,8 @@ class Addcandidat extends React.Component {
                                                     <label className="form-label">Poste <span style={{ color: "red" }}>*</span></label>
                                                     <select onChange={this.handlePoste} class="form-control" id="exampleFormControlSelect1">
                                                         <option value={null} >----</option>
-                                                        {categoriesPost && categoriesPost.map(categorie => {
+                                                        {alpha && alpha.map(categorie => {
+                                                            
                                                             return (
                                                                 <>
                                                                     <option value={categorie.id} key={`cat${categorie.id}`} >{categorie.categorie}
@@ -540,14 +590,42 @@ class Addcandidat extends React.Component {
                                                             <option>+230</option>
                                                         </select>
                                                         <div class="input-group-append">
-                                                            <input onChange={this.handleTelephone} maxLength={9} className="form-control input-prefix mb-2" type="text" />
+                                                            <input onChange={this.handleTelephone} placeholder='32.25.525.08' maxLength={15} className="form-control input-prefix mb-2" type="tel" />
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div className="form-group">
-                                                    <label className="form-label">Date de naissance <span style={{ color: "red" }}>*</span></label>
-                                                    <input onChange={this.handleAge} className="form-control input-prefix mb-2" placeholder='votre âge' type="date" />
+                                                    <label className="form-label">Autre numéro Téléphone </label>
+                                                    <div class="input-group">
+                                                        <select onChange={this.handleCodeCall} class="custom-select" id="inputGroupSelect04">
+                                                            <option selected>...</option>
+                                                            <option>+261 </option>
+                                                            <option>+230</option>
+                                                        </select>
+                                                        <div class="input-group-append">
+                                                            <input onChange={this.handleTelephone1} maxLength={15} placeholder='32.25.525.08' className="form-control input-prefix mb-2" type="tel" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="form-group">
+                                                    <label className="form-label">Autre numéro Téléphone </label>
+                                                    <div class="input-group">
+                                                        <select onChange={this.handleCodeCall}  class="custom-select" id="inputGroupSelect04">
+                                                            <option selected>...</option>
+                                                            <option>+261 </option>
+                                                            <option>+230</option>
+                                                        </select>
+                                                        <div class="input-group-append">
+                                                            <input onChange={this.handleTelephone2} placeholder='32.25.525.08' maxLength={15} className="form-control input-prefix mb-2" type="tel" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="form-group">
+                                                    <label className="form-label">Année de naissance <span style={{ color: "red" }}>*</span></label>
+                                                    <input onChange={this.handleAge} maxLength={4} className="form-control input-prefix mb-2" placeholder='Année de votre naissance' type="text" />
                                                 </div>
 
                                                 <div className="form-group">
@@ -569,7 +647,7 @@ class Addcandidat extends React.Component {
                                                     <label className="form-label">Prétention salariale</label>
                                                     <div class="input-group">
                                                         <div class="input-group-append">
-                                                            <input onChange={this.handlePretention} className="form-control input-prefix mb-2" 
+                                                            <input onChange={this.handlePretention} maxLength={50} className="form-control input-prefix mb-2" 
                                                             type="text" placeholder='Votre prétention salariale' />
                                                         </div>
                                                         <select onChange={(e) => {this.setState({money: e.target.value})}} class="custom-select" id="inputGroupSelect04">
@@ -586,8 +664,20 @@ class Addcandidat extends React.Component {
                                                         <option >----</option>
                                                         <option >Disponible immédiat</option>
                                                         <option>Disponible avec préavis</option>
+                                                        <option>En poste</option>
                                                     </select>
                                                 </div>
+                                                {this.state.dispo === 'Disponible avec préavis' ? (
+                                                    <>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="exampleFormControlSelect1">Date de disponiblité <span style={{ color: "red" }}>*</span></label>
+                                                            <input type='date' onChange={this.handledateDispo} class="form-control" id="exampleFormControlSelect1"/>
+                                                        </div>
+                                                    </>
+                                                ):(
+                                                    <>
+                                                    </>
+                                                )}
 
                                                 <div class="form-group">
                                                     <label class="form-label" for="exampleFormControlSelect1">Type de contrat <span style={{ color: "red" }}>*</span></label>
@@ -621,16 +711,18 @@ class Addcandidat extends React.Component {
                                         </div>
 
                                     </div>
-                                    <div className="card-body">
+                                    <div className="">
                                         <div className="card mb-grid">
                                             <div className="card-header">
                                                 <div className="card-header-title">Photo</div>
                                             </div>
+                                            <div className="card-body">
 
                                             <div className="form-group">
                                                 <label className="form-label">Ajouter une photo</label>
                                                 <input onChange={this.handleFile} className="form-control mb-2 input-credit-card"
                                                     type="file" placeholder="Ecole" />
+                                            </div>
                                             </div>
                                         </div>
 
@@ -676,7 +768,7 @@ class Addcandidat extends React.Component {
                                                 <div>
                                                     <div className="form-group">
                                                         <label className="form-label">Nom de l'entreprise</label>
-                                                        <input required onChange={this.handlesociete} className="form-control mb-2 input-credit-card"
+                                                        <input required onChange={this.handlesociete} maxLength={50} className="form-control mb-2 input-credit-card"
                                                             type="textarea" placeholder="Société" />
                                                     </div>
                                                 </div>
@@ -685,15 +777,25 @@ class Addcandidat extends React.Component {
                                                     <div className="form-group">
                                                         <label className="form-label">Date de debut et de fin</label>
                                                         <div class="input-group">
-                                                            <input type="date" onChange={this.handleDate} class="form-control"/>
-                                                            <input type="date" onChange={this.handleDateExpFin} class="form-control"/>
+                                                            <select type='text' defaultValue={2023} maxLength={4} onChange={this.handleDate} class="date-own form-control">
+                                                                {dates.map((date) => (
+                                                                    <option value={date} key={date}>{date}</option>
+                                                                ))}
+                                                            </select>
+                                                            <select type="text" defaultValue={2024} maxLength={4} onChange={this.handleDateExpFin} class="form-control">
+                                                                {dates.map((date) => (
+                                                                    <option value={date} key={date}>{date}</option>
+                                                                ))}
+                                                            </select>
+                                                            <div>
+                                                        </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <label className="form-label">Description du poste</label>
                                                 <textarea required onChange={this.handleDescriptionExp} className="form-control mb-2 input-credit-card"
-                                                    type="textarea" placeholder="Description de votre post" rows="3" maxLength={250} >
+                                                    type="textarea" placeholder="Description de votre post" rows="3" >
                                                 </textarea>
                                                 <br />
                                                 <button type='reset' class="btn btn-primary mr-2" onClick={this.handleClickExp} >
@@ -732,7 +834,7 @@ class Addcandidat extends React.Component {
                                                 <div >
                                                     <div className="form-group">
                                                         <label className="form-label">Nom de l'institution</label>
-                                                        <input onChange={this.handleEcole} className="form-control mb-2 input-credit-card"
+                                                        <input onChange={this.handleEcole} maxLength={50} className="form-control mb-2 input-credit-card"
                                                             type="textarea" placeholder="Ecole" />
                                                     </div>
                                                 </div>
@@ -741,8 +843,16 @@ class Addcandidat extends React.Component {
                                                     <div className="form-group">
                                                         <label className="form-label">Date de debut et fin d'etude ou formation</label>
                                                         <div class="input-group">
-                                                            <input type="date" onChange={this.handleDateDiplome} class="form-control"/>
-                                                            <input type="date" onChange={this.handleDatefinDiplo} class="form-control"/>
+                                                            <select type="text" defaultValue={2015} maxLength={4} onChange={this.handleDateDiplome} class="form-control">
+                                                                {dates.map((date) => (
+                                                                    <option value={date} key={date}>{date}</option>
+                                                                ))}
+                                                            </select>
+                                                            <select type="text" defaultValue={2019} maxLength={4} onChange={this.handleDatefinDiplo} class="form-control">
+                                                                {dates.map((date) => (
+                                                                    <option value={date} key={date}>{date}</option>
+                                                                ))}
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -786,7 +896,7 @@ class Addcandidat extends React.Component {
                                                 <div >
                                                     <div className="form-group">
                                                         <label className="form-label">Connaissance</label>
-                                                        <input className="form-control mb-2 input-credit-card"
+                                                        <input className="form-control mb-2 input-credit-card" maxLength={50}
                                                             type="text" onChange={this.onChangeApp} placeholder="Logiciel ou autres application" />
                                                     </div>
                                                 </div>
@@ -794,8 +904,12 @@ class Addcandidat extends React.Component {
                                                 <div>
                                                     <div className="form-group">
                                                         <label className="form-label">Progression (echelle jusqu'à 100 %)</label>
-                                                        <input className="form-control mb-2 input-credit-card"
-                                                            type="number" onChange={this.onChangeProgress} placeholder="0-100" min={0} max={100} />
+                                                        <select className="form-control mb-2 input-credit-card" maxLength={3}
+                                                            type="number" onChange={this.onChangeProgress} placeholder="0-100" min={0} max={100} >
+                                                                {pourcentages.map((cent) => (
+                                                                    <option value={cent} key={cent}>{cent} % </option>
+                                                                ))}
+                                                            </select>
                                                     </div>
                                                 </div>
 
@@ -834,7 +948,7 @@ class Addcandidat extends React.Component {
                                                 <div >
                                                     <div className="form-group">
                                                         <label className="form-label">Ajouter une langue</label>
-                                                        <input className="form-control mb-2 input-credit-card"
+                                                        <input className="form-control mb-2 input-credit-card" maxLength={30}
                                                             type="text" onChange={this.onChangelangue} placeholder="Ajouter une langue" />
                                                     </div>
                                                 </div>
@@ -842,8 +956,12 @@ class Addcandidat extends React.Component {
                                                 <div>
                                                     <div className="form-group">
                                                         <label className="form-label">Progression (echelle jusqu'à 100 %)</label>
-                                                        <input className="form-control mb-2 input-credit-card"
-                                                            type="number" onChange={this.onChangeProgrelangue} placeholder="0-100" min={0} max={100} />
+                                                        <select className="form-control mb-2 input-credit-card" maxLength={3}
+                                                            type="number" onChange={this.onChangeProgrelangue} placeholder="0-100" min={0} max={100} >
+                                                                {pourcentages.map((cent) => (
+                                                                    <option value={cent} key={cent}>{cent} % </option>
+                                                                ))}
+                                                            </select>
                                                     </div>
                                                 </div>
 
@@ -856,7 +974,7 @@ class Addcandidat extends React.Component {
                                     </div>
                                     <div className="card mb-grid">
                                         <div className="card-header">
-                                            <div className="card-header-title">Loisirs</div>
+                                            <div className="card-header-title">Autre compétances </div>
                                         </div>
                                         <div className="card-body">
                                             {consLoisir ? (
@@ -881,9 +999,9 @@ class Addcandidat extends React.Component {
                                             <form>
                                                 <div >
                                                     <div className="form-group">
-                                                        <label className="form-label">Ajouter une Loisir</label>
+                                                        <label className="form-label">Ajouter d'autres compétences </label>
                                                         <input onChange={this.onChangeLoisir} className="form-control mb-2 input-credit-card"
-                                                            type="text" placeholder="Ajouter une loisir" />
+                                                            type="text" placeholder="Votre compétence" />
                                                     </div>
                                                 </div>
                                                 <button type='reset' class="btn btn-primary mr-2" onClick={this.handleClickLoisir} >

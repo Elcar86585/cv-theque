@@ -7,7 +7,6 @@ function UserProfil({ dataUser }) {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    console.log(dataUser)
     return (
         <>
             <Button variant="primary" onClick={handleShow}>
