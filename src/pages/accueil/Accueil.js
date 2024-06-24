@@ -9,7 +9,7 @@ class Accueil extends React.Component {
     render() {
         return (
             <><header>
-                <div className="adminx-content">
+                <div className="container">
                     <div className="">
                         <div className="page-banner home-banner">
                             <div className="h-100">
@@ -76,7 +76,7 @@ class Accueil extends React.Component {
                     </div>
 
                     <div className="page-section">
-                        <div style={{margin: '100px'}}>
+                        <div className="container">
                             <div className="row">
                                 <div className="col-lg-4 py-3 wow zoomIn">
                                     <div className="img-place text-center">
