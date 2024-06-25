@@ -39,10 +39,9 @@ a:hover {
   text-decoration: underline;
 }
 
-header{
+.bg-w{
   background-color: #fff;
 }
-
 
 .text-xs {
   font-size: 12px !important;

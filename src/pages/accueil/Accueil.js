@@ -8,7 +8,7 @@ import icon_pattern from '../../images/img/icon_pattern.svg'
 class Accueil extends React.Component {
     render() {
         return (
-            <><header>
+            <><header className="bg-w">
                 <div className="container">
                     <div className="">
                         <div className="page-banner home-banner">
