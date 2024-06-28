@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import Avvvatars from 'avvvatars-react';
 
 class CandidatRecent extends React.Component {
     state = {
@@ -40,11 +41,11 @@ class CandidatRecent extends React.Component {
                                                             <div className="story-container-2">
                                                                 <div className="single-story">
                                                                     <div className="story-dp unseen">
-                                                                        {cv.photo && cv.photo.url === null ? (
-                                                                            <img src="https://bootdey.com/img/Content/avatar/avatar6.png"/>
+                                                                        {cv.photo && cv.photo.url !== null ? (
+                                                                            <Avvvatars value={cv.nomPrenom}/>
                                                                             ):(
                                                                             <img src={`https://cvtheque.activsolution.fr:33066/${cv.photo.url}`}/>
-                                                                        )}                                                                    
+                                                                        )}                                                                   
                                                                     </div>
                                                                     <div className="story-author">
                                                                         <p className="name">
@@ -78,8 +79,8 @@ class CandidatRecent extends React.Component {
                                                             <div className="story-container-2">
                                                                 <div className="single-story">
                                                                     <div className="story-dp unseen">
-                                                                        {cv.photo && cv.photo.url === null ? (
-                                                                            <img src="https://bootdey.com/img/Content/avatar/avatar6.png"/>
+                                                                        {cv.photo && cv.photo.url !== null ? (
+                                                                            <Avvvatars value={cv.nomPrenom}/>
                                                                             ):(
                                                                             <img src={`https://cvtheque.activsolution.fr:33066/${cv.photo.url}`}/>
                                                                         )}                                                                    

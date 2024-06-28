@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Ratage from "./Ratage";
 import GetSousCategories from "./getCateogtieCv/GetSousCategories";
 import Categoriename from "./getCateogtieCv/Categoriename";
+import Avvvatars from 'avvvatars-react';
 
 
 export default function Cvpublique({ candy, utilisateur }) {
@@ -21,8 +22,7 @@ export default function Cvpublique({ candy, utilisateur }) {
                 let image;
                 if (profil.photo && profil.photo.url) {
                     image = (
-                        <span style={{ "background-image": `url(https://cvtheque.activsolution.fr:33066/${profil.photo.url})` }} className="avatar avatar-xl mr-3">
-                        </span>
+                        <span style={{"margin" : "0 15px 0 0"}}><Avvvatars size={80} value={profil.nomPrenom}/></span>
                     )
                 } else {
                     image = (

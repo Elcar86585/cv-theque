@@ -12,6 +12,7 @@ import {NotificationManager} from "react-notifications";
 import {useHistory } from 'react-router-dom'
 import AddExperience from "./addContent/AddExperience";
 import AddEtude from "./addContent/AddEtude";
+import Avvvatars from 'avvvatars-react';
 
 export default function EditCV() {
     const {id} = useParams();
@@ -150,8 +151,7 @@ export default function EditCV() {
                                     <div className="d-flex flex-column align-items-center text-center">
                                         {profile.photo && profile.photo.url ? (
                                             <>
-                                                <img src={`https://cvtheque.activsolution.fr:33066/${profile.photo.url}`} alt="Admin" 
-                                                className="rounded-circle p-1 bg-primary" width="110" height={110} onClick={handleClick}/>
+                                                <span onClick={handleClick} alt="Admin" className="rounded-circle p-1 bg-primary"><Avvvatars size={110} value={profile.nomPrenom}/></span>
                                             </>
                                         ):(<>
                                             <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin" 
