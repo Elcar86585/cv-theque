@@ -1,8 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import LoaderContent from "./modal/LoaderContent";
 
 export default function CandidatInfo({infor}) {
-
+    if(infor.length === 0) {
+        return(
+            <ul className="list-unstyled mb-4">
+                <LoaderContent />
+             </ul>
+        )
+    }
     return (
         <>
              <ul className="list-unstyled mb-4">

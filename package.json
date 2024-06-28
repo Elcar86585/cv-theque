@@ -23,6 +23,7 @@
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
+    "react-content-loader": "^7.0.2",
     "react-core-ui": "^1.0.28",
     "react-csv": "^2.2.2",
     "react-date-picker": "^10.5.2",

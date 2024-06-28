@@ -22,6 +22,7 @@ import moment from 'moment';
 import generatePDF, { Margin } from 'react-to-pdf';
 import ReactStars from 'react-stars';
 import Loader from '../../Loader';
+import LoaderContent from './modal/LoaderContent';
 export default function CV_candidat({ user, fun }) {
     const { id } = useParams();
     const [cv, setCv] = useState('');
@@ -226,6 +227,7 @@ export default function CV_candidat({ user, fun }) {
         )
     }
 
+
     return (
         <div className="adminx-content">
             <div className="adminx-main-content">
@@ -265,7 +267,11 @@ export default function CV_candidat({ user, fun }) {
                                     <span class="badge bg-dark" style={{color: "white"}}>{cv.contrat} </span>
                                 </h2>
                                 <div className="resume-section-content">
-                                    <p className="mb-0">{cv.descriptionProfile} </p>
+                                    {cv.descriptionProfile  ?(<>
+                                        <p className="mb-0">{cv.descriptionProfile} </p>
+                                    </>):(<>
+                                        <LoaderContent/>
+                                    </>)}
                                 </div>
                             </section>
                             <div className="row">
@@ -274,9 +280,15 @@ export default function CV_candidat({ user, fun }) {
                                         <h2 className="resume-section-title text-uppercase font-weight-bold pb-3 mb-3">Experiences</h2>
                                         <div className="resume-section-content">
                                             <div className="resume-timeline position-relative">
-                                                <CandidatExper exp={array.exp} />
+                                                {array.exp.length === 0 ? (<>
+                                                    <LoaderContent />
+                                                    <LoaderContent />
+                                                </>):(<>
+                                                    <CandidatExper exp={array.exp} />
+                                                </>)}
                                             </div>
                                             <br />
+                                            
                                             <CandidatEtude diplo={array.diplo} />
                                         </div>
                                     </section>
