@@ -22,6 +22,7 @@ import moment from 'moment';
 import generatePDF, { Margin } from 'react-to-pdf';
 import ReactStars from 'react-stars';
 import Loader from '../../Loader';
+import Avvvatars from 'avvvatars-react';
 export default function CV_candidat({ user, fun }) {
     const { id } = useParams();
     const [cv, setCv] = useState('');
@@ -152,7 +153,7 @@ export default function CV_candidat({ user, fun }) {
     if (cv && cv.photo.url) {
         photo = (
             <>
-                <img src={`https://cvtheque.activsolution.fr:33066/${cv.photo.url}`} alt="image" border="0" width="220" height="220" />
+                <span style={{"margin" : "20px -84px 0 24px"}}><Avvvatars size={180} value={cv.nomPrenom}/></span>
             </>
         )
     } else {
