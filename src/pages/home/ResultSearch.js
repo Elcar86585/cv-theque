@@ -2,10 +2,13 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ContentTable from "./ContentTable";
 import { Link } from "react-router-dom";
+import Avvvatars from 'avvvatars-react';
 
 
 
 export default function ResultSeach({ sea, con }) {
+    console.log(con)
+    //sea = resultat de recherche
     const array = sea
     if (array.length === 0 && con === true) {
         return (
@@ -38,7 +41,7 @@ export default function ResultSeach({ sea, con }) {
                                 const url = cv.photo.url;
                                 image = (
                                     <>
-                                        <img src={`https://cvtheque.activsolution.fr:33066/${url}`} style={{ "width": "50px", "borderRadius": "50%", "height": "50px", }} className="img-thumbnail" alt="image CV thèque Activ solution" />
+                                        <span><Avvvatars size={50} value={cv.nomPrenom}/></span>
                                     </>
                                 )
                             } else {

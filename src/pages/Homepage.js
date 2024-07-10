@@ -93,8 +93,8 @@ class Homepage extends React.Component {
                             <div className="pb-3">
                                 <h1>Tableau de bord</h1>
                             </div>
-                            <Search ctg={categories} user={user} />
                             {cards}
+                            <Search ctg={categories} user={user} />
                             <div className="row">
                                 <div className="col-lg-8">
                                     <div className="card">

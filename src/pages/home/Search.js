@@ -62,7 +62,7 @@ class Search extends React.Component {
         if(this.state.result.length > 0){
             resultat = (
                 <>
-                    <ResultSeach sea={this.state.result} />
+                    <ResultSeach sea={this.state.result} con={true} />
                 </>
             )
         }else{

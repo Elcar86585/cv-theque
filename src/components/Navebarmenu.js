@@ -45,9 +45,11 @@ class Navebarmenu extends React.Component {
                          <li>
                             <Link class="position-relative" to="/notifications">
                                 <i class="bi bi-bell-fill" style={{"fontSize": "25px"}} ></i>
+                                {not != 0 && (
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                     {not}
                                 </span>
+                                )}
                             </Link>
                         </li>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

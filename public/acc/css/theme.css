@@ -444,6 +444,7 @@ a.text-dark:hover, a.text-dark:focus {
   color: #fff;
   background-color: #6C55F9;
   border-color: transparent;
+  border-color: #1184ff !important;
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
@@ -1102,7 +1103,7 @@ a.text-dark:hover, a.text-dark:focus {
 
 .navbar-nav {
   margin-top: 10px;
-  border-top: 1px solid #e4e7ee;
+  /* border-top: 1px solid #e4e7ee; */
   flex-shrink: 0;
 }
 
