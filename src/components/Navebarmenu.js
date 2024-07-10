@@ -76,7 +76,7 @@ class Navebarmenu extends React.Component {
                         <img src={favicon} className="navbar-brand-image d-inline-block align-top mr-2" alt=""/>
                             CVthèque Activ Solution Océan Indien
                         </a>
-
+                        {localStorage.user_token && (
                         <div  className="form-inline form-quicksearch d-none d-md-block mx-auto">
                             <div className="input-group">
                                 <div className="input-group-prepend">
@@ -89,6 +89,7 @@ class Navebarmenu extends React.Component {
                                 </form>
                             </div>
                         </div>
+                         )}
 
                         <div className="d-flex flex-1 d-block d-md-none">
                         <a href="#" className="sidebar-toggle ml-3">

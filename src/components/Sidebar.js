@@ -152,6 +152,7 @@ export default class Sidebar extends React.Component {
 
         return (
             <>
+            {localStorage.user_token && (
                 <div className="adminx-sidebar expand-hover push">
                     <ul className="sidebar-nav">
                         <li className="sidebar-nav-item">
@@ -190,6 +191,7 @@ export default class Sidebar extends React.Component {
                         )}
                     </ul>
                 </div>
+                )}
             </>
         )
     }
