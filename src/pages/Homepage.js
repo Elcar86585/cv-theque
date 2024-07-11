@@ -184,7 +184,7 @@ class Homepage extends React.Component {
                                         </div>
                                         <CandidatRecent use={user} />
                                     </div>
-                                    {idealProf}
+                                    {/* {idealProf} */}
                                 </div>
                             </div>
                         </div>

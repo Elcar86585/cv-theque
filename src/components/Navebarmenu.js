@@ -1,127 +1,115 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import favicon from '../images/favicon.png'
-class Navebarmenu extends React.Component {
-    state={
-        notificationCounter: '',
-        search: '',
-        entretienCount: ''
-    }
+import favicon from '../images/favicon.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass, faBell } from '@fortawesome/free-solid-svg-icons';
 
-    componentDidMount = () => {
-        if(localStorage.url === 'Administrateur'){
-            axios.get('notify').then(resp => {
+class NavbarMenu extends Component {
+    state = {
+        notificationCounter: 0,
+        entretienCount: 0
+    };
+
+    async componentDidMount() {
+        if (localStorage.url === 'Administrateur') {
+            try {
+                const [notifyResponse, entretienResponse] = await Promise.all([
+                    axios.get('notify'),
+                    axios.get('entretienCounter')
+                ]);
                 this.setState({
-                    notificationCounter: resp.data
-                })
-            }).catch(error => console.log(error))
-            axios.get('entretienCounter').then(resp => {
-                this.setState({
-                    entretienCount: resp.data
-                })
-            }).catch(error => console.log(error))
+                    notificationCounter: notifyResponse.data,
+                    entretienCount: entretienResponse.data
+                });
+            } catch (error) {
+                console.error(error);
+            }
         }
     }
 
-
-    handleClick = () => {
+    handleLogout = () => {
         localStorage.clear();
-        localStorage.clear(window.location.reload())
-        window.location.replace('/cvtheque')
+        window.location.replace('/cvtheque');
     }
-
-    
 
     render() {
-        const use = this.props.user
-        const not = this.state.notificationCounter + this.state.entretienCount
-        let button;
-        let notify;
-        if(localStorage.user_token){
-            if(use.role === 'Administrateur'){
-                notify=(
-                    <>
-                         <li>
-                            <Link class="position-relative" to="/notifications">
-                                <i class="bi bi-bell-fill" style={{"fontSize": "25px"}} ></i>
-                                {not != 0 && (
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {not}
-                                </span>
-                                )}
-                            </Link>
-                        </li>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </>
-                )
-            }
-            button = (
-                <>
-                    <button onClick={this.handleClick} class="btn btn-sm btn-danger">Se deconnecter</button>
-                </>
-            )
-        }else{
-            button = (
-                <>
-                    <Link to="/se-connecter">
-                        <button class="btn btn-sm btn-secondary">Se connecter </button>
-                    </Link>
-                </>
-            )
-        }
+        const { user } = this.props;
+        const { notificationCounter, entretienCount } = this.state;
+        const notificationTotal = notificationCounter + entretienCount;
+
+        const notificationBadge = notificationTotal !== 0 && (
+            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {notificationTotal}
+            </span>
+        );
+
+        const adminNotification = localStorage.user_token && user.role === 'Administrateur' && (
+            <li>
+                <Link className="position-relative" to="/notifications">
+                    <FontAwesomeIcon icon={faBell} size="lg" />
+                    {notificationBadge}
+                </Link>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </li>
+        );
+
+        const loginButton = localStorage.user_token ? (
+            <button onClick={this.handleLogout} className="btn btn-sm btn-danger">Se déconnecter</button>
+        ) : (
+            <Link to="/se-connecter">
+                <button className="btn btn-sm btn-secondary">Se connecter</button>
+            </Link>
+        );
 
         return (
-            <>
-                <nav className="navbar navbar-expand justify-content-between fixed-top">
-                        <a className="navbar-brand mb-0 h1 d-none d-md-block" href="/cvtheque">
-                        <img src={favicon} className="navbar-brand-image d-inline-block align-top mr-2" alt=""/>
-                            CVthèque Activ Solution Océan Indien
-                        </a>
-                        {localStorage.user_token && (
-                        <div  className="form-inline form-quicksearch d-none d-md-block mx-auto">
-                            <div className="input-group">
-                                <div className="input-group-prepend">
-                                    <div className="input-group-icon">
-                                        <span class="oi oi-magnifying-glass" style={{"paddingTop": "8px"}} ></span>
-                                    </div>
-                                </div>
-                                <form>
-                                    <input onChange={(e) => this.props.fonction(e)} type="search" className="form-control" placeholder="Chercher par ID ..."/>
-                                </form>
-                            </div>
+            <nav className="navbar navbar-expand justify-content-between fixed-top">
+                <a className="navbar-brand mb-0 h1 d-none d-md-block" href="/cvtheque">
+                    <img src={favicon} className="navbar-brand-image d-inline-block align-top mr-2" alt="" />
+                    CVthèque Activ Solution Océan Indien
+                </a>
+                {localStorage.user_token && (
+                    <div className="mx-auto">
+                        <div className="inputs mx-auto">
+                            <span>
+                                <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" />
+                            </span>
+                            <form>
+                                <input
+                                    onChange={(e) => this.props.fonction(e)}
+                                    type="search"
+                                    className="form-control"
+                                    placeholder="Recherche de profil ..."
+                                />
+                            </form>
                         </div>
-                         )}
+                    </div>
+                )}
 
-                        <div className="d-flex flex-1 d-block d-md-none">
-                        <a href="#" className="sidebar-toggle ml-3">
-                            <i data-feather="menu"></i>
-                        </a>
-                        </div>
+                <div className="d-flex flex-1 d-block d-md-none">
+                    <a href="#" className="sidebar-toggle ml-3">
+                        <i data-feather="menu"></i>
+                    </a>
+                </div>
 
-                    <ul className="navbar-nav d-flex justify-content-end mr-2">
-                        {notify}
-                        <li>
-                            {use.role === 'Administrateur' ? (<>
-                                <Link to="/ajoute-candidat">
-                                    <button class="btn btn-sm btn-primary">Ajouter un CV </button>
-                                </Link>
-                            </>):(
-                                <>
-                                </>
-                            )}
-                        </li>
-                        &nbsp;&nbsp;
-                        <li>
-                            {button}
-                        </li>
-                        &nbsp;&nbsp;
-                        
-                    </ul>
-                </nav>
-            </>
-        )
+                <ul className="navbar-nav d-flex justify-content-end mr-2">
+                    {adminNotification}
+                    <li>
+                        {user.role === 'Administrateur' && (
+                            <Link to="/ajoute-candidat">
+                                <button className="btn btn-sm btn-primary">Ajouter un CV</button>
+                            </Link>
+                        )}
+                    </li>
+                    &nbsp;&nbsp;
+                    <li>
+                        {loginButton}
+                    </li>
+                    &nbsp;&nbsp;
+                </ul>
+            </nav>
+        );
     }
 }
 
-export default Navebarmenu;
+export default NavbarMenu;
