@@ -2,251 +2,105 @@ import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import axios from 'axios';
 
-export default class Sidebar extends React.Component {
-    state = {
-        categories: []
-    }
+const Sidebar = ({ user }) => {
+    const [categories, setCategories] = useState([]);
 
-    componentDidMount = () => {
-        this.getCategorie();
-    }
-
-    getCategorie = () => {
+    useEffect(() => {
         axios.get('categorie_cvs').then(resp => {
             if (resp.status === 200) {
-                this.setState({
-                    categories: resp.data
-                })
+                setCategories(resp.data);
             }
-        })
-    }
+        });
+    }, []);
 
-    handleClickDecon = () => {
+    const handleClickDecon = () => {
         localStorage.clear();
-        localStorage.clear(window.location.reload())
-        window.location.replace('/cvtheque')
-    }
+        window.location.replace('/cvtheque');
+    };
 
-    render() {
-        const utilisateur = this.props.user
-        const cate = this.state.categories
-        const compareLink = window.location.pathname === `/utilisateurs`
-        
-        let userMenu;
-        if (localStorage.user_token) {
-            if (utilisateur.role === 'Administrateur') {
-                userMenu = (
-                    <>
-                        <li className="sidebar-nav-item">
-                            <li className="sidebar-nav-item">
-                                <NavLink to="/utilisateurs"
-                                    className="sidebar-nav-link"
-                                >
-                                    <span className="sidebar-nav-abbr">
-                                        <i style={{ 'fontSize': '20px' }} className="bi bi-person-circle"></i>
-                                    </span>
-                                    <span className="sidebar-nav-name">
-                                        Utilisateurs
-                                    </span>
-                                </NavLink>
-                            </li>
-                        </li>
-                        <li className="sidebar-nav-item">
-                            <NavLink to="/categories" className="sidebar-nav-link" actived>
-                                <span className="sidebar-nav-abbr">
-                                    <i style={{ 'fontSize': '20px' }} className="bi bi-list-task"></i>
-                                </span>
-                                <span className="sidebar-nav-name">
-                                    Liste des Categories
-                                </span>
-                            </NavLink>
-                        </li>
-                        <li className="sidebar-nav-item">
-                            <NavLink to="/table" className="sidebar-nav-link" actived>
-                                <span className="sidebar-nav-abbr">
-                                    <i style={{ 'fontSize': '20px' }} className="bi bi-file-earmark-person-fill"></i>
-                                </span>
-                                <span className="sidebar-nav-name">
-                                    Candidat
-                                </span>
-                            </NavLink>
-                        </li>
-                        <li className="sidebar-nav-item">
-                            <NavLink to="/notifications" className="sidebar-nav-link">
-                                <span className="sidebar-nav-abbr">
-                                    <i style={{ 'fontSize': '20px' }} className="bi bi-bell-fill"></i>
-                                </span>
-                                <span className="sidebar-nav-name">
-                                    Notifications
-                                </span>
-                            </NavLink>
-                        </li>
-                        <li className="sidebar-nav-item">
-                            <NavLink to="/cv" className="sidebar-nav-link">
-                                <span className="sidebar-nav-abbr">
-                                    <i style={{ 'fontSize': '20px' }} className="bi bi-file-earmark-richtext-fill"></i>
-                                </span>
-                                <span className="sidebar-nav-name">
-                                    Tous les CV
-                                </span>
-                            </NavLink>
-                        </li>
-                    </>
-                )
-            } else {
-                userMenu = (
-                    <>
-                        <li className="sidebar-nav-item">
-                            <NavLink to="/profile" className="sidebar-nav-link">
-                                <span className="sidebar-nav-abbr">
-                                    <i style={{ 'fontSize': '20px' }} className="bi bi-person-fill"></i>
-                                </span>
-                                <span className="sidebar-nav-name">
-                                    Profile
-                                </span>
-                            </NavLink>
-                        </li>
-
-                        <li className="sidebar-nav-item">
-                            <NavLink to="/notification" className="sidebar-nav-link">
-                                <span className="sidebar-nav-abbr">
-                                    <i style={{ 'fontSize': '20px' }} className="bi bi-bell-fill"></i>
-                                </span>
-                                <span className="sidebar-nav-name">
-                                    Notifications
-                                </span>
-                            </NavLink>
-                        </li>
-                        <li className="sidebar-nav-item">
-                            <NavLink to="/favoris" className="sidebar-nav-link">
-                                <span className="sidebar-nav-abbr">
-                                    <i style={{ 'fontSize': '20px' }} className="bi bi-star-fill"></i>
-                                </span>
-                                <span className="sidebar-nav-name">
-                                    Favoris
-                                </span>
-                            </NavLink>
-                        </li>
-                        <li><hr/></li>
-                        {cate && cate.map(categorie => {
-                            return (
-                                <>
-                                    <li className="sidebar-nav-item">
-                                        <NavLink to={`/candidats/${categorie.id}`} className="sidebar-nav-link" data-toggle="collapse" href="#navTables" aria-expanded="false" aria-controls="navTables">
-                                            <div className="sidebar-nav-icon">
-                                                <i style={{ 'fontSize': '20px' }} className="bi bi-folder-fill"></i>
-                                            </div>
-                                            <span className="sidebar-nav-name">
-                                                {categorie.categorie} <GetCategoryCvcount dId={categorie.id} />
-                                            </span>
-                                        </NavLink>
-                                        <GetSousCat datar={categorie.id} />
-                                    </li>
-                                </>
-                            )
-                        })}
-                    </>
-                )
-            }
-        }
-
-        return (
+    const userMenu = localStorage.user_token && (
+        user.role === 'Administrateur' ? (
             <>
-            {localStorage.user_token && (
-                <div className="adminx-sidebar expand-hover push">
-                    <ul className="sidebar-nav">
-                        <li className="sidebar-nav-item">
-                            <NavLink to="/" className="sidebar-nav-link">
-                                <div className="sidebar-nav-icon">
-                                    <i style={{ 'fontSize': '20px' }} className="bi bi-house"></i>
-                                </div>
-                                <span className="sidebar-nav-name">
-                                    Tableau de bord
-                                </span>
-                                <span className="sidebar-nav-end">
-
-                                </span>
-                            </NavLink>
-                        </li>
-                        {userMenu}
-                        {localStorage.user_token ? (
-                            <>
-                                <li className="sidebar-nav-item">
-                                    <a href="#" className="sidebar-nav-link" onClick={this.handleClickDecon}>
-                                        <div className="sidebar-nav-icon">
-                                            <i style={{ 'fontSize': '20px' }} className="bi bi-box-arrow-right"></i>
-                                        </div>
-                                        <span className="sidebar-nav-name">
-                                            Deconnexion
-                                        </span>
-                                        <span className="sidebar-nav-end">
-
-                                        </span>
-                                    </a>
-                                </li>
-                            </>
-                        ) : (
-                            <>
-                            </>
-                        )}
-                    </ul>
-                </div>
-                )}
+                <SidebarItem to="/utilisateurs" icon="bi bi-person-circle" label="Utilisateurs" />
+                <SidebarItem to="/categories" icon="bi bi-list-task" label="Liste des Categories" />
+                <SidebarItem to="/table" icon="bi bi-file-earmark-person-fill" label="Candidat" />
+                <SidebarItem to="/notifications" icon="bi bi-bell-fill" label="Notifications" />
+                <SidebarItem to="/cv" icon="bi bi-file-earmark-richtext-fill" label="Tous les CV" />
+            </>
+        ) : (
+            <>
+                <SidebarItem to="/profile" icon="bi bi-person-fill" label="Profile" />
+                <SidebarItem to="/notification" icon="bi bi-bell-fill" label="Notifications" />
+                <SidebarItem to="/favoris" icon="bi bi-star-fill" label="Favoris" />
+                <hr />
+                {categories.map(categorie => (
+                    <SidebarItem key={categorie.id} to={`/candidats/${categorie.id}`} icon="bi bi-folder-fill" label={categorie.categorie} count={<GetCategoryCvcount dId={categorie.id} />}>
+                        <GetSousCat datar={categorie.id} />
+                    </SidebarItem>
+                ))}
             </>
         )
-    }
+    );
 
-}
-
-
-function GetSousCat({datar}) {
-    const [sousCat, setSousCat] = useState([]);
-    useEffect(() => {
-        if(datar){
-            axios.get(`categorie_cvs/${datar}`).then(reps => {
-                setSousCat(reps.data.sousCategorie)
-            }).catch(error => console.log(error))
-        }
-    }, [datar])
-
-    if(sousCat.length > 0){
-        return (
-            <>
-                <ul class="sidebar-nav">
-                    {sousCat && sousCat.map(sc => {
-                        return(
-                            <>
-                                <li class="sidebar-nav-item">
-                                    <Link to={`/souscategorie/${sc.id}`} class="sidebar-nav-link">
-                                        <span class="sidebar-nav-abbr">
-                                            <i class="bi bi-grid-fill"></i>
-                                        </span>
-                                        <span class="sidebar-nav-name">
-                                            {sc.categorie}
-                                        </span>
-                                    </Link>
-                                </li>
-                            </>
-                        )
-                    })}
+    return (
+        localStorage.user_token && (
+            <div className="adminx-sidebar expand-hover push">
+                <ul className="sidebar-nav">
+                    <SidebarItem to="/" icon="bi bi-house" label="Tableau de bord" />
+                    {userMenu}
+                    <SidebarItem to="#" icon="bi bi-box-arrow-right" label="Deconnexion" onClick={handleClickDecon} />
                 </ul>
-            </>
+            </div>
         )
-    }
-}
+    );
+};
 
-function GetCategoryCvcount({dId}) {
-    const [cvCounter, setCvConter] = useState('');
+const SidebarItem = ({ to, icon, label, count, onClick, children }) => (
+    <li className="sidebar-nav-item">
+        <NavLink to={to} className="sidebar-nav-link" onClick={onClick}>
+            <div className="sidebar-nav-icon">
+                <i style={{ fontSize: '20px' }} className={icon}></i>
+            </div>
+            <span className="sidebar-nav-name">{label} {count}</span>
+            {children}
+        </NavLink>
+    </li>
+);
+
+const GetSousCat = ({ datar }) => {
+    const [sousCat, setSousCat] = useState([]);
+
+    useEffect(() => {
+        if (datar) {
+            axios.get(`categorie_cvs/${datar}`).then(resp => {
+                setSousCat(resp.data.sousCategorie);
+            }).catch(console.log);
+        }
+    }, [datar]);
+
+    return (
+        sousCat.length > 0 && (
+            <ul className="sidebar-nav">
+                {sousCat.map(sc => (
+                    <SidebarItem key={sc.id} to={`/souscategorie/${sc.id}`} icon="bi bi-grid-fill" label={sc.categorie} />
+                ))}
+            </ul>
+        )
+    );
+};
+
+const GetCategoryCvcount = ({ dId }) => {
+    const [cvCounter, setCvCounter] = useState('');
+
     useEffect(() => {
         axios.get(`categorie_cvs/${dId}`).then(resp => {
-            if(resp.status === 200){
-                setCvConter(resp.data.counter)
+            if (resp.status === 200) {
+                setCvCounter(resp.data.counter);
             }
-        })
-    }, [dId])
-    return (
-        <b>
-            ({cvCounter})
-        </b>
-    )
-}
+        });
+    }, [dId]);
+
+    return <b>({cvCounter})</b>;
+};
+
+export default Sidebar;
