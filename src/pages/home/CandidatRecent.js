@@ -138,8 +138,8 @@ class CandidatRecent extends React.Component {
                                                             <div className="story-container-2">
                                                                 <div className="single-story">
                                                                     <div className="story-dp unseen">
-                                                                        {cv.photo && cv.photo.url === null ? (
-                                                                            <img src="https://bootdey.com/img/Content/avatar/avatar6.png"/>
+                                                                        {cv.photo && cv.photo.url !== null ? (
+                                                                            <img src="https://doodleipsum.com/100x100/avatar-2?i=b403f32a10b2a7473c695c3cc705a8ea"/>
                                                                             ):(
                                                                             <img src={`https://cvtheque.activsolution.fr:33066/${cv.photo.url}`}/>
                                                                         )}

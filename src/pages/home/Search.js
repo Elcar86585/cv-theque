@@ -95,11 +95,11 @@ class Search extends Component {
                                         </div>
                                     </div>
                                 </form>
-                                {localStorage.url === 'Utilisateur' && (
+                                {/* {localStorage.url === 'Utilisateur' && (
                                     <div className="card-title-sub">
                                         <ProfilIdeal user={this.props.user} />
                                     </div>
-                                )}
+                                )} */}
                             </div>
                         </div>
                     </div>

@@ -35,7 +35,7 @@ const Sidebar = ({ user }) => {
                 <hr />
                 {categories.map(categorie => (
                     <SidebarItem key={categorie.id} to={`/candidats/${categorie.id}`} icon="bi bi-folder-fill" label={categorie.categorie} count={<GetCategoryCvcount dId={categorie.id} />}>
-                        <GetSousCat datar={categorie.id} />
+                        {/* <GetSousCat datar={categorie.id} /> */}
                     </SidebarItem>
                 ))}
             </>
@@ -48,7 +48,7 @@ const Sidebar = ({ user }) => {
                 <ul className="sidebar-nav">
                     <SidebarItem to="/" icon="bi bi-house" label="Tableau de bord" />
                     {userMenu}
-                    <SidebarItem to="#" icon="bi bi-box-arrow-right" label="Deconnexion" onClick={handleClickDecon} />
+                    <SidebarItem icon="bi bi-box-arrow-right" label="Deconnexion" onClick={handleClickDecon} />
                 </ul>
             </div>
         )
@@ -57,13 +57,23 @@ const Sidebar = ({ user }) => {
 
 const SidebarItem = ({ to, icon, label, count, onClick, children }) => (
     <li className="sidebar-nav-item">
-        <NavLink to={to} className="sidebar-nav-link" onClick={onClick}>
-            <div className="sidebar-nav-icon">
-                <i style={{ fontSize: '20px' }} className={icon}></i>
-            </div>
-            <span className="sidebar-nav-name">{label} {count}</span>
-            {children}
-        </NavLink>
+        {to ? (
+            <NavLink to={to} className="sidebar-nav-link">
+                <div className="sidebar-nav-icon">
+                    <i style={{ fontSize: '20px' }} className={icon}></i>
+                </div>
+                <span className="sidebar-nav-name">{label} {count}</span>
+                {children}
+            </NavLink>
+        ) : (
+            <a href="#" className="sidebar-nav-link" onClick={onClick}>
+                <div className="sidebar-nav-icon">
+                    <i style={{ fontSize: '20px' }} className={icon}></i>
+                </div>
+                <span className="sidebar-nav-name">{label}</span>
+                {children}
+            </a>
+        )}
     </li>
 );
 

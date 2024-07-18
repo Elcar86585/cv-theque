@@ -4,11 +4,15 @@ import axios from 'axios';
 import favicon from '../images/favicon.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faBell } from '@fortawesome/free-solid-svg-icons';
+import { Player } from '@lordicon/react';
+
+const ICON = require('../images/system-solid-46-notification-bell.json');
 
 class NavbarMenu extends Component {
     state = {
         notificationCounter: 0,
-        entretienCount: 0
+        entretienCount: 0,
+        notificationTotal: 0,
     };
 
     async componentDidMount() {
@@ -21,6 +25,8 @@ class NavbarMenu extends Component {
                 this.setState({
                     notificationCounter: notifyResponse.data,
                     entretienCount: entretienResponse.data
+                }, () => {
+                    this.updateNotificationTotal();
                 });
             } catch (error) {
                 console.error(error);
@@ -28,29 +34,45 @@ class NavbarMenu extends Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.notificationCounter !== this.state.notificationCounter ||
+            prevState.entretienCount !== this.state.entretienCount) {
+            this.updateNotificationTotal();
+        }
+    }
+
+    updateNotificationTotal = () => {
+        const { notificationCounter, entretienCount } = this.state;
+        const notificationTotal = notificationCounter + entretienCount;
+        this.setState({ notificationTotal });
+    };
+
     handleLogout = () => {
         localStorage.clear();
         window.location.replace('/cvtheque');
-    }
+    };
 
     render() {
         const { user } = this.props;
-        const { notificationCounter, entretienCount } = this.state;
-        const notificationTotal = notificationCounter + entretienCount;
+        const { notificationTotal } = this.state;
 
         const notificationBadge = notificationTotal !== 0 && (
-            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-white bg-danger ml-4 z-3">
                 {notificationTotal}
             </span>
         );
 
         const adminNotification = localStorage.user_token && user.role === 'Administrateur' && (
-            <li>
+            <li className='mr-5 inline-block w-20'>
                 <Link className="position-relative" to="/notifications">
-                    <FontAwesomeIcon icon={faBell} size="lg" />
                     {notificationBadge}
+                    <Player
+                        icon={ICON}
+                        size={30}
+                        loop
+                        autoplay
+                    />
                 </Link>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </li>
         );
 
@@ -92,7 +114,7 @@ class NavbarMenu extends Component {
                     </a>
                 </div>
 
-                <ul className="navbar-nav d-flex justify-content-end mr-2">
+                <ul className="navbar-nav d-flex justify-content-end mr-4 mt-0">
                     {adminNotification}
                     <li>
                         {user.role === 'Administrateur' && (

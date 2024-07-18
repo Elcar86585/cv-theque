@@ -3,6 +3,7 @@ import { Form, Formik, Field } from 'formik';
 import axios from "axios";
 import { NotificationManager } from 'react-notifications'
 import santatra from '../../images/santatra.jpg'
+import emailjs from '@emailjs/browser';
 
 class DemandeLogin extends React.Component {
     state = {
@@ -60,6 +61,7 @@ class DemandeLogin extends React.Component {
     render() {
         const trace = this.state.ip
         console.log(this.state.pays)
+
         return (
             <>
                 <div className="adminx-content">
@@ -141,6 +143,17 @@ class DemandeLogin extends React.Component {
                                                             NotificationManager.warning('Une erreur est survenue lors de l\'envoye de votre demande', 'Erreur', 4000);
                                                         }
                                                     }).catch(error => console.log(error))
+
+                                                    const templateParams = {
+                                                        email: this.state.email,
+                                                    };
+
+                                                    emailjs.send('service_x3zbaha', 'template_g917mgp', templateParams, 'MfXlP5doj950_gfSF')
+                                                        .then(() => {
+                                                            console.log('Email envoyé avec succès');
+                                                        }, (error) => {
+                                                            console.log('Erreur lors de l\'envoi de l\'email', error.text);
+                                                        });
                                                 }}
                                             >
                                                 <Form>
